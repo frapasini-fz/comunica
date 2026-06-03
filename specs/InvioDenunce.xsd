@@ -1,0 +1,2189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Nuova versione del 27-08-2014-->
+<!--aggiornate le restrictions su ToponimoType, TipoNaturaGiuridicaType e SettoreAttivitaType -->
+<xs:schema xmlns:tns="http://inail.it/denunce/online/InvioDenunce.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://inail.it/denunce/online/InvioDenunce.xsd" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+    <xs:element name="Invio_Denunce">
+        <xs:annotation>
+            <xs:documentation>Comment describing your root element</xs:documentation>
+        </xs:annotation>
+
+        <xs:complexType>
+
+            <xs:sequence>
+
+                <xs:element name="InfoDenuncia" type="tns:InfoDenunciaType">
+                    <xs:annotation>
+                        <xs:documentation>Informazioni relative al file caricato.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="Iscrizione" type="tns:IscrizioneType" maxOccurs="unbounded">
+                    <xs:key name="ProgressivoLavorazione_ID">
+                        <xs:selector xpath="./QuadroB/QuadroD/DescrizioneAttivita"/>
+                        <xs:field xpath="ProgressivoLavorazione"/>
+                    </xs:key>
+                    <xs:keyref name="Lavorazione_REF" refer="tns:ProgressivoLavorazione_ID">                                   
+                        <xs:selector xpath="./QuadroB/QuadroD1/IncidenzaLavorazioni"/>
+                        <xs:field xpath="Lavorazione"/>
+                    </xs:keyref>
+                    <!--<xs:key name="ProgressivoLavorazione_C_ID">-->
+                        <!--<xs:selector xpath="./QuadroB/QuadroC/DescrizioneAttivita"/>-->
+                        <!--<xs:field xpath="ProgressivoLavorazione"/>-->
+                    <!--</xs:key>-->
+                    <!--<xs:keyref name="Lavorazione_C_REF" refer="tns:ProgressivoLavorazione_C_ID">-->
+                        <!--<xs:selector xpath="./QuadroB/QuadroP/IncidenzaLavorazioni"/>-->
+                        <!--<xs:field xpath="Lavorazione"/>-->
+                    <!--</xs:keyref>-->
+                </xs:element>
+                <xs:element name="Variazione" type="tns:VariazioneType" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation>Denuncia di variarione ditta.</xs:documentation>
+                    </xs:annotation>
+                    <xs:key name="ProgrLavorazione_ID">
+                        <xs:selector xpath="./QuadroD/DescrizioneAttivita"/>
+                        <xs:field xpath="ProgressivoLavorazione"/>
+                    </xs:key>
+                    <xs:keyref name="Lav_REF" refer="tns:ProgrLavorazione_ID">
+                        <xs:selector xpath="./QuadroD1/IncidenzaLavorazioni"/>
+                        <xs:field xpath="Lavorazione"/>
+                    </xs:keyref>
+                </xs:element>
+                <xs:element name="Cessazione" type="tns:CessazioneType" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="targetNamespace" type="xs:string" use="optional"/>
+            <xs:attribute name="elementFormDefault" type="xs:string" use="optional"/>
+            <xs:attribute name="attributeFormDefault" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Abi">
+        <xs:annotation>
+            <xs:documentation>Codice ABI</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:int">
+                <xs:totalDigits value="5"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="AlboProfessionale" type="tns:AlboProfessionaleType">
+        <xs:annotation>
+            <xs:documentation>Informazioni sull'albo professionale.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="AmpiezzaDelega" type="tns:AmpiezzaDelegaType">
+        <xs:annotation>
+            <xs:documentation>Tipologia della delega assegnata.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="AnnoRetribuzione" type="xs:gYear"/>
+    <xs:element name="CC">
+        <xs:annotation>
+            <xs:documentation>Codice di controllo relativo al numero della posizione assicurativa territoriale
+                (P.A.T.).
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:int">
+                <xs:pattern value="\d{2}"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:simpleType name="AssociazioneType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\d{11}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="Cab">
+        <xs:annotation>
+            <xs:documentation>Codice CAB.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:int">
+                <xs:totalDigits value="5"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="Cap">
+        <xs:annotation>
+            <xs:documentation>Codice di avviamento postale.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:pattern value="\d{5}"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="CausaleCessazione" type="tns:CausaleCessazioneType">
+        <xs:annotation>
+            <xs:documentation>Motivo della cessazione dell'attivita'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="CessazioneType">
+        <xs:sequence>
+            <xs:element name="Cessazione_Ditta" type="tns:CessazioneDittaType" minOccurs="0" maxOccurs="unbounded">
+            </xs:element>
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="CessazioneDittaType">
+        <xs:sequence>
+            <xs:element name="DataCessazione" type="xs:date">
+                <xs:annotation>
+                    <xs:documentation>Data di cessazione della ditta.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="CausaleCessazione">
+                <xs:annotation>
+                    <xs:documentation>Data di cessazione della ditta.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Fine Attivita"/>
+                        <xs:enumeration value="Liquidazione"/>
+                        <xs:enumeration value="Trasferimento ad altro soggetto"/>
+                        <xs:enumeration value="Fallimento"/>
+                        <xs:enumeration value="Eredità giacente"/>
+                        <xs:enumeration value="Liquidazione coatta"/>
+                        <xs:enumeration value="Amministrativa"/>
+                        <xs:enumeration value="Irreperibilita"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="SedeCorrispondenza" type="tns:SedeCorrispondenzaType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Dati relativi alla sede alla quale Inviare eventuale corrispondenza relativa alla
+                        cessazione.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="CodiceDitta" type="tns:CodiceDittaType" use="required"/>
+        <xs:attribute name="CodiceFiscaleDitta" type="tns:CodiceFiscaleType" use="required"/>
+        <xs:attribute name="dataInvio" type="xs:date" use="optional"/>
+        <xs:attribute name="origine" type="tns:OrigineType" use="optional"/>
+
+    </xs:complexType>
+    <xs:element name="CicloLavorativo" type="tns:Stringa512Type">
+        <xs:annotation>
+            <xs:documentation>Elencazione sintetica delle fasi del processo produttivo per la realizzazione dei
+                prodotti, attivita' e/o servizi.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="CodiceContributo">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:length value="5"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="CodiceDitta" type="tns:CodiceDittaType">
+        <xs:annotation>
+            <xs:documentation>Codice della ditta per la quale si invia la denuncia di iscrcizione.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="CodiceFiscale" type="tns:CodiceFiscaleType"/>
+    <xs:element name="CodiceFiscaleDitta" type="tns:CodiceFiscaleDittaType">
+        <xs:annotation>
+            <xs:documentation>Codice fiscale della ditta per la quale si invia la denuncia di
+                iscrizione.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="CodicePAT">
+        <xs:annotation>
+            <xs:documentation>Numero della posizione assicurativa territoriale (P.A.T.).</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:int">
+                <xs:totalDigits value="9"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="Cognome" type="tns:Stringa60Type">
+        <xs:annotation>
+            <xs:documentation>Cognome della persona.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="Comune" type="tns:Stringa60Type">
+        <xs:annotation>
+            <xs:documentation>Nome del comune.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataCessazione" type="xs:date">
+        <xs:annotation>
+            <xs:documentation>Data di cessazione attivita' nel formato 'yyyy-MM-dd'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataComunicazione" type="xs:date">
+        <xs:annotation>
+            <xs:documentation>Data di comunicazione della denuncia, nel formato 'yyyy-MM-dd'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataCostituzioneDitta" type="xs:date">
+        <xs:annotation>
+            <xs:documentation>Data di costituzione ditta, nel formato 'yyyy-MM-dd'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataFine" type="xs:date">
+        <xs:annotation>
+            <xs:documentation>Data di fine periodo, nel formato 'yyyy-MM-dd'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataFineAbilitazione" type="xs:date">
+        <xs:annotation>
+            <xs:documentation>Data di fine periodo di abilitazione, nel formato 'yyyy-MM-dd'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataFineDelega" type="xs:date">
+        <xs:annotation>
+            <xs:documentation>Data di fine validita' della delega, nel formato 'yyyy-MM-dd'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataFineRischio" type="xs:date">
+        <xs:annotation>
+            <xs:documentation>Data di fine lavori dell'artigiano, nel formato 'yyyy-MM-dd'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataInizio" type="xs:date">
+        <xs:annotation>
+            <xs:documentation>Data di inizio periodo, nel formato 'yyyy-MM-dd'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataInizioAbilitazione" type="xs:date">
+        <xs:annotation>
+            <xs:documentation>Data di inizio periodo di abilitazione, nel formato 'yyyy-MM-dd'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataInizioAttivita" type="xs:date">
+        <xs:annotation>
+            <xs:documentation>Data di inizio attivita' della ditta, nel formato 'yyyy-MM-dd'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataInizioDelega" type="xs:date">
+        <xs:annotation>
+            <xs:documentation>Data di inizio validita' della delega, nel formato 'yyyy-MM-dd'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataInizioRischio" type="xs:date">
+        <xs:annotation>
+            <xs:documentation>Data di inizio lavori dell'artigiano, nel formato 'yyyy-MM-dd'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataInizioValidita" type="xs:date">
+        <xs:annotation>
+            <xs:documentation>Data di inizio validita' nel formato 'yyyy-MM-dd'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataDal" type="xs:date"/>
+    <xs:element name="DataAl" type="xs:date"/>
+    <xs:element name="DataIscrizioneAlbo" type="xs:date">
+        <xs:annotation>
+            <xs:documentation>Data di iscrizione all'albo, nel formato 'yyyy-MM-dd'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataIscrizioneCCIAA" type="xs:date">
+        <xs:annotation>
+            <xs:documentation>Data iscrizione alla camera di commercio industria artigianato e
+                agricoltura.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataNascita" type="xs:date">
+        <xs:annotation>
+            <xs:documentation>Data di nascita della persona, nel formato 'yyyy-MM-dd'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="DataVariazioneCPA" type="xs:date"/>
+    <xs:element name="DataIniRischio" type="xs:date"/>
+    <xs:element name="DataFinRischio" type="xs:date"/>
+    <xs:element name="DataSospensione" type="xs:date"/>
+    <xs:element name="DataDecorrenza" type="xs:date"/>
+
+    <xs:complexType name="ReferenteType">
+        <xs:sequence>
+            <xs:element name="Codice" type="tns:CodiceReferenteType" minOccurs="0"/>
+            <xs:element name="Associazione" type="tns:AssociazioneType" minOccurs="0"/>
+            <xs:element ref="tns:Nome" minOccurs="0"/>
+            <xs:element ref="tns:Denominazione" minOccurs="0"/>
+            <xs:element ref="tns:Cognome" minOccurs="0"/>
+
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="DescrizioneContributo" type="tns:Stringa40Type"/>
+    <xs:element name="EMail">
+        <xs:annotation>
+            <xs:documentation>E-mail di riferimento.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:pattern value="[^@]+@[^@]+"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="EMailPec">
+        <xs:annotation>
+            <xs:documentation>E-mail pec di riferimento.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:pattern value="[^@]+@[^@]+"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="ImpiantiAttrezzature" type="tns:Stringa512Type"/>
+    <xs:element name="IncidenzaLavorazione">
+        <xs:simpleType>
+            <xs:restriction base="xs:int">
+                <xs:totalDigits value="3"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="Indirizzo" type="tns:Stringa60Type"/>
+    <xs:complexType name="IscrizioneType">
+        <xs:sequence>
+            <xs:element name="Iscrizione_Ditta" type="tns:IscrizioneDittaType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="IscrizioneDittaType">
+        <xs:sequence>
+            <xs:element name="QuadroA" type="tns:QuadroAType" minOccurs="0"/>
+            <xs:element name="QuadroA1" type="tns:QuadroA1Type" minOccurs="0"/>
+            <xs:element name="QuadroB" type="tns:QuadroBType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="dataInvio" type="xs:date" use="optional"/>
+        <xs:attribute name="origine" type="tns:OrigineType" use="optional"/>
+    </xs:complexType>
+    <xs:element name="IscrizioneAlbo" type="tns:Stringa40Type"/>
+    <xs:element name="IscrizioneCCIAA">
+        <xs:annotation>
+            <xs:documentation>Iscrizione alla camera di commercio industria artigianato e
+                agricoltura.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="16"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="Lavorazione">
+        <xs:simpleType>
+            <xs:restriction base="xs:int">
+                <xs:totalDigits value="8"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="LavorazioniComplementari" type="tns:Stringa512Type"/>
+    <xs:element name="LavorazionePrincipale" type="tns:Stringa512Type"/>
+    <xs:element name="MezziTrasporto" type="tns:Stringa512Type"/>
+    <xs:element name="ModalitaRestituzione" type="tns:ModalitaRestituzioneType">
+        <xs:annotation>
+            <xs:documentation>Canale da utilizzare per ottenere il rimborso.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="Nazione" type="tns:NazioneType">
+        <xs:annotation>
+            <xs:documentation>Sigla di identificazione della nazione.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="Nome">
+        <xs:annotation>
+            <xs:documentation>Nome della persona.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="30"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="NumeroApprendisti">
+        <xs:annotation>
+            <xs:documentation>Il numero degli apprendisti in forza alla ditta al momento dell'apertura
+                dell'assicurazione lavoratori dipendenti e assimilati
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:int">
+                <xs:totalDigits value="3"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="NumeroCC">
+        <xs:annotation>
+            <xs:documentation>Numero conto corrente.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="9"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="NumeroCivico">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="20"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="NumeroDipendentiDitta" type="tns:NumeroDipendentiDittaType">
+        <xs:annotation>
+            <xs:documentation>Numero dei dipendenti della ditta.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="NumeroIscrizioneAlbo">
+        <xs:annotation>
+            <xs:documentation>Numero di iscrizione all'albo.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="7"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="NumeroIscrizioneAlboSD">
+        <xs:annotation>
+            <xs:documentation>Numero di iscrizione al corrispondente albo professionale.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="5"/>
+                <xs:minLength value="1"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="NumeroIscrizioneCCIAA">
+        <xs:annotation>
+            <xs:documentation>Numero di iscrizione alla camera di commercio industria artigianato e
+                agricoltura.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:maxLength value="7"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="OraComunicazione" type="xs:time">
+        <xs:annotation>
+            <xs:documentation>Ora di comunicazione della denuncia, nel formato 'hh:mm'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="Presso" type="tns:Stringa40Type"/>
+    <xs:element name="ProdottiFiniti" type="tns:Stringa512Type"/>
+    <xs:element name="ProgressivoLavorazione">
+        <xs:annotation>
+            <xs:documentation>Numerazione relativa alla lavorazione.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:int">
+                <xs:totalDigits value="8"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="Provincia" type="tns:ProvinciaType">
+        <xs:annotation>
+            <xs:documentation>Provincia di appartenenza del Comune.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="Postuma">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:DataCessazione" minOccurs="0"/>
+                <xs:element ref="tns:CausaleCessazione" minOccurs="0"/>
+            </xs:sequence>
+
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Riattivazione">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:Postuma" minOccurs="0"/>
+            </xs:sequence>
+
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="QuoteEsenti" type="tns:ImportoType">
+        <xs:annotation>
+            <xs:documentation>L'ammontare delle quote di retribuzione parzialmente esenti che si presume verranno
+                corrisposte al personale dipendente nel periodo suddetto.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="RagioneSociale" type="tns:Stringa60Type">
+        <xs:annotation>
+            <xs:documentation>Ragione sociale della ditta.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="Retribuzione" type="tns:ImportoType">
+        <xs:annotation>
+            <xs:documentation>Retribuzione dell'artigiano.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="RetribuzioneMinimale" type="tns:SINOType">
+        <xs:annotation>
+            <xs:documentation>Indica se la retribuzione dell'artigiano differisce da quella minima
+                convenzionale.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="RetribuzioniOrdinarie" type="tns:ImportoType">
+        <xs:annotation>
+            <xs:documentation>Importo delle retribuzioni complessive che si presume verranno corrisposte al personale
+                dipendente nel periodo suddetto.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="RetribuzioniSILASB" type="tns:ImportoType">
+        <xs:annotation>
+            <xs:documentation>L'importo delle retribuzioni specifiche silicosi/asbestosi che si presume verranno
+                corrisposte al personale dipendente nel periodo suddetto..
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="RetribuzioniSoggetteSconto1" type="tns:ImportoType"/>
+    <xs:element name="RetribuzioniSoggetteSconto2" type="tns:ImportoType"/>
+    <xs:element name="RichiestaPagamento" type="tns:SINOType"/>
+    <xs:element name="RischioSil" type="tns:SINOType">
+        <xs:annotation>
+            <xs:documentation>Cambiato per poter gestire il quadro O</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="Sesso" type="tns:FMType"/>
+    <xs:element name="SettoreAttivita" type="tns:SettoreAttivitaType">
+        <xs:annotation>
+            <xs:documentation>Settore di attivita' della posizione, per es. Industria</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="Telefono">
+        <xs:annotation>
+            <xs:documentation>Numero di telefono di
+                riferimento.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="TipoAlboProfessionale">
+        <xs:annotation>
+            <xs:documentation>Tipologia di albo professionale al quale il soggetto 柩scritto.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:length value="1"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="TipoCessazione" type="tns:TipoCessazioneType" nillable="true">
+        <xs:annotation>
+            <xs:documentation>Indicare se si tratta di una cessazione della P.A.T. o di
+                un'assicurazione.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="TipoCessazioneLavoratori" type="tns:TipoCessazioneLavoratoriType">
+        <xs:annotation>
+            <xs:documentation>in caso di cessazione di un'assicurazione indicarne il tipo.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="TipoNaturaGiuridica" type="tns:TipoNaturaGiuridicaType">
+        <xs:annotation>
+            <xs:documentation>Datura giuridica della ditta.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="TipoResponsabilita" type="tns:TipoResponsabilitaType">
+        <xs:annotation>
+            <xs:documentation>Tipologia di responsabilita'</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="TipoSconto1" type="tns:TipoScontoType"/>
+    <xs:element name="TipoSconto2" type="tns:TipoScontoType"/>
+    <xs:element name="Toponimo" type="tns:ToponimoType"/>
+    <xs:element name="UtenzaInvio" type="tns:UtenzaType">
+        <xs:annotation>
+            <xs:documentation>Utente che ha effettuato l'invio della denuncia (userid).</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="VariazioneCessazione" type="tns:VariazioneCessazioneType"/>
+    <xs:simpleType name="AlboProfessionaleType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Albo dei Commercialisti"/>
+            <xs:enumeration value="Albo dei Ragionieri"/>
+            <xs:enumeration value="Altri"/>
+            <xs:enumeration value="Consulenti del lavoro"/>
+            <xs:enumeration value="Nessun Albo"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AmpiezzaDelegaType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Minima"/>
+            <xs:enumeration value="Media"/>
+            <xs:enumeration value="Massima"/>
+            <xs:enumeration value="Totale"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CausaleCessazioneType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value=""/>
+            <xs:enumeration value="Fine Attivita'"/>
+            <xs:enumeration value="Liquidazione"/>
+            <xs:enumeration value="Trasferimento ad altro soggetto"/>
+            <xs:enumeration value="Fallimento"/>
+            <xs:enumeration value="Eredita' giacente"/>
+            <xs:enumeration value="Liquidazione coatta"/>
+            <xs:enumeration value="Amministrativa"/>
+            <xs:enumeration value="Irreperibilita'"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CodiceReferenteType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]{6}[0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CodiceCausaleCessazioneType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="01"/>
+            <xs:enumeration value="02"/>
+            <xs:enumeration value="03"/>
+            <xs:enumeration value="04"/>
+            <xs:enumeration value="05"/>
+            <xs:enumeration value="06"/>
+            <xs:enumeration value="07"/>
+            <xs:enumeration value="08"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CodiceDittaType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\d{1,9}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CodiceVoceType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\d{1,9}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CodiceFiscaleDittaType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\d{0}"/>
+            <xs:pattern value="\d{11}"/>
+            <xs:pattern value="[A-Z]{6}[0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CodiceFiscaleType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\d{11}"/>
+            <xs:pattern value="[A-Z]{6}[0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="FMType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="F"/>
+            <xs:enumeration value="M"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ImportoType">
+        <xs:restriction base="xs:decimal">
+            <xs:pattern value="\d{1,13}.\d{2}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ModalitaRestituzioneType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value=""/>
+            <xs:enumeration value="ACCREDITO IN C/C BANCARIO"/>
+            <xs:enumeration value="RESTITUZIONE TRAMITE ASSEGNO PRESSO SEDE LEGALE"/>
+            <xs:enumeration value="RESTITUZIONE TRAMITE ASSEGNO PRESSO SEDE CORRISPONDENZA"/>
+            <xs:enumeration value="RESTITUZIONE TRAMITE ASSEGNO PRESSO INDIRIZZO ALTERNATIVO"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="NazioneType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="3"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="NumeroDipendentiDittaType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Da 1 a 15"/>
+            <xs:enumeration value="Da 16 a 30"/>
+            <xs:enumeration value="Da 31 a 100"/>
+            <xs:enumeration value="Da 101 a 250"/>
+            <xs:enumeration value="Oltre 250"/>
+            <xs:enumeration value="Nessuno"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PercentualeType">
+        <xs:restriction base="xs:decimal">
+            <xs:maxInclusive value="100.00"/>
+            <xs:pattern value="\d{1,3}.\d{2}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ProvinciaType">
+        <xs:restriction base="xs:string">
+            <xs:length value="2"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="DescRischioType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Miniere e cave in sotterraneo"/>
+            <xs:enumeration value="Lavori in sotterraneo in genere"/>
+            <xs:enumeration value="Miniere e cave a cielo aperto"/>
+            <xs:enumeration value="Lavori di scavo a cielo aperto"/>
+            <xs:enumeration value="Lavori di frantumazione di rocce, materiali e abrasivi"/>
+            <xs:enumeration value="Lavori di macinazione di rocce, materiali e abrasivi"/>
+            <xs:enumeration value="Lavori di manipolazione di rocce, materiali e abrasivi"/>
+            <xs:enumeration
+                    value="Taglio, lavorazione, preparazione, levigatura, smerigliatura, molatura, lucidatura, adattamento in opera di rocce o materiali"/>
+            <xs:enumeration
+                    value="Taglio, levigatura, smerigliatura, molatura, lucidatura, eseguiti con impiego di materiali"/>
+            <xs:enumeration value="Produzione di mole e abrasivi"/>
+            <xs:enumeration value="Produzione di refrattari"/>
+            <xs:enumeration value="Produzione di ceramiche"/>
+            <xs:enumeration value="Produzione di cemento"/>
+            <xs:enumeration value="Produzione di vetro"/>
+            <xs:enumeration value="Lavori nelle industrie siderurgiche"/>
+            <xs:enumeration value="Lavori nelle industrie metallurgiche"/>
+            <xs:enumeration value="Lavori nelle industrie meccaniche"/>
+            <xs:enumeration value="Produzione di laterizi (comprese le cave di argilla)"/>
+            <xs:enumeration value="Altre lavorazioni"/>
+            <xs:enumeration
+                    value="Estrazioni e successive lavorazioni dell'amianto nelle miniere; lavori nelle manifatture e lavori che comportano impiego ed applicazione di amianto e di materiali che lo contengono o che comunque esporgano ad inalazione di polvere di amianto"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="SettoreAttivitaType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Altre attivita'"/>
+            <xs:enumeration value="Artigianato"/>
+            <xs:enumeration value="Industria"/>
+            <xs:enumeration value="Terziario"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TipoPolizzaType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="DI"/>
+            <xs:enumeration value="AR"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TipoPeriodoType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Rata"/>
+            <xs:enumeration value="Regolazione"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="SINOType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SI"/>
+            <xs:enumeration value="NO"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Stringa40Type">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="40"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Stringa512Type">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="512"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Stringa200Type">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="200"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Stringa60Type">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="60"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <!--<xs:simpleType name="Stringa1o60Type">-->
+        <!--<xs:restriction base="xs:string">-->
+            <!--<xs:maxLength value="60"/>-->
+            <!--<xs:minLength value="1"/>-->
+        <!--</xs:restriction>-->
+    <!--</xs:simpleType>-->
+    <xs:simpleType name="Stringa16Type">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="16"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TipoCessazioneType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Assicurazione"/>
+            <xs:enumeration value="Pat"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TipoCessazioneLavoratoriType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value=""/>
+            <xs:enumeration value="Autonomi"/>
+            <xs:enumeration value="Dipendenti"/>
+            <xs:enumeration value="Speciali"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TipoNaturaGiuridicaType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Altre"/>
+            <xs:enumeration value="Associazione senza fine di lucro"/>
+            <xs:enumeration value="Ente pubblico non territoriale"/>
+            <xs:enumeration value="Ente pubblico territoriale"/>
+            <xs:enumeration value="Individuale"/>
+            <xs:enumeration value="Senza obbligo di partita IVA"/>
+            <xs:enumeration value="Soc. Coop. a responsabilita' illimitata"/>
+            <xs:enumeration value="Soc. Coop. a responsabilita' limitata"/>
+            <xs:enumeration value="Societa'"/>
+            <xs:enumeration value="Societa' a responsabilita' limitata"/>
+            <xs:enumeration value="Societa' di fatto"/>
+            <xs:enumeration value="Societa' in accomandita semplice"/>
+            <xs:enumeration value="Societa' in nome colletivo"/>
+            <xs:enumeration value="Societa' per azioni"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TipoResponsabilitaType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Legale Rappresentante"/>
+            <xs:enumeration value="Socio"/>
+            <xs:enumeration value="Titolare"/>
+            <xs:enumeration value="Liquidatore ex art. 2487 c.c."/> 
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TipoResponsabilitaAType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Socio"/>
+            <xs:enumeration value="Familiare"/>
+            <xs:enumeration value="Titolare"/>
+            <xs:enumeration value="Assoc. in partecipaz."/>
+
+
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TipoResponsabilitaPType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Socio"/>
+            <xs:enumeration value="Familiare"/>
+            <xs:enumeration value="Titolare"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TipoScontoType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Sconto Autotrasportatori"/>
+            <xs:enumeration value="Sconto Edile"/>
+            <xs:enumeration value="Sconto Inserimento Lavoratico Disabili"/>
+            <xs:enumeration value="Sconto Settore della Pesca"/>
+            <xs:enumeration value="Sconto Sostegno Maternita'"/>
+            <xs:enumeration value="Sconto Reimpiego di Personale con Qualifica Dirigenziale"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ToponimoType">
+        <xs:restriction base="xs:string">
+        	<!--aggiornamento del 25/08/2014-->
+		<xs:enumeration value="ACCESSO"/>
+		<xs:enumeration value="AEROPORTO"/>
+		<xs:enumeration value="ALTO"/>
+		<xs:enumeration value="ALVEO"/>
+		<xs:enumeration value="ALZAIA"/>
+		<xs:enumeration value="ANDRONA"/>
+		<xs:enumeration value="ANGIPORTO"/>
+		<xs:enumeration value="ANGOLO"/>
+		<xs:enumeration value="APERTA"/>
+		<xs:enumeration value="ARCHI"/>
+		<xs:enumeration value="ARCHIVOLTO"/>
+		<xs:enumeration value="ARCO"/>
+		<xs:enumeration value="ARGINE"/>
+		<xs:enumeration value="ARGINE DESTRO"/>
+		<xs:enumeration value="ATRIO"/>
+		<xs:enumeration value="AUTOPORTO"/>
+		<xs:enumeration value="AUTOSTRADA"/>
+		<xs:enumeration value="AVENUE"/>
+		<xs:enumeration value="BACINO"/>
+		<xs:enumeration value="BAGLIO"/>
+		<xs:enumeration value="BAIA"/>
+		<xs:enumeration value="BALUARDO"/>
+		<xs:enumeration value="BANCHINA"/>
+		<xs:enumeration value="BARBARIA"/>
+		<xs:enumeration value="BASTIONE"/>
+		<xs:enumeration value="BASTIONI"/>
+		<xs:enumeration value="BELVEDERE"/>
+		<xs:enumeration value="BIRI"/>
+		<xs:enumeration value="BIVIO"/>
+		<xs:enumeration value="BLOCCO"/>
+		<xs:enumeration value="BOCCA DE"/>
+		<xs:enumeration value="BORGATA"/>
+		<xs:enumeration value="BORGHETTO"/>
+		<xs:enumeration value="BORGO"/>
+		<xs:enumeration value="BORGO II"/>
+		<xs:enumeration value="BORGOLOCO"/>
+		<xs:enumeration value="BOULEVARD"/>
+		<xs:enumeration value="BRIGATA"/>
+		<xs:enumeration value="CA'"/>
+		<xs:enumeration value="CALA"/>
+		<xs:enumeration value="CALATA"/>
+		<xs:enumeration value="CALLE"/>
+		<xs:enumeration value="CALLE I"/>
+		<xs:enumeration value="CALLE LARGA"/>
+		<xs:enumeration value="CALLESELLE"/>
+		<xs:enumeration value="CAMPAZZO"/>
+		<xs:enumeration value="CAMPIELLO"/>
+		<xs:enumeration value="CAMPO"/>
+		<xs:enumeration value="CANALE"/>
+		<xs:enumeration value="CANTO"/>
+		<xs:enumeration value="CANTON"/>
+		<xs:enumeration value="CANTONE"/>
+		<xs:enumeration value="CAPO"/>
+		<xs:enumeration value="CARRAIA"/>
+		<xs:enumeration value="CARRARA"/>
+		<xs:enumeration value="CARRARO"/>
+		<xs:enumeration value="CARRARONE"/>
+		<xs:enumeration value="CASA"/>
+		<xs:enumeration value="CASALE"/>
+		<xs:enumeration value="CASALI"/>
+		<xs:enumeration value="CASCINA"/>
+		<xs:enumeration value="CASCINA II"/>
+		<xs:enumeration value="CASCINE"/>
+		<xs:enumeration value="CASE"/>
+		<xs:enumeration value="CASE SPARSE"/>
+		<xs:enumeration value="CASEGGIATO"/>
+		<xs:enumeration value="CASELLA POSTALE"/>
+		<xs:enumeration value="CASOLARI"/>
+		<xs:enumeration value="CAVA"/>
+		<xs:enumeration value="CAVALCAVIA"/>
+		<xs:enumeration value="CAVONCELLO"/>
+		<xs:enumeration value="CAVONE"/>
+		<xs:enumeration value="CENTRO"/>
+		<xs:enumeration value="CENTRO COMMERCIALE"/>
+		<xs:enumeration value="CHEMIN"/>
+		<xs:enumeration value="CHIASSETTO"/>
+		<xs:enumeration value="CHIASSO"/>
+		<xs:enumeration value="CHIESA"/>
+		<xs:enumeration value="CHIOSTRA"/>
+		<xs:enumeration value="CHIOSTRI"/>
+		<xs:enumeration value="CIRCONVALLAZIONE"/>
+		<xs:enumeration value="CLAUSTRO"/>
+		<xs:enumeration value="CLIVO"/>
+		<xs:enumeration value="COLLE"/>
+		<xs:enumeration value="COLLINA"/>
+		<xs:enumeration value="COMPLANARE"/>
+		<xs:enumeration value="COMPLESSO"/>
+		<xs:enumeration value="CONDOMINIO"/>
+		<xs:enumeration value="CONTRA'"/>
+		<xs:enumeration value="CONTRADA"/>
+		<xs:enumeration value="CONTRADA III"/>
+		<xs:enumeration value="CONTRADA PIANA"/>
+		<xs:enumeration value="CORSETTO"/>
+		<xs:enumeration value="CORSIA"/>
+		<xs:enumeration value="CORSO"/>
+		<xs:enumeration value="CORSO"/>
+		<xs:enumeration value="CORTE"/>
+		<xs:enumeration value="CORTE I"/>
+		<xs:enumeration value="CORTE II"/>
+		<xs:enumeration value="CORTE III"/>
+		<xs:enumeration value="CORTICELLA"/>
+		<xs:enumeration value="CORTILE"/>
+		<xs:enumeration value="CORTILE I"/>
+		<xs:enumeration value="CORTILE II"/>
+		<xs:enumeration value="CORTINA"/>
+		<xs:enumeration value="COSTA"/>
+		<xs:enumeration value="CROCEVIA"/>
+		<xs:enumeration value="CROSA"/>
+		<xs:enumeration value="CROSERA"/>
+		<xs:enumeration value="CROSINO"/>
+		<xs:enumeration value="CUPA"/>
+		<xs:enumeration value="CUPA VICINALE"/>
+		<xs:enumeration value="DARSELLA"/>
+		<xs:enumeration value="DARSENA"/>
+		<xs:enumeration value="DIGA"/>
+		<xs:enumeration value="DIRAMAZIONE"/>
+		<xs:enumeration value="DIRAMAZIONE I"/>
+		<xs:enumeration value="DIRAMAZIONE II"/>
+		<xs:enumeration value="DISCESA"/>
+		<xs:enumeration value="DISTACCO"/>
+		<xs:enumeration value="EMICICLO"/>
+		<xs:enumeration value="ERTA"/>
+		<xs:enumeration value="EXTRAMURALE"/>
+		<xs:enumeration value="FONDACO"/>
+		<xs:enumeration value="FONDAMENTA"/>
+		<xs:enumeration value="FONDAMENTE NUOVE"/>
+		<xs:enumeration value="FONDO"/>
+		<xs:enumeration value="FORNICE"/>
+		<xs:enumeration value="FORO"/>
+		<xs:enumeration value="FORTE"/>
+		<xs:enumeration value="FOSSA"/>
+		<xs:enumeration value="FOSSATO"/>
+		<xs:enumeration value="FOSSO"/>
+		<xs:enumeration value="FRAZIONE"/>
+		<xs:enumeration value="GALLERIA"/>
+		<xs:enumeration value="GIARDINI"/>
+		<xs:enumeration value="GIARDINO"/>
+		<xs:enumeration value="GRADINATA"/>
+		<xs:enumeration value="GRADINI"/>
+		<xs:enumeration value="GRADONI"/>
+		<xs:enumeration value="GRANDE RACCORDO ANULARE"/>
+		<xs:enumeration value="INTERNO"/>
+		<xs:enumeration value="INTERRATO"/>
+		<xs:enumeration value="ISOLA"/>
+		<xs:enumeration value="ISOLATO"/>
+		<xs:enumeration value="LARGHETTO"/>
+		<xs:enumeration value="LARGO"/>
+		<xs:enumeration value="LARGO"/>
+		<xs:enumeration value="LARGO PROPRIO"/>
+		<xs:enumeration value="LATERALE"/>
+		<xs:enumeration value="LIDO"/>
+		<xs:enumeration value="LISTA"/>
+		<xs:enumeration value="LISTA VECCHIA"/>
+		<xs:enumeration value="LITORANEA"/>
+		<xs:enumeration value="LOCALITA'"/>
+		<xs:enumeration value="LOCALITA' I"/>
+		<xs:enumeration value="LOCALITA' II"/>
+		<xs:enumeration value="LOCALITA' III"/>
+		<xs:enumeration value="LOGGE"/>
+		<xs:enumeration value="LOGGETTA"/>
+		<xs:enumeration value="LOGGIA"/>
+		<xs:enumeration value="LOTTIZZAZIONE"/>
+		<xs:enumeration value="LUNGADIGE"/>
+		<xs:enumeration value="LUNGARGINE"/>
+		<xs:enumeration value="LUNGARNO"/>
+		<xs:enumeration value="LUNGO"/>
+		<xs:enumeration value="LUNGOBISAGNO"/>
+		<xs:enumeration value="LUNGOBUSENTO"/>
+		<xs:enumeration value="LUNGOCRATI"/>
+		<xs:enumeration value="LUNGODORA"/>
+		<xs:enumeration value="LUNGOFIUME"/>
+		<xs:enumeration value="LUNGOFOGLIA"/>
+		<xs:enumeration value="LUNGOISARCO"/>
+		<xs:enumeration value="LUNGOLAGO"/>
+		<xs:enumeration value="LUNGOLARIO"/>
+		<xs:enumeration value="LUNGOLIRI"/>
+		<xs:enumeration value="LUNGOMALLERO"/>
+		<xs:enumeration value="LUNGOMARE"/>
+		<xs:enumeration value="LUNGOPARCO"/>
+		<xs:enumeration value="LUNGOPIAVE"/>
+		<xs:enumeration value="LUNGOPO"/>
+		<xs:enumeration value="LUNGOSILE"/>
+		<xs:enumeration value="LUNGOSTURA"/>
+		<xs:enumeration value="LUNGOTALVERA"/>
+		<xs:enumeration value="LUNGOTANARO"/>
+		<xs:enumeration value="LUNGOTEVERE"/>
+		<xs:enumeration value="LUNGOTORRENTE"/>
+		<xs:enumeration value="LUNGOTRONTO"/>
+		<xs:enumeration value="MARITTIMA"/>
+		<xs:enumeration value="MARZARIA"/>
+		<xs:enumeration value="MASO"/>
+		<xs:enumeration value="MASSERIA"/>
+		<xs:enumeration value="MERCATI GENERALI"/>
+		<xs:enumeration value="MERCATO"/>
+		<xs:enumeration value="MERCERIE"/>
+		<xs:enumeration value="MOLINO"/>
+		<xs:enumeration value="MOLO"/>
+		<xs:enumeration value="MONTE"/>
+		<xs:enumeration value="MULATTIERA"/>
+		<xs:enumeration value="MULINO"/>
+		<xs:enumeration value="MURA"/>
+		<xs:enumeration value="MURAZZI"/>
+		<xs:enumeration value="NUCLEO"/>
+		<xs:enumeration value="ORTO"/>
+		<xs:enumeration value="PALAZZO"/>
+		<xs:enumeration value="PALUDO"/>
+		<xs:enumeration value="PARALLELA"/>
+		<xs:enumeration value="PARALLELA I"/>
+		<xs:enumeration value="PARALLELA II"/>
+		<xs:enumeration value="PARCO"/>
+		<xs:enumeration value="PASSAGE"/>
+		<xs:enumeration value="PASSAGGIO"/>
+		<xs:enumeration value="PASSAGGIO PRIVATO"/>
+		<xs:enumeration value="PASSEGGIATA"/>
+		<xs:enumeration value="PASSEGGIO"/>
+		<xs:enumeration value="PASSO"/>
+		<xs:enumeration value="PASSO CHIUSO"/>
+		<xs:enumeration value="PENDICE"/>
+		<xs:enumeration value="PENDINO"/>
+		<xs:enumeration value="PENDIO"/>
+		<xs:enumeration value="PENNINATA"/>
+		<xs:enumeration value="PESCARIA"/>
+		<xs:enumeration value="PIAGGIA"/>
+		<xs:enumeration value="PIANO"/>
+		<xs:enumeration value="PIAZZA"/>
+		<xs:enumeration value="PIAZZA"/>
+		<xs:enumeration value="PIAZZA INFERIORE"/>
+		<xs:enumeration value="PIAZZALE"/>
+		<xs:enumeration value="PIAZZATA"/>
+		<xs:enumeration value="PIAZZETTA"/>
+		<xs:enumeration value="PIAZZETTA PONTE"/>
+		<xs:enumeration value="PIAZZOLA"/>
+		<xs:enumeration value="PISCINA"/>
+		<xs:enumeration value="PLACE"/>
+		<xs:enumeration value="PLAZA"/>
+		<xs:enumeration value="PODERE"/>
+		<xs:enumeration value="POGGIO"/>
+		<xs:enumeration value="PONTE"/>
+		<xs:enumeration value="PONTILE"/>
+		<xs:enumeration value="PORTA"/>
+		<xs:enumeration value="PORTELLA"/>
+		<xs:enumeration value="PORTICATO"/>
+		<xs:enumeration value="PORTICI"/>
+		<xs:enumeration value="PORTICO"/>
+		<xs:enumeration value="PORTO"/>
+		<xs:enumeration value="PRATO"/>
+		<xs:enumeration value="PRESSO"/>
+		<xs:enumeration value="PROLUNGAMENTO"/>
+		<xs:enumeration value="PROPRIETA'"/>
+		<xs:enumeration value="PROVINCIALE"/>
+		<xs:enumeration value="QUADRATO"/>
+		<xs:enumeration value="QUADRIVIO"/>
+		<xs:enumeration value="QUARTIERE"/>
+		<xs:enumeration value="RACCORDO"/>
+		<xs:enumeration value="RAMO"/>
+		<xs:enumeration value="RAMO I"/>
+		<xs:enumeration value="RAMO II"/>
+		<xs:enumeration value="RAMO III"/>
+		<xs:enumeration value="RAMO IV"/>
+		<xs:enumeration value="RAMPA"/>
+		<xs:enumeration value="RAMPA I"/>
+		<xs:enumeration value="RAMPA II"/>
+		<xs:enumeration value="RAMPANTE"/>
+		<xs:enumeration value="RAMPARI"/>
+		<xs:enumeration value="RAMPE"/>
+		<xs:enumeration value="RATTO"/>
+		<xs:enumeration value="RECINTO"/>
+		<xs:enumeration value="RECINTO I"/>
+		<xs:enumeration value="RECINTO II"/>
+		<xs:enumeration value="RECINTO III"/>
+		<xs:enumeration value="RECINTO VII"/>
+		<xs:enumeration value="REGIONE"/>
+		<xs:enumeration value="RESEDA"/>
+		<xs:enumeration value="RESIDENCE"/>
+		<xs:enumeration value="RESIDENZA"/>
+		<xs:enumeration value="RIALTO"/>
+		<xs:enumeration value="RIGASTE"/>
+		<xs:enumeration value="RIO"/>
+		<xs:enumeration value="RIO TERA'"/>
+		<xs:enumeration value="RIO TERRA'"/>
+		<xs:enumeration value="RIONE"/>
+		<xs:enumeration value="RIPA"/>
+		<xs:enumeration value="RIPARTO"/>
+		<xs:enumeration value="RIVA"/>
+		<xs:enumeration value="RIVALE"/>
+		<xs:enumeration value="RIVIERA"/>
+		<xs:enumeration value="RONCO"/>
+		<xs:enumeration value="RONCO I"/>
+		<xs:enumeration value="RONCO II"/>
+		<xs:enumeration value="RONCO III"/>
+		<xs:enumeration value="RONCO IV"/>
+		<xs:enumeration value="RONCO IX"/>
+		<xs:enumeration value="RONCO VI"/>
+		<xs:enumeration value="RONCO XI"/>
+		<xs:enumeration value="RONDO'"/>
+		<xs:enumeration value="ROTABILE"/>
+		<xs:enumeration value="ROTONDA"/>
+		<xs:enumeration value="ROUTE"/>
+		<xs:enumeration value="RUA"/>
+		<xs:enumeration value="RUE"/>
+		<xs:enumeration value="RUELLE"/>
+		<xs:enumeration value="RUGA"/>
+		<xs:enumeration value="RUGA GIUFFA"/>
+		<xs:enumeration value="RUGA VECCHIA"/>
+		<xs:enumeration value="RUGHETTA"/>
+		<xs:enumeration value="SACCA"/>
+		<xs:enumeration value="SALITA"/>
+		<xs:enumeration value="SALITA I"/>
+		<xs:enumeration value="SALITA INFERIORE"/>
+		<xs:enumeration value="SALITA NUOVA"/>
+		<xs:enumeration value="SALITA SUPERIORE"/>
+		<xs:enumeration value="SALITA VECCHIA"/>
+		<xs:enumeration value="SALIZADA"/>
+		<xs:enumeration value="SALIZZADE"/>
+		<xs:enumeration value="SBARCATOIO"/>
+		<xs:enumeration value="SCALA"/>
+		<xs:enumeration value="SCALA PRIVATA"/>
+		<xs:enumeration value="SCALE"/>
+		<xs:enumeration value="SCALEA"/>
+		<xs:enumeration value="SCALETTA"/>
+		<xs:enumeration value="SCALETTE"/>
+		<xs:enumeration value="SCALI"/>
+		<xs:enumeration value="SCALINATA"/>
+		<xs:enumeration value="SCALO"/>
+		<xs:enumeration value="SCALONE"/>
+		<xs:enumeration value="SCESA"/>
+		<xs:enumeration value="SCORCIATOIA"/>
+		<xs:enumeration value="SDRUCCIOLO"/>
+		<xs:enumeration value="SECCO"/>
+		<xs:enumeration value="SELCIATO"/>
+		<xs:enumeration value="SENTIERO"/>
+		<xs:enumeration value="SESTIERE"/>
+		<xs:enumeration value="SILOS"/>
+		<xs:enumeration value="SITO"/>
+		<xs:enumeration value="SOBBORGO"/>
+		<xs:enumeration value="SOPPORTICO"/>
+		<xs:enumeration value="SOTTO"/>
+		<xs:enumeration value="SOTTOPASSAGGIO"/>
+		<xs:enumeration value="SOTTOPORTICO"/>
+		<xs:enumeration value="SPADARIA"/>
+		<xs:enumeration value="SPALTO"/>
+		<xs:enumeration value="SPIAGGIA"/>
+		<xs:enumeration value="SPIANATA"/>
+		<xs:enumeration value="SPIAZZO"/>
+		<xs:enumeration value="STANDS"/>
+		<xs:enumeration value="STATALE"/>
+		<xs:enumeration value="STAZIONE"/>
+		<xs:enumeration value="STRADA"/>
+		<xs:enumeration value="STRADA ALTA"/>
+		<xs:enumeration value="STRADA ANTICA"/>
+		<xs:enumeration value="STRADA ARGINALE"/>
+		<xs:enumeration value="STRADA COMUNALE"/>
+		<xs:enumeration value="STRADA COMUNALE CUPA"/>
+		<xs:enumeration value="STRADA ESTERNA"/>
+		<xs:enumeration value="STRADA I"/>
+		<xs:enumeration value="STRADA II"/>
+		<xs:enumeration value="STRADA III"/>
+		<xs:enumeration value="STRADA IV"/>
+		<xs:enumeration value="STRADA IX"/>
+		<xs:enumeration value="STRADA NAZIONALE"/>
+		<xs:enumeration value="STRADA NUOVA"/>
+		<xs:enumeration value="STRADA PRIVATA"/>
+		<xs:enumeration value="STRADA PROVINCIALE"/>
+		<xs:enumeration value="STRADA RURALE"/>
+		<xs:enumeration value="STRADA STATALE"/>
+		<xs:enumeration value="STRADA TRAVERSANTE"/>
+		<xs:enumeration value="STRADA V"/>
+		<xs:enumeration value="STRADA VECCHIA"/>
+		<xs:enumeration value="STRADA VI"/>
+		<xs:enumeration value="STRADA VICINALE"/>
+		<xs:enumeration value="STRADA VICINALE CUPA"/>
+		<xs:enumeration value="STRADA VIII"/>
+		<xs:enumeration value="STRADA X"/>
+		<xs:enumeration value="STRADA XI"/>
+		<xs:enumeration value="STRADA XII"/>
+		<xs:enumeration value="STRADA XIV"/>
+		<xs:enumeration value="STRADA XIX"/>
+		<xs:enumeration value="STRADA XVI"/>
+		<xs:enumeration value="STRADA XX"/>
+		<xs:enumeration value="STRADA XXII"/>
+		<xs:enumeration value="STRADA XXIII"/>
+		<xs:enumeration value="STRADA XXIX"/>
+		<xs:enumeration value="STRADA XXV"/>
+		<xs:enumeration value="STRADA XXVI"/>
+		<xs:enumeration value="STRADA XXVII"/>
+		<xs:enumeration value="STRADALE"/>
+		<xs:enumeration value="STRADELLA"/>
+		<xs:enumeration value="STRADELLA I"/>
+		<xs:enumeration value="STRADELLA IV"/>
+		<xs:enumeration value="STRADELLO"/>
+		<xs:enumeration value="STRADETTA"/>
+		<xs:enumeration value="STRADONE"/>
+		<xs:enumeration value="STRADONE II"/>
+		<xs:enumeration value="STRADONE III"/>
+		<xs:enumeration value="STRADONE V"/>
+		<xs:enumeration value="STRETTA"/>
+		<xs:enumeration value="STRETTO"/>
+		<xs:enumeration value="STRETTO I"/>
+		<xs:enumeration value="STRETTO II"/>
+		<xs:enumeration value="STRETTOIA"/>
+		<xs:enumeration value="STRETTOIA I"/>
+		<xs:enumeration value="STRETTOIA II"/>
+		<xs:enumeration value="STRETTOLA"/>
+		<xs:enumeration value="SUPERSTRADA"/>
+		<xs:enumeration value="SUPPORTICO"/>
+		<xs:enumeration value="SVINCOLO"/>
+		<xs:enumeration value="SVOTO"/>
+		<xs:enumeration value="TANGENZIALE"/>
+		<xs:enumeration value="TANGENZIALE NORD"/>
+		<xs:enumeration value="TANGENZIALE SUD"/>
+		<xs:enumeration value="TENUTA"/>
+		<xs:enumeration value="TERRAZZA"/>
+		<xs:enumeration value="TETTI"/>
+		<xs:enumeration value="TONDO"/>
+		<xs:enumeration value="TORRENTE"/>
+		<xs:enumeration value="TRAGHETTO"/>
+		<xs:enumeration value="TRASVERSALE"/>
+		<xs:enumeration value="TRATTO"/>
+		<xs:enumeration value="TRATTO II"/>
+		<xs:enumeration value="TRATTURO"/>
+		<xs:enumeration value="TRAVERSA"/>
+		<xs:enumeration value="TRAVERSA A"/>
+		<xs:enumeration value="TRAVERSA B"/>
+		<xs:enumeration value="TRAVERSA C"/>
+		<xs:enumeration value="TRAVERSA I"/>
+		<xs:enumeration value="TRAVERSA I CUPA"/>
+		<xs:enumeration value="TRAVERSA I DESTRA"/>
+		<xs:enumeration value="TRAVERSA I PRIVATA"/>
+		<xs:enumeration value="TRAVERSA I VECCHIA"/>
+		<xs:enumeration value="TRAVERSA II"/>
+		<xs:enumeration value="TRAVERSA II CUPA"/>
+		<xs:enumeration value="TRAVERSA II PRIVATA"/>
+		<xs:enumeration value="TRAVERSA II SINISTRA"/>
+		<xs:enumeration value="TRAVERSA III"/>
+		<xs:enumeration value="TRAVERSA III PRIVATA"/>
+		<xs:enumeration value="TRAVERSA III SINISTRA"/>
+		<xs:enumeration value="TRAVERSA IV"/>
+		<xs:enumeration value="TRAVERSA IX"/>
+		<xs:enumeration value="TRAVERSA NUOVA"/>
+		<xs:enumeration value="TRAVERSA PRIVATA"/>
+		<xs:enumeration value="TRAVERSA SINISTRA"/>
+		<xs:enumeration value="TRAVERSA V"/>
+		<xs:enumeration value="TRAVERSA VI"/>
+		<xs:enumeration value="TRAVERSA VICINALE"/>
+		<xs:enumeration value="TRAVERSA VII"/>
+		<xs:enumeration value="TRAVERSA VIII"/>
+		<xs:enumeration value="TRAVERSA X"/>
+		<xs:enumeration value="TRAVERSA XI"/>
+		<xs:enumeration value="TRAVERSA XII"/>
+		<xs:enumeration value="TRAVERSA XIII"/>
+		<xs:enumeration value="TRAVERSA XIV"/>
+		<xs:enumeration value="TRAVERSA XIX"/>
+		<xs:enumeration value="TRAVERSA XV"/>
+		<xs:enumeration value="TRAVERSA XVI"/>
+		<xs:enumeration value="TRAVERSA XVIII"/>
+		<xs:enumeration value="TRAVERSA XX"/>
+		<xs:enumeration value="TRAVERSA XXX"/>
+		<xs:enumeration value="TRESANDA"/>
+		<xs:enumeration value="TRONCO"/>
+		<xs:enumeration value="TRONCO I"/>
+		<xs:enumeration value="TRONCO II"/>
+		<xs:enumeration value="TRONCO III"/>
+		<xs:enumeration value="VALLE"/>
+		<xs:enumeration value="VALLONE"/>
+		<xs:enumeration value="VANELLA"/>
+		<xs:enumeration value="VARCO"/>
+		<xs:enumeration value="VARIANTE"/>
+		<xs:enumeration value="VIA"/>
+		<xs:enumeration value="VIA"/>
+		<xs:enumeration value="VIA A"/>
+		<xs:enumeration value="VIA ANTICA"/>
+		<xs:enumeration value="VIA BASSA"/>
+		<xs:enumeration value="VIA CHIUSA"/>
+		<xs:enumeration value="VIA COMUNALE"/>
+		<xs:enumeration value="VIA COMUNALE VECCHIA"/>
+		<xs:enumeration value="VIA CONSOLARE"/>
+		<xs:enumeration value="VIA CONTRADA"/>
+		<xs:enumeration value="VIA DESTRA"/>
+		<xs:enumeration value="VIA DIETRO"/>
+		<xs:enumeration value="VIA ESTERNA"/>
+		<xs:enumeration value="VIA ESTRAMURALE"/>
+		<xs:enumeration value="VIA FONDA"/>
+		<xs:enumeration value="VIA GRANDE"/>
+		<xs:enumeration value="VIA I"/>
+		<xs:enumeration value="VIA II"/>
+		<xs:enumeration value="VIA III"/>
+		<xs:enumeration value="VIA INFERIORE"/>
+		<xs:enumeration value="VIA INTERMEDIA"/>
+		<xs:enumeration value="VIA INTERNA"/>
+		<xs:enumeration value="VIA IV"/>
+		<xs:enumeration value="VIA IX"/>
+		<xs:enumeration value="VIA LITORANEA"/>
+		<xs:enumeration value="VIA LUNGO"/>
+		<xs:enumeration value="VIA MAGGIORE"/>
+		<xs:enumeration value="VIA NAZIONALE"/>
+		<xs:enumeration value="VIA NUOVA"/>
+		<xs:enumeration value="VIA PANORAMICA"/>
+		<xs:enumeration value="VIA PRIVATA"/>
+		<xs:enumeration value="VIA PROVINCIALE"/>
+		<xs:enumeration value="VIA SINISTRA"/>
+		<xs:enumeration value="VIA SOPRA"/>
+		<xs:enumeration value="VIA SOTTO"/>
+		<xs:enumeration value="VIA STATALE"/>
+		<xs:enumeration value="VIA SUPERIORE"/>
+		<xs:enumeration value="VIA TRAVERSA"/>
+		<xs:enumeration value="VIA V"/>
+		<xs:enumeration value="VIA VECCHIA"/>
+		<xs:enumeration value="VIA VECCHIA PROVINCIALE"/>
+		<xs:enumeration value="VIA VI"/>
+		<xs:enumeration value="VIA VICINALE"/>
+		<xs:enumeration value="VIA VII"/>
+		<xs:enumeration value="VIA VIII"/>
+		<xs:enumeration value="VIA X"/>
+		<xs:enumeration value="VIA XIII"/>
+		<xs:enumeration value="VIA XIV"/>
+		<xs:enumeration value="VIA XIX"/>
+		<xs:enumeration value="VIA XVI"/>
+		<xs:enumeration value="VIADOTTO"/>
+		<xs:enumeration value="VIALE"/>
+		<xs:enumeration value="VIALE I"/>
+		<xs:enumeration value="VIALE II"/>
+		<xs:enumeration value="VIALE PRIVATO"/>
+		<xs:enumeration value="VIALETTO"/>
+		<xs:enumeration value="VIALETTO IV"/>
+		<xs:enumeration value="VICHI"/>
+		<xs:enumeration value="VICINALE"/>
+		<xs:enumeration value="VICO"/>
+		<xs:enumeration value="VICO B"/>
+		<xs:enumeration value="VICO CHIUSO"/>
+		<xs:enumeration value="VICO CIECO"/>
+		<xs:enumeration value="VICO DIETRO"/>
+		<xs:enumeration value="VICO I"/>
+		<xs:enumeration value="VICO II"/>
+		<xs:enumeration value="VICO III"/>
+		<xs:enumeration value="VICO INFERIORE"/>
+		<xs:enumeration value="VICO IV"/>
+		<xs:enumeration value="VICO IX"/>
+		<xs:enumeration value="VICO LUNGO"/>
+		<xs:enumeration value="VICO ROTTO"/>
+		<xs:enumeration value="VICO STORTO"/>
+		<xs:enumeration value="VICO STRETTO"/>
+		<xs:enumeration value="VICO SUPERIORE"/>
+		<xs:enumeration value="VICO V"/>
+		<xs:enumeration value="VICO VI"/>
+		<xs:enumeration value="VICO VII"/>
+		<xs:enumeration value="VICO VIII"/>
+		<xs:enumeration value="VICO X"/>
+		<xs:enumeration value="VICO XI"/>
+		<xs:enumeration value="VICO XII"/>
+		<xs:enumeration value="VICO XIII"/>
+		<xs:enumeration value="VICO XIV"/>
+		<xs:enumeration value="VICO XIX"/>
+		<xs:enumeration value="VICO XV"/>
+		<xs:enumeration value="VICO XVII"/>
+		<xs:enumeration value="VICO XVIII"/>
+		<xs:enumeration value="VICO XX"/>
+		<xs:enumeration value="VICO XXVII"/>
+		<xs:enumeration value="VICOLETTO"/>
+		<xs:enumeration value="VICOLETTO CIECO"/>
+		<xs:enumeration value="VICOLETTO I"/>
+		<xs:enumeration value="VICOLETTO II"/>
+		<xs:enumeration value="VICOLETTO PRIVATO"/>
+		<xs:enumeration value="VICOLI"/>
+		<xs:enumeration value="VICOLO"/>
+		<xs:enumeration value="VICOLO A"/>
+		<xs:enumeration value="VICOLO C"/>
+		<xs:enumeration value="VICOLO CHIUSO"/>
+		<xs:enumeration value="VICOLO CIECO"/>
+		<xs:enumeration value="VICOLO DIETRO"/>
+		<xs:enumeration value="VICOLO I"/>
+		<xs:enumeration value="VICOLO II"/>
+		<xs:enumeration value="VICOLO III"/>
+		<xs:enumeration value="VICOLO IV"/>
+		<xs:enumeration value="VICOLO IX"/>
+		<xs:enumeration value="VICOLO LARGO"/>
+		<xs:enumeration value="VICOLO LUNGO"/>
+		<xs:enumeration value="VICOLO MOZZO"/>
+		<xs:enumeration value="VICOLO NUOVO"/>
+		<xs:enumeration value="VICOLO PRIVATO"/>
+		<xs:enumeration value="VICOLO ROTTO"/>
+		<xs:enumeration value="VICOLO STORTO"/>
+		<xs:enumeration value="VICOLO V"/>
+		<xs:enumeration value="VICOLO VECCHIO"/>
+		<xs:enumeration value="VICOLO VI"/>
+		<xs:enumeration value="VICOLO VII"/>
+		<xs:enumeration value="VICOLO VIII"/>
+		<xs:enumeration value="VICOLO X"/>
+		<xs:enumeration value="VICOLO XI"/>
+		<xs:enumeration value="VIELLA"/>
+		<xs:enumeration value="VILLA"/>
+		<xs:enumeration value="VILLAGGIO"/>
+		<xs:enumeration value="VILLAGGIO II"/>
+		<xs:enumeration value="VILLINO"/>
+		<xs:enumeration value="VIOTTOLO"/>
+		<xs:enumeration value="VIUZZO"/>
+		<xs:enumeration value="VOCABOLO"/>
+		<xs:enumeration value="VOLTA"/>
+		<xs:enumeration value="VOLTO"/>
+		<xs:enumeration value="VOLTONE"/>
+		<xs:enumeration value="ZONA"/>
+		<xs:enumeration value="ZONA INDUSTRIALE"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="UtenzaType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]{6}[0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="VariazioneCessazioneType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="C"/>
+            <xs:enumeration value="V"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="AnagraficaType">
+        <xs:sequence>
+            <xs:element ref="tns:CodiceFiscale"/>
+            <xs:element ref="tns:Cognome"/>
+            <xs:element ref="tns:Nome"/>
+            <xs:element ref="tns:Sesso"/>
+            <xs:element ref="tns:DataNascita"/>
+            <xs:element name="DatiComunali" type="tns:DatiComunaliType">
+                <xs:annotation>
+                    <xs:documentation>Dati per l'identificazione del comune.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="AnnoCSType">
+        <xs:sequence>
+            <xs:element ref="tns:DataInizio"/>
+            <xs:element ref="tns:DataFine"/>
+            <xs:element ref="tns:NumeroApprendisti" minOccurs="0"/>
+            <xs:element ref="tns:RetribuzioniOrdinarie"/>
+            <xs:element ref="tns:RetribuzioniSILASB" minOccurs="0"/>
+            <xs:element ref="tns:QuoteEsenti" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Art70Type">
+        <xs:sequence>
+            <xs:element ref="tns:ModalitaRestituzione"/>
+            <xs:element name="CodiceBIC" type="tns:CodiceBICType" minOccurs="0"/>
+            <xs:element name="CodiceIban" type="tns:CodiceIbanType" minOccurs="0"/>
+            <xs:element ref="tns:Presso" minOccurs="0"/>
+            <xs:element name="Domicilio" type="tns:DomicilioType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Questo campo e' obbligatorio solo se si e'
+                        scelto 'restituzione presso indirizzo alternativo',
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <!--<xs:element ref="tns:QuadroAAPCCodiceDitta" minOccurs="0"/>-->
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Art70VType">
+        <xs:complexContent>
+            <xs:extension base="tns:Art70Type">
+                <xs:sequence>
+                    <xs:element ref="tns:DataVariazione"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="AssociazioneCategoriaType">
+        <xs:sequence>
+            <xs:element ref="tns:DescrizioneContributo"/>
+            <xs:element ref="tns:CodiceContributo"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="DatiComunaliType">
+        <xs:sequence>
+            <xs:element ref="tns:Comune"/>
+            <xs:element ref="tns:Provincia" minOccurs="0"/>
+            <!-- todo:verificare se deve essere obbligatoria-->
+            <xs:element ref="tns:Nazione"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="DescrizioneAttivitaType">
+        <xs:sequence>
+            <xs:element ref="tns:ProgressivoLavorazione" minOccurs="1"/>
+            <xs:element ref="tns:LavorazionePrincipale"/>
+            <xs:element ref="tns:ProdottiFiniti"/>
+            <xs:element ref="tns:LavorazioniComplementari" minOccurs="0"/>
+            <xs:element ref="tns:ImpiantiAttrezzature"/>
+            <xs:element ref="tns:MezziTrasporto" minOccurs="0"/>
+            <xs:element ref="tns:CicloLavorativo" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="DomicilioType">
+        <xs:sequence>
+            <xs:element ref="tns:Toponimo"/>
+            <xs:element ref="tns:Indirizzo"/>
+            <xs:element ref="tns:NumeroCivico"/>
+            <xs:element ref="tns:Cap" minOccurs="0"/>   <!-- todo:verificare se deve essere obbligatoria-->
+            <xs:element name="DatiComunali" type="tns:DatiComunaliType">
+                <xs:annotation>
+                    <xs:documentation>Dati per l'identificazione del comune.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="tns:Telefono" minOccurs="0"/>
+            <xs:element ref="tns:EMail" minOccurs="0"/>
+            <xs:element ref="tns:EMailPec" minOccurs="0"/>
+            <xs:element ref="tns:InfoAggiuntive" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="IncidenzaLavorazioniType">
+        <xs:sequence>
+            <xs:element ref="tns:Lavorazione"/>
+            <xs:element ref="tns:IncidenzaLavorazione"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="InfoDenunciaType">
+        <xs:sequence>
+            <xs:element ref="tns:UtenzaInvio"/>
+            <xs:element ref="tns:Nome"/>
+            <xs:element ref="tns:Cognome"/>
+            <xs:element name="Ind" type="tns:DomicilioType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="TipoUtente" type="tns:TipoUtenteType"/>
+            <xs:element name="Referente" type="tns:ReferenteType" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="tns:DataComunicazione"/>
+            <xs:element ref="tns:OraComunicazione"/>
+        </xs:sequence>
+        <xs:attribute name="subdelegato" type="xs:boolean" use="optional"/>
+
+    </xs:complexType>
+    <xs:complexType name="LavorazioneSilAsbType">
+        <xs:annotation>
+            <xs:documentation>Cambiato, lo schema proposto in precedenza non era valido,
+                le due alternative della 'choice' erano ambigue; l'ulteriore controllo viene fatto a livello
+                applicativo
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="DescRischio" type="tns:DescRischioType"/>
+            <xs:element name="RischioAmbientale" type="tns:RischioType" minOccurs="0"/>
+            <xs:element name="RischioDiretto" type="tns:RischioType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="LegaleRappresentanteType">
+        <xs:sequence>
+            <xs:element ref="tns:TipoResponsabilita"/>
+            <xs:element name="Anagrafica" type="tns:AnagraficaType"/>
+            <xs:element name="Domicilio" type="tns:DomicilioType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="LegaleRappresentanteVType">
+        <xs:complexContent>
+            <xs:extension base="tns:LegaleRappresentanteType">
+                <xs:sequence>
+                    <xs:element ref="tns:DataVariazione"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="PeriodiPrecedentiType">
+        <xs:sequence>
+            <xs:element name="Periodo" type="tns:AnnoCSType"/>
+            <xs:element ref="tns:TipoSconto1" minOccurs="0"/>
+            <xs:element ref="tns:RetribuzioniSoggetteSconto1" minOccurs="0"/>
+            <xs:element ref="tns:TipoSconto2" minOccurs="0"/>
+            <xs:element ref="tns:RetribuzioniSoggetteSconto2" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="QuadroAType">
+        <xs:sequence>
+            <xs:element ref="tns:DataInizioAttivita"/>
+            <xs:element ref="tns:CodiceFiscaleDitta" minOccurs="0"/>
+            <xs:element ref="tns:RagioneSociale"/>
+            <xs:element ref="tns:TipoNaturaGiuridica"/>
+            <xs:element ref="tns:DataCostituzioneDitta" minOccurs="0"/>
+            <xs:element ref="tns:IscrizioneCCIAA" minOccurs="0"/>
+            <xs:element ref="tns:DataIscrizioneCCIAA" minOccurs="0"/>
+            <xs:element ref="tns:NumeroIscrizioneCCIAA" minOccurs="0"/>
+
+            <xs:element ref="tns:Postuma" minOccurs="0"/>
+
+
+            <xs:element ref="tns:NumeroDipendentiDitta"/>
+            <xs:element ref="tns:RichiestaPagamento"/>
+            <xs:element name="SedeLegale" type="tns:SedeLegaleType" minOccurs="0"/>
+            <xs:element name="SedeCorrispondenza" type="tns:SedeCorrispondenzaType" minOccurs="0"/>
+            <xs:element name="LegaleRappresentante" type="tns:LegaleRappresentanteType" minOccurs="0"/>
+            <xs:element name="Art70" type="tns:Art70Type" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="QuadroA1Type">
+        <xs:sequence>
+            <xs:element name="SoggettiDelegati" type="tns:SoggettiDelegatiType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="QuadroBType">
+        <xs:sequence>
+            <xs:element ref="tns:DataInizioAttivita"/>
+            <xs:element ref="tns:SettoreAttivita" minOccurs="0"/>
+
+            <xs:element ref="tns:Postuma" minOccurs="0"/>
+            <!--<xs:element ref="tns:DataCessazione" minOccurs="0"/>-->
+            <!--<xs:element ref="tns:CausaleCessazione" minOccurs="0"/>-->
+
+            <xs:element name="SedeLavori" type="tns:SedeLavoriType">
+                <xs:annotation>
+                    <xs:documentation>Informazioni sulla sede dei lavori della P.A.T.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <!--<xs:element name="ResponsabileSicurezza" type="tns:ResponsabileSicurezzaType" minOccurs="0">--> 
+                <!--<xs:annotation>-->
+                    <!--<xs:documentation>Dati anagrafici e il domicilio della persona eventualmente individuata dalla ditta-->
+                        <!--quale responsabile della sicurezza, igiene e prevenzione sul luogo di lavoro ai sensi della L.-->
+                        <!--626/96.-->
+                    <!--</xs:documentation>-->
+                <!--</xs:annotation>-->
+            <!--</xs:element>-->
+            <!--<xs:element name="AssociazioneCategoria" type="tns:AssociazioneCategoriaType" minOccurs="0">-->
+            <!--<xs:annotation>-->
+            <!--<xs:documentation>Denominazione e relativo codice contributo dell'associazione di categoria alla-->
+            <!--quale 檠eventualmente, iscritta la ditta.-->
+            <!--</xs:documentation>-->
+            <!--</xs:annotation>-->
+            <!--</xs:element>-->
+            <xs:element name="QuadroC" type="tns:QuadroCType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Assicurazione lavoratori dipendenti e assimilati.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="QuadroD" type="tns:QuadroDType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Assicurazione artigiani.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="QuadroD1" type="tns:QuadroD1Type" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Assicurazione artigiani  Dati anagrafici e retributivi.</xs:documentation>
+                </xs:annotation>
+                <xs:unique name="Lavorazione_ID">
+                    <xs:selector xpath="./IncidenzaLavorazioni"/>
+                    <xs:field xpath="Lavorazione"/>
+                </xs:unique>
+            </xs:element>
+            <xs:element name="QuadroP" type="tns:QuadroPType" minOccurs="0">
+                <xs:unique name="SoggettoAssicurato_ID">
+                    <xs:selector xpath="./SoggettoAssicurato/Anagrafica"/>
+                    <xs:field xpath="CodiceFiscale"/>
+                </xs:unique>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="QuadroCType">
+        <xs:sequence>
+            <xs:element ref="tns:DataInizioValidita"/>
+            <xs:element ref="tns:SettoreAttivita" minOccurs="0"/>
+
+            <xs:element ref="tns:Postuma" minOccurs="0"/>
+            <!--<xs:element ref="tns:DataCessazione" minOccurs="0"/>-->
+            <!--<xs:element ref="tns:CausaleCessazione" minOccurs="0"/>-->
+
+            <xs:element ref="tns:RischioSil"/>
+            <xs:element name="DescrizioneAttivita" type="tns:DescrizioneAttivitaType">
+                <xs:annotation>
+                    <xs:documentation>Informazioni dettagliate relative alla singola attivita' svolta dal personale
+                        dipendente.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="QuadroC1" type="tns:QuadroC1Type">
+                <xs:annotation>
+                    <xs:documentation>Assicurazione lavoratori dipendenti e assimilati - Dati
+                        retributivi.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="QuadroO" type="tns:QuadroOType" minOccurs="0" maxOccurs="1">
+                <xs:unique name="Rischio_ID">
+                    <xs:selector xpath="./Lavorazione"/>
+                    <xs:field xpath="DescRischio"/>
+                </xs:unique>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="QuadroC1Type">
+        <xs:annotation>
+            <xs:documentation>Informazioni sul periodo a cominciare dal quale vi sono soggetti da
+                assicurare.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="AnnoCorrente" type="tns:AnnoCSType" minOccurs="0"/>
+            <xs:element name="AnnoSuccessivo" type="tns:AnnoCSType" minOccurs="0"/>
+            <xs:element name="PeriodiPrecedenti" type="tns:PeriodiPrecedentiType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="QuadroDType">
+        <xs:sequence>
+            <xs:element ref="tns:DataInizioValidita"/>
+            <xs:element ref="tns:IscrizioneAlbo" minOccurs="0"/>
+            <xs:element ref="tns:DataIscrizioneAlbo" minOccurs="0"/>
+            <xs:element ref="tns:NumeroIscrizioneAlbo" minOccurs="0"/>
+            <xs:element ref="tns:SettoreAttivita" minOccurs="0"/>
+
+            <xs:element ref="tns:Postuma" minOccurs="0"/>
+            <!--<xs:element ref="tns:DataCessazione" minOccurs="0"/>-->
+            <!--<xs:element ref="tns:CausaleCessazione" minOccurs="0"/>-->
+
+            <xs:element name="DescrizioneAttivita" type="tns:DescrizioneAttivitaType">
+                <xs:annotation>
+                    <xs:documentation>Informazioni dettagliate relative alla singola attivita' svolta dagli
+                        artigiani.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="QuadroD1Type">
+        <xs:sequence>
+            <xs:element name="SoggettoAssicurato" type="tns:SoggettoAssicuratoType"/>
+            <xs:element name="IncidenzaLavorazioni" type="tns:IncidenzaLavorazioniType" maxOccurs="unbounded"/>
+            <xs:element name="RetribuzioniPrecedenti" type="tns:RetribuzioniPrecedentiType" minOccurs="0"
+                        maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="QuadroOType">
+        <xs:sequence>
+            <xs:element ref="tns:DataInizioValidita"/>
+            <xs:element name="SiliceLibera" type="tns:SINOType" minOccurs="0"/>
+            <xs:element name="Conimetria" type="tns:SINOType" minOccurs="0"/>
+            <xs:element name="Umidita" type="tns:PercentualeType" minOccurs="0"/>
+            <xs:element name="MezziPrevenzione" type="tns:Stringa200Type" minOccurs="0"/>
+            <xs:element name="Lavorazione" type="tns:LavorazioneSilAsbType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="QuadroPType">
+        <xs:sequence>
+            <xs:element name="SoggettoAssicurato" type="tns:SoggettoAssicuratoPType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!--<xs:complexType name="ResponsabileSicurezzaType">-->
+        <!--<xs:sequence>-->
+            <!--<xs:element name="Anagrafica" type="tns:AnagraficaType"/>-->
+            <!--<xs:element name="Domicilio" type="tns:DomicilioType"/>-->
+        <!--</xs:sequence>-->
+    <!--</xs:complexType>-->
+    <xs:complexType name="RetribuzioniPrecedentiType">
+        <xs:sequence>
+            <xs:element ref="tns:AnnoRetribuzione"/>
+            <xs:element ref="tns:Retribuzione"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="RischioType">
+        <xs:sequence>
+            <xs:element name="Addetti">
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minExclusive value="0"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="Retribuzioni">
+                <xs:simpleType>
+                    <xs:restriction base="tns:ImportoType">
+                        <xs:minExclusive value="0.00"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SedeCorrispondenzaVType">
+        <xs:complexContent>
+            <xs:extension base="tns:SedeCorrispondenzaType">
+                <xs:sequence>
+                    <xs:element ref="tns:DataVariazione"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="SedeCorrispondenzaType">
+        <xs:sequence>
+            <xs:element ref="tns:Presso" minOccurs="0"/>
+            <xs:element name="Domicilio" type="tns:DomicilioType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SedeLavoriType">
+        <xs:sequence>
+            <xs:element name="Domicilio" type="tns:DomicilioType">
+                <xs:annotation>
+                    <xs:documentation>Informazioni relative all'indirizzo della sede.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SedeLavoriVType">
+        <xs:complexContent>
+            <xs:extension base="tns:SedeLavoriType">
+                <xs:sequence>
+                    <xs:element ref="tns:DataVariazione"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="SedeLegaleType">
+        <xs:sequence>
+            <xs:element name="Domicilio" type="tns:DomicilioType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SedeLegaleVType">
+        <xs:complexContent>
+            <xs:extension base="tns:SedeLegaleType">
+                <xs:sequence>
+                    <xs:element ref="tns:DataVariazione"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="SoggettiDelegatiType">
+        <xs:sequence>
+            <xs:element ref="tns:DataInizioDelega"/>
+            <xs:element ref="tns:DataFineDelega"/>
+            <xs:element ref="tns:AmpiezzaDelega"/>
+
+            <xs:element name="Anagrafica" type="tns:AnagraficaType"/>
+            <xs:element name="Domicilio" type="tns:DomicilioType"/>
+            <xs:element ref="tns:TipoAlboProfessionale" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Obbligatorio se AlboProfessionale diverso da 'nessun albo'</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="tns:AlboProfessionale"/>
+            <xs:element ref="tns:NumeroIscrizioneAlboSD" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Obbligatorio se AlboProfessionale diverso da 'nessun albo'</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+
+            <xs:element ref="tns:DataInizioAbilitazione" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Obbligatorio se AlboProfessionale diverso da 'nessun albo'</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="tns:DataFineAbilitazione" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Obbligatorio se AlboProfessionale diverso da 'nessun albo'</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SoggettiDelegatiVType">
+        <xs:complexContent>
+            <xs:extension base="tns:SoggettiDelegatiType">
+                <xs:sequence>
+                    <xs:element ref="tns:DataVariazione"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="SoggettoAssicuratoType">
+        <xs:sequence>
+            <xs:element name="TipoResponsabilita" type="tns:TipoResponsabilitaPType"/>
+            <xs:element name="Anagrafica" type="tns:AnagraficaType"/>
+            <xs:element ref="tns:DataInizioRischio"/>
+            <xs:element ref="tns:DataFineRischio" minOccurs="0"/>
+            <xs:element ref="tns:RetribuzioneMinimale"/>
+            <xs:element ref="tns:Retribuzione"/>
+            <xs:element name="Domicilio" type="tns:DomicilioType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SoggettoAssicuratoPType">
+        <xs:sequence>
+            <!--<xs:element ref="tns:ProgressivoLavorazione" minOccurs="0"/>-->
+            <xs:element name="TipoResponsabilita" type="tns:TipoResponsabilitaPType"/>
+            <xs:element name="Anagrafica" type="tns:AnagraficaType"/>
+            <xs:element ref="tns:DataInizioRischio"/>
+            <xs:element ref="tns:DataFineRischio" minOccurs="0"/>
+            <xs:element name="Domicilio" type="tns:DomicilioType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="telefonoType">
+        <xs:restriction base="xs:string"/>
+        <!--<xs:maxLength value="16"/>-->
+        <!--<xs:pattern value="\d+"/>-->
+        <!--</xs:restriction>-->
+    </xs:simpleType>
+    <xs:element name="Addetti">
+        <xs:simpleType>
+            <xs:restriction base="xs:int">
+                <xs:minExclusive value="0"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="Retribuzioni">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:pattern value="\d{1,13}\.\d{2}"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="DataVariazione" type="xs:date" default="0001-01-01">
+        <xs:annotation>
+            <xs:documentation>Data della variazione, nel formato 'yyyy-MM-dd'.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="VariazioneType">
+        <xs:sequence>
+            <xs:element name="Variazione_Ditta" type="tns:VariazioneDittaType" minOccurs="0" maxOccurs="unbounded">
+                <!--<xs:annotation>-->
+                <!--<xs:documentation>Informazioni generali sulla denuncia di variazione, come l'utente che ha-->
+                <!--effettuato l'invio e la data di comunicazione della stessa.</xs:documentation>-->
+                <!--</xs:annotation>-->
+            </xs:element>
+        </xs:sequence>
+        <!--<xs:attribute name="CodiceDitta" type="tns:CodiceDittaType" use="required"/>-->
+        <!--<xs:attribute name="CodiceFiscaleDitta" type="tns:CodiceFiscaleType" use="required"/>-->
+    </xs:complexType>
+    <xs:complexType name="VariazioneDittaType">
+        <xs:sequence>
+            <xs:element name="Quadro0" type="tns:Quadro0Type" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Dati Variazioni semplificate</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="QuadroV" type="tns:QuadroVType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Dati Anagrafici Cliente.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="QuadroV2" type="tns:QuadroV2Type" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Dati Anagrafici.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="QuadroV3" type="tns:QuadroV3Type" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Dati anagrafici Posizione Assicurativa Territoriale.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+
+
+            <xs:element name="QuadroB" type="tns:QuadroBType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Dati anagrafici Posizione Assicurativa Territoriale e sede dei
+                        lavori.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="CodiceDitta" type="tns:CodiceDittaType" use="required"/>
+        <xs:attribute name="CodiceFiscaleDitta" type="tns:CodiceFiscaleType" use="required"/>
+        <xs:attribute name="dataInvio" type="xs:date" use="optional"/>
+        <xs:attribute name="origine" type="tns:OrigineType" use="optional"/>
+
+    </xs:complexType>
+    <xs:simpleType name="RischioSiliType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Nessuno"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="CessazionePatAssicurazioneType">
+        <xs:sequence>
+            <xs:element ref="tns:DataVariazione"/>
+            <xs:element ref="tns:VariazioneCessazione"/>
+            <xs:element ref="tns:DataCessazione"/>
+            <xs:element ref="tns:CausaleCessazione"/>
+            <xs:element ref="tns:TipoCessazione"/>
+            <xs:element ref="tns:TipoCessazioneLavoratori"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Quadro0Type">
+        <xs:sequence>
+            <xs:element name="Operazione" type="tns:OperazioneType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="OperazioneType">
+        <xs:sequence>
+            <xs:element ref="tns:CodicePAT" maxOccurs="unbounded"/>
+            <xs:element name="TipoOperazione" type="tns:TipoOperazioneType"/>
+            <xs:element name="DescrOperazione" type="tns:DescrOperazioneType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="TipoOperazioneType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SOSPENSIONE ATTIVITA"/>
+            <xs:enumeration value="CESSAZIONE ATTIVITA"/>
+            <xs:enumeration value="RIATTIVAZIONE ATTIVITA"/>
+            <xs:enumeration value="VARIAZIONE ATTIVITA ESERCITATA"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="DescrOperazioneType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="QuadroVType">
+        <xs:sequence>
+            <xs:element ref="tns:DataVariazione" minOccurs="0"/>
+            <xs:element ref="tns:DataInizioAttivita" minOccurs="0"/>
+            <xs:element ref="tns:RagioneSociale" minOccurs="0"/>
+            <xs:element ref="tns:TipoNaturaGiuridica" minOccurs="0"/>
+            <xs:element ref="tns:DataCostituzioneDitta" minOccurs="0"/>
+            <xs:element ref="tns:IscrizioneCCIAA" minOccurs="0"/>
+            <xs:element ref="tns:DataIscrizioneCCIAA" minOccurs="0"/>
+            <xs:element ref="tns:NumeroIscrizioneCCIAA" minOccurs="0"/>
+
+            <xs:element ref="tns:Riattivazione" minOccurs="0"/>
+
+            <xs:element ref="tns:NumeroDipendentiDitta" minOccurs="0"/>
+            <xs:element ref="tns:RichiestaPagamento" minOccurs="0"/>
+            <xs:element name="SedeLegale" type="tns:SedeLegaleVType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Dati relativi alla sede legale della ditta.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SedeCorrispondenza" type="tns:SedeCorrispondenzaVType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Dati relativi alla sede di corrispondenza della ditta, questo blocco a
+                        utilizzare solo se le informazioni differiscono da quelle della sede legale; in questo caso deve
+                        essere indicata la ragione sociale, o il cognome e nome, presso la quale deve essere inoltrata
+                        la corrispondenza relativa alla ditta.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="LegaleRappresentante" type="tns:LegaleRappresentanteVType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Rappresentante legale della ditta; in caso di ditta individuale, indicare i dati
+                        del titolare.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Art70" type="tns:Art70VType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Richiesta di pagamento di indennita' di inabilita' temporanea ai sensi dell'art.
+                        70
+                        T.U. 1124/65
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="QuadroV2Type">
+        <xs:sequence>
+            <xs:element name="SoggettiDelegati" type="tns:SoggettiDelegatiVType">
+                <xs:annotation>
+                    <xs:documentation>Informazioni del soggetto delegato incaricato da una ditta di rappresentarla a
+                        tutti gli effetti nei confronti di terzi , ai sensi dell'art. 14 del T.U. DPR
+                        1124/65.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="QuadroV3Type">
+        <xs:sequence>
+            <xs:element ref="tns:CodicePAT"/>
+            <xs:element name="SedeLavori" type="tns:SedeLavoriVType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Informazioni sulla sede dei lavori della P.A.T.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="CessazionePatAssicurazione" type="tns:CessazionePatAssicurazioneType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Cessazione di un'assicurazione o dell'intera P.A.T.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="TipoUtenteType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ServiziAssociazioneCategoria"/>
+            <xs:enumeration value="Consulente"/>
+            <xs:enumeration value="ProfessionistaAbilitato"/>
+            <xs:enumeration value="Titolare"/>
+            <xs:enumeration value="Tributarista"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="VoceType">
+        <xs:attribute name="Codice" type="tns:Stringa16Type" use="required"/>
+        <xs:attribute name="Classe" type="tns:Stringa16Type" use="required"/>
+    </xs:complexType>
+    <xs:simpleType name="CodiceBICType">
+
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\w{8}"/>
+            <xs:pattern value="\w{11}"/>
+        </xs:restriction>
+
+    </xs:simpleType>
+    <xs:simpleType name="CodiceIbanType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z-[I]][A-Z]|[A-Z][A-Z-[T]][0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}"/>
+            <xs:pattern value="IT[0-9]{2}[A-Z]{1}[0-9]{5}[0-9]{5}[a-zA-Z0-9]{12}"/>
+        </xs:restriction>
+
+
+    </xs:simpleType>
+    <xs:element name="InfoAggiuntive" type="xs:string">
+
+    </xs:element>
+    <xs:simpleType name="OrigineType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="X"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="Denominazione" type="xs:string"/>
+</xs:schema>
+

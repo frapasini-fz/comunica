@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema 
+    elementFormDefault="unqualified" attributeFormDefault="unqualified" 
+    targetNamespace="http://www.impresainungiorno.gov.it/schema/suap/riepilogo"
+    xmlns:ps="http://www.impresainungiorno.gov.it/schema/suap/pratica" 
+    xmlns:ri="http://www.impresainungiorno.gov.it/schema/suap/riepilogo" 
+    xmlns:pi="http://www.impresainungiorno.gov.it/schema/base" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    version="1.0.0">
+    <xs:import namespace="http://www.impresainungiorno.gov.it/schema/base" schemaLocation="impresainungiorno.gov_tipi_elementari-1.0.0.xsd"/>
+    <xs:import namespace="http://www.impresainungiorno.gov.it/schema/suap/pratica" schemaLocation="pratica_suap-1.0.0.xsd"/>
+    <!-- 
+        
+    -->
+    <xs:element name="suap-ri" type="ri:SuapRI"/>
+    <!--  
+        
+    -->
+    <xs:complexType name="SuapRI">
+        <xs:sequence>
+            <xs:element name="suap" type="ps:EstremiSuap"/> 
+            <xs:element name="codice-pratica" type="ri:CodicePraticaComUnica">
+                <xs:annotation><xs:documentation>
+                    E' il codice pratica ComUnica che conteneva la SICA contestuale che vieni inviata al SUAP competente
+                </xs:documentation></xs:annotation>
+            </xs:element>
+            <xs:element name="impresa" type="ri:AnagraficaImpresa"/>
+            <xs:element name="protocollo-ri" type="ps:ProtocolloRI"/>
+            <xs:element name="allegato" type="ri:AllegatoPraticaSUAP"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!--  
+    -->
+    <xs:complexType name="AnagraficaImpresa">
+        <xs:annotation><xs:documentation>
+            Questo elemento contiene i dati identificativi di un'impresa
+        </xs:documentation></xs:annotation>
+        <xs:sequence>
+            <xs:element minOccurs="0" name="forma-giuridica" type="pi:FormaGiuridica"/>
+            <xs:element name="ragione-sociale" type="pi:Stringa"/>
+            <xs:element name="codice-fiscale" type="pi:CodiceFiscale"/>
+            <xs:element name="partita-iva" type="pi:PartitaIVA" minOccurs="0"/>
+            <xs:element name="codice-REA" type="pi:CodiceREA"/>
+            <xs:element name="domicilio-elettronico" type="pi:EMailIndirizzo" minOccurs="0">
+              <xs:annotation><xs:documentation>
+                  Il domicilio elettronico viene restituito dal Registro Imprese nel caso in cui
+                  l'impresa chieda nella pratica ComUnica l'attribuzione della PEC
+              </xs:documentation></xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <!--  
+    -->
+    <xs:simpleType name="CodicePraticaComUnica"> 
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9A-Z]+\-M\d\d[1-9A-C][0-3][0-9][A-X][0-5][0-9][0-5][0-9]"/>
+            <!-- [ACCOUNT_TELEMACO]-[CODICE_PRATICA_COMUNICA]  -->
+        </xs:restriction>
+    </xs:simpleType>
+    <!--  
+    -->
+    <xs:complexType name="AllegatoPraticaSUAP">
+        <xs:complexContent>
+            <xs:extension base="ps:BaseAllegatoSUAP">
+                <xs:attribute name="nome-file" type="ri:TipoFileAllegatoPraticaSUAP" use="required"/> 
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!--  
+    -->    
+    <xs:simpleType name="TipoFileAllegatoPraticaSUAP">
+        <xs:annotation><xs:documentation>
+            CF-GGMMAAAA-HHMM.SUAP.ZIP
+            Es: DPRTNT00A01A012T-08072010-1733.SUAP.ZIP
+        </xs:documentation></xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="(([A-Z]{6}[0-9A-Z][0-9LMNPQRSTUV][ABCDEHLMPRST][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z])|([0-9]{11}))-[0-3]\d[0-1]\d\d{4}-[0-2]\d[0-5]\d\.SUAP\.[Zz][Ii][Pp]"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

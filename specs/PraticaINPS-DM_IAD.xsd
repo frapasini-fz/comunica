@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<xs:schema targetNamespace="http://www.inps.it/schema/DM/XS_IM_Iscrizione_Adempimenti_IAD.xsd"
+           xmlns:dm="http://www.inps.it/schema/DM/XS_IM_Iscrizione_Adempimenti_IAD.xsd"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           attributeFormDefault="unqualified" elementFormDefault="unqualified">
+  <!-- 
+    -->
+  <xs:element name="inps" type="dm:IscrizioneAziendaDM" />
+  <!-- 
+   -->
+  <xs:complexType name="IscrizioneAziendaDM">
+    <xs:annotation>
+      <xs:documentation>
+        Messaggio di richiesta di iscrizione azienda con dipendenti
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="operazione" type="dm:Operazione" maxOccurs="1" minOccurs="1" />
+      <xs:element name="chiamante" type="dm:Chiamante" maxOccurs="1" minOccurs="1" />
+      <xs:element name="adempimento" type="dm:Adempimento" maxOccurs="1" minOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 
+    -->
+  <xs:complexType name="Operazione">
+    <xs:annotation>
+      <xs:documentation>
+        Informazioni relative al tipo di operazione richiesta con il messaggio XML.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="nome" maxOccurs="1" minOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="ISCRIZIONE" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="tipo" maxOccurs="1" minOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="IAD" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="entita" maxOccurs="1" minOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="ADEMPIMENTI" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="tipoimpresa" maxOccurs="1" minOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="DM" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 
+    -->
+  <xs:complexType name="Chiamante">
+    <xs:annotation>
+      <xs:documentation>
+        Informazioni relative all'ente chiamante.
+        In questo caso: ente = INFOCAMERE, riferimento = IDENTIFICATIVO PRATICA, data = DATA INOLTRO.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="ente" maxOccurs="1" minOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="INFOCAMERE" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="riferimento" maxOccurs="1" minOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:length value="11" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="data" type="xs:date" maxOccurs="1" minOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 
+    -->
+  <xs:complexType name="Adempimento">
+    <xs:annotation>
+      <xs:documentation>
+        Informazioni relative all'adempimento di iscrizione.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="impresa" type="dm:Impresa" maxOccurs="1" minOccurs="1" />
+      <xs:element name="sede-legale" type="dm:SedeLegale" maxOccurs="1" minOccurs="1" />
+      <xs:element name="referente" type="dm:Referente" maxOccurs="1" minOccurs="1" />
+      <xs:element name="sede-operativa" type="dm:SedeOperativa" maxOccurs="1" minOccurs="1" />
+      <xs:element name="attivita" type="dm:Attivita" maxOccurs="1" minOccurs="1" />
+      <xs:element name="cuaf" type="dm:Cuaf" maxOccurs="1" minOccurs="1" />
+      <xs:element name="intermediario" type="dm:Intermediario" maxOccurs="1" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 
+    -->
+  <xs:complexType name="Impresa">
+    <xs:annotation>
+      <xs:documentation>
+        Informazioni relative all'impresa oggetto dell'iscrizione.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="codice-fiscale" type="dm:CodiceFiscaleImpresa" maxOccurs="1" minOccurs="1" />
+      <xs:element name="denominazione" type="dm:DenominazioneImpresa" maxOccurs="1" minOccurs="1" />
+      <xs:element name="forma-giuridica" type="dm:FormaGiuridica" maxOccurs="1" minOccurs="1" />
+      <xs:element name="partita-iva" type="dm:PartitaIVA" maxOccurs="1" minOccurs="0" />
+      <xs:element name="sede-competenza" type="dm:SedeCompetenza" maxOccurs="1" minOccurs="0" />
+      <xs:element name="cciaa" type="dm:CCIAA" maxOccurs="1" minOccurs="0" />
+      <xs:element name="numero-rea" type="dm:NumeroREA" maxOccurs="1" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 
+    -->
+  <xs:complexType name="SedeLegale">
+    <xs:annotation>
+      <xs:documentation>
+        Informazioni relative alla sede legale dell'impresa.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="indirizzo" type="dm:Indirizzo" minOccurs="1" maxOccurs="1" />
+      <xs:element name="telefono" type="dm:Telefono" minOccurs="0" maxOccurs="1" />
+      <xs:element name="telefono-alternativo" type="dm:Telefono" minOccurs="0" maxOccurs="1" />
+      <xs:element name="fax" type="dm:Telefono" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 
+    -->
+  <xs:complexType name="Referente">
+    <xs:annotation>
+      <xs:documentation>
+        Informazioni relative al referente dell'impresa.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="qualifica" type="dm:QualificaReferente" maxOccurs="1" minOccurs="1" />
+      <xs:element name="codice-fiscale" type="dm:CodiceFiscalePersona" maxOccurs="1" minOccurs="1" />
+      <xs:element name="cognome" type="dm:Cognome" maxOccurs="1" minOccurs="1" />
+      <xs:element name="nome" type="dm:Nome" maxOccurs="1" minOccurs="1" />
+      <xs:element name="sesso" type="dm:Sesso" maxOccurs="1" minOccurs="1" />
+      <xs:element name="nascita" type="dm:Nascita" maxOccurs="1" minOccurs="1" />
+      <xs:element name="residenza" type="dm:Indirizzo" maxOccurs="1" minOccurs="1" />
+      <xs:element name="telefono" type="dm:Telefono" maxOccurs="1" minOccurs="0" />
+      <xs:element name="email" type="dm:Email" maxOccurs="1" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 
+    -->
+  <xs:complexType name="SedeOperativa">
+    <xs:annotation>
+      <xs:documentation>
+        Informazioni relative alla sede legale dell'impresa.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="indirizzo" type="dm:Indirizzo" minOccurs="1" maxOccurs="1" />
+      <xs:element name="telefono" type="dm:Telefono" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 
+    -->
+  <xs:complexType name="Attivita">
+    <xs:annotation>
+      <xs:documentation>
+        Informazioni relative all'attività svolta dall'impresa.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="descrizione" type="dm:DescrizioneAttivita" maxOccurs="1" minOccurs="1" />
+      <xs:element name="altro" type="dm:Altro" maxOccurs="1" minOccurs="0" />
+      <xs:element name="lavorazione" type="dm:Lavorazione" maxOccurs="1" minOccurs="1" />
+      <xs:element name="data-inizio" type="xs:date" maxOccurs="1" minOccurs="1" />
+      <xs:element name="numero-dipendenti" type="dm:Dipendenti" maxOccurs="1" minOccurs="1" />
+      <xs:element name="familiari-coadiutori" type="dm:Familiari" maxOccurs="1" minOccurs="1" />
+      <xs:element name="soci" type="dm:Soci" maxOccurs="1" minOccurs="1" />
+      <xs:element name="documentazione-allegata" type="xs:boolean" maxOccurs="1" minOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 
+    -->
+  <xs:complexType name="Cuaf">
+    <xs:annotation>
+      <xs:documentation>
+        Informazioni relative alla scelta CUAF (Cassa Unica per gli Assegni Familiari) effettuata dall'impresa.
+        N.B. Tutte le opzioni devono essere valorizzate ma solo una può essere = True (scelta esclusiva).
+        Se non viene effettuata alcuna scelta tutte le opzioni devono essere = False.
+        Se l'impresa è individuale può selezionare solo l'opzione scelta-individuale.
+        Se l'impresa è società può selezionare tutte le opzioni tranne scelta-individuale.
+        Se si seleziona l'opzione cooperative sono obbligatorie le rispettive date.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="scelta-individuale" type="xs:boolean" maxOccurs="1" minOccurs="1" />
+      <xs:element name="due-soci-artigiani" type="xs:boolean" maxOccurs="1" minOccurs="1" />
+      <xs:element name="due-soci-commercianti" type="xs:boolean" maxOccurs="1" minOccurs="1" />
+      <xs:element name="oltre-due-soci" type="xs:boolean" maxOccurs="1" minOccurs="1" />
+      <xs:element name="socio-uninominale-accomandatario" type="xs:boolean" maxOccurs="1" minOccurs="1" />
+      <xs:element name="cooperative" type="xs:boolean" maxOccurs="1" minOccurs="1" />
+      <xs:element name="cooperative-date" type="dm:CooperativeDate" maxOccurs="1" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 
+    -->
+  <xs:complexType name="Intermediario">
+    <xs:annotation>
+      <xs:documentation>
+        Informazioni relative all'intermediario dell'impresa.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="qualifica" type="dm:QualificaIntermediario" maxOccurs="1" minOccurs="1" />
+      <xs:element name="codice-fiscale" type="dm:CodiceFiscalePersona" maxOccurs="1" minOccurs="1" />
+      <xs:element name="cognome" type="dm:Cognome" maxOccurs="1" minOccurs="1" />
+      <xs:element name="nome" type="dm:Nome" maxOccurs="1" minOccurs="1" />
+      <xs:element name="indirizzo" type="dm:Indirizzo" maxOccurs="1" minOccurs="1" />
+      <xs:element name="telefono" type="dm:Telefono" maxOccurs="1" minOccurs="0" />
+      <xs:element name="email" type="dm:Email" maxOccurs="1" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 
+    -->
+  <xs:simpleType name="CodiceFiscaleImpresa">
+    <xs:annotation>
+      <xs:documentation>
+        Codice fiscale dell'impresa.
+        N.B. Società da 11 caratteri, impresa individuale da 16 caratteri.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9]{11}"/>
+      <xs:pattern value="[A-Z]{6}[0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="DenominazioneImpresa">
+    <xs:annotation>
+      <xs:documentation>
+        Denominazione dell'impresa: testo libero di max 49 caratteri.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="49"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="FormaGiuridica">
+    <xs:annotation>
+      <xs:documentation>
+        Forma giuridica dell'impresa.
+        N.B. Corrisponde al codice della classificazione INPS di 2 caratteri.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z]{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="PartitaIVA">
+    <xs:annotation>
+      <xs:documentation>
+        Partita IVA dell'impresa.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9]{11}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:complexType name="SedeCompetenza">
+    <xs:annotation>
+      <xs:documentation>
+        Estremi della sede di competenza INPS destinataria della pratica.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="codice" maxOccurs="1" minOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="\d{4}" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="denominazione" type="xs:string" maxOccurs="1" minOccurs="1" />
+      <xs:element name="provincia" type="dm:Provincia" maxOccurs="1" minOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 
+    -->
+  <xs:simpleType name="CCIAA">
+    <xs:annotation>
+      <xs:documentation>
+        Sigla della provincia di appartenenza della CCIAA che ha iscritto l'impresa.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z]{2}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="NumeroREA">
+    <xs:annotation>
+      <xs:documentation>
+        Numero REA assegnato all'impresa.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{1,10}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:complexType name="Indirizzo">
+    <xs:annotation>
+      <xs:documentation>
+        Informazioni relative all'indirizzo di persona o di impresa.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="toponimo" minOccurs="0" maxOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="12" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="via" minOccurs="1" maxOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="26" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="civico" minOccurs="1" maxOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="12" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="cap" minOccurs="1" maxOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="\d{5}"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="frazione" minOccurs="0" maxOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="30" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="comune" type="dm:Comune" minOccurs="1" maxOccurs="1" />
+      <xs:element name="provincia" type="dm:Provincia" minOccurs="1" maxOccurs="1" />
+      <xs:element name="stato" type="dm:Stato" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 
+    -->
+  <xs:simpleType name="Telefono">
+    <xs:annotation>
+      <xs:documentation>
+        Prefisso e numero di telefono.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{1,14}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="QualificaReferente">
+    <xs:annotation>
+      <xs:documentation>
+        Qualifica prevista per il referente dell'impresa.
+        N.B. TITOLARE per le imprese individuali, RAPPRESENTANTE LEGALE per le società.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="TITOLARE" />
+      <xs:enumeration value="RAPPRESENTANTE LEGALE" />
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="CodiceFiscalePersona">
+    <xs:annotation>
+      <xs:documentation>
+        Codice fiscale di persona da 16 caratteri.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z]{6}[0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="Cognome">
+    <xs:annotation>
+      <xs:documentation>
+        Cognome della persona.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1" />
+      <xs:maxLength value="20" />
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="Nome">
+    <xs:annotation>
+      <xs:documentation>
+        Nome della persona.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1" />
+      <xs:maxLength value="20" />
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="Sesso">
+    <xs:annotation>
+      <xs:documentation>
+        Sesso della persona.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="M"/>
+      <xs:enumeration value="F"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:complexType name="Nascita">
+    <xs:annotation>
+      <xs:documentation>
+        Estremi di nascita di persona.
+        N.B. Se comune e stato sono esteri la provincia deve essere = EE.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="data" type="xs:date" maxOccurs="1" minOccurs="1" />
+      <xs:element name="comune" type="dm:Comune" maxOccurs="1" minOccurs="1" />
+      <xs:element name="provincia" type="dm:Provincia" maxOccurs="1" minOccurs="1" />
+      <xs:element name="stato" type="dm:Stato" maxOccurs="1" minOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 
+    -->
+  <xs:simpleType name="Email">
+    <xs:annotation>
+      <xs:documentation>
+        Indirizzo di posta elettronica.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="([A-Za-z0-9_\-]+\.)*[A-Za-z0-9_\-]+@([A-Za-z0-9_\-]+\.)+[A-Za-z0-9_\-]*"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="DescrizioneAttivita">
+    <xs:annotation>
+      <xs:documentation>
+        Descrizione dell'attività economica svolta dall'impresa.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1" />
+      <xs:maxLength value="62" />
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="Altro">
+    <xs:annotation>
+      <xs:documentation>
+        Descrizione di altra attività economica svolta dall'impresa.
+        N.B. Il dato deve essere specificato quando descrizione = ALTRO.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1" />
+      <xs:maxLength value="62" />
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="Lavorazione">
+    <xs:annotation>
+      <xs:documentation>
+        Tipo di lavorazione effettuata dall'impresa nell'ambito dell'attività svolta.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="DI SERIE" />
+      <xs:enumeration value="NON DI SERIE" />
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="Dipendenti">
+    <xs:annotation>
+      <xs:documentation>
+        Numero totale di dipendenti dell'impresa.
+        N.B. Il dato deve essere diverso da zero.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:int">
+      <xs:minExclusive value="0"/>
+      <xs:pattern value="\d{1,4}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="Familiari">
+    <xs:annotation>
+      <xs:documentation>
+        Numero totale di familiari coadiutori dell'impresa.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{1,4}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="Soci">
+    <xs:annotation>
+      <xs:documentation>
+        Numero totale di soci dell'impresa.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{1,4}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:complexType name="CooperativeDate">
+    <xs:annotation>
+      <xs:documentation>
+        Date relative alla scelta CUAF di tipo COOPERATIVE.
+        N.B. Le date devono essere specificate se cooperative = True.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="delibera" type="xs:date" maxOccurs="1" minOccurs="1" />
+      <xs:element name="domanda" type="xs:date" maxOccurs="1" minOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 
+    -->
+  <xs:simpleType name="QualificaIntermediario">
+    <xs:annotation>
+      <xs:documentation>
+        Qualifica prevista per l'intermediario dell'impresa.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ALTRO" />
+      <xs:enumeration value="AMMINISTRATORE" />
+      <xs:enumeration value="ASSOCIAZIONE CATEGORIA" />
+      <xs:enumeration value="CENTRO ELABORAZIONE DATI" />
+      <xs:enumeration value="COMMISSARIO GIUDIZIARIO" />
+      <xs:enumeration value="CONSULENTE" />
+      <xs:enumeration value="CURATORE FALLIMENTARE" />
+      <xs:enumeration value="DELEGATO" />
+      <xs:enumeration value="LIQUIDATORE" />
+      <xs:enumeration value="NOTAIO" />
+      <xs:enumeration value="PROFESSIONISTA INCARICATO" />
+      <xs:enumeration value="SOCIO" />
+      <xs:enumeration value="STUDIO ASSOCIATO" />
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="Provincia">
+    <xs:annotation>
+      <xs:documentation>
+        Sigla della provincia per indirizzi, CCIAA, sede INPS, nascita.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z]{2}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="Comune">
+    <xs:annotation>
+      <xs:documentation>
+        Denominazione del comune.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1" />
+      <xs:maxLength value="30" />
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+  <xs:simpleType name="Stato">
+    <xs:annotation>
+      <xs:documentation>
+        Denominazione dello stato.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- 
+    -->
+</xs:schema>

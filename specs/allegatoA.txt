@@ -1,0 +1,1332 @@
+                                                                                                            ALLEGATO A
+
+SPECIFICHE FEDRA 7.00
+
+
+
+
+Le variazioni riguardano:
+
+    a) Modifiche tracciato b95_fd70-TE contenente il nuovo modulo TE per la comunicazione o conferma del Titolare
+       Effettivo;
+    b) Creazione nuove tabelle CTE e RTE;
+    c) Aggiornamento Tabella Decodifica;
+    d) Aggiornamento specifiche per la preparazione del “file-Pratica” (Filespe70) alla versione 7.0 per accludere il nuovo
+       modulo TE;
+    e) Controlli automatici applicati in fase di spedizione della pratica contenente il modulo TE;
+    f) appunto 1685/A - istruzioni modulo TE” che aggiorna la circolare n. 3689/C del 6 maggio 2016
+
+
+
+
+                                                                                                                        1
+      A) MODIFICHE TRACCIATO B95_FD70-TE CONTENENTE IL NUOVO MODULO TE PER LA
+         COMUNICAZIONE O CONFERMA DEL TITOLARE EFFETTIVO
+ COORDINATA
+                                                                                                NG      TI
+X     Y       Z     CONTENUTO                                                              LU              PO    CONTROLLI
+                                                                                                                                                                                             Modulistica 2023
+
+                                                                                                                                                                                    Modulo TE
+                  A / ESTREMI DELLA COMUNICAZIONE
+Riquadro obbligatorio
+D    65     30      posizione (sigla pv.)                                                  2                     obbligatorio; esistenza in tabella PRV
+D    65     50      tipo soggetto o istituto                                               1                     obbligatorio; esitenza in tabella CTE valori ammessi: I, P, T, M
+D    65     60      codice fiscale                                                        11                     obbligatorio
+D    65     65      Estremi mandato                                                       80                     Obbligatorio se [D 65 50]=M; altrimenti vietato
+                                                                                                                 obbligatorio se ([D 65 50] = T) o ([D 65 50]= P e soggetto non iscritto nel RI/REA); altrimenti
+D    65      70     denominazione 1° riga                                                  65                    vietato
+D    65     80      denominazione 2° riga                                                 80                     consentito se valorizzato [D 65 70]
+D    65     90      denominazione 3° riga                                                 80                     consentito se valorizzato [D 65 70]
+D    65     100     denominazione 4° riga                                                 80                     consentito se valorizzato [D 65 70]
+D    65     110     tipo denuncia                                                          1                     obbligatorio; esistenza in tabella CTE valori ammessi: N, V, C
+D    65     120     tipo dichiarazione                                                     1                     obbligatorio; esistenza in tabella CTE valori ammessi: S, U, Z
+D    65     130     nome e.mail certificata                                               40                     obbligatorio solo in caso di [D 65 50] = P e solo se [D 65 110] = N o V; altrimenti vietato
+D    65     140     dominio e.mail certificata                                            40                     obbligatorio se valorizzato [D 65 130] altrimenti vietato
+D    65     150     data evento                                                            8         data        obbligatorio se ([D 65 110]= V) o ([D 65 110]= N e [D 65 50]= P); altrimenti vietato
+
+ATTENZIONE: i seguenti riquadri sono vietati nel caso di comunicazione di conferma dei titolari effettivi [D 65 110] = 'C'
+
+                  1 / PGP - INFORMAZIONI IDENTIFICATIVE
+Se [D 65 70] valorizzato e [D 65 50]=P (ossia PGP non iscritta), è possibile valorizzare tante occorrenze quante necessarie, ed almeno un'occorrenza deve avere "Tipo sede"=L . Altrimenti il
+riquadro e' vietato.
+ D 1        10       tipo sede                                                           1                  obbligatorio; esistenza in tabella CTE valori ammessi: L, A
+ D 1        20       provincia (codice )                                                 2                  obbligatorio; uguale a [D 65 30] se [D 1 10] = L
+ D 1        30       cap                                                                 5     num          obbligatorio se valorizzato [D 1 20]
+ D 1        40       comune                                                             40                  obbligatorio; esistenza in tabella COM
+ D 1        50       frazione o località'                                               40
+ D 1        60       via, viale, piazza, ...                                            80                  obbligatorio
+ D 1        70       nr. civico                                                          8                  obbligatorio
+ D 1        80       presso od altre indicazioni                                        40
+
+                  2 / TRUST - INFORMAZIONI IDENTIFICATIVE
+Riquadro obbligatorio se [D 65 110]=N e [D 65 50] = T; altrimenti vietato
+D 2        10     data di costituzione                                                     8          data       obbligatorio
+D 2        20     estremi costituzione                                                    80                     obbligatorio
+D 2        30     stato (codice)                                                           3                     obbligatorio; esistenza in tabella STA
+D 2        40     provincia (codice)                                                       2                     obbligatorio se [D 2 30] = I, altrimenti vietato; esistenza in tabella PRV e uguale a [D 65 30]
+D 2        50     comune                                                                  40                     obbligatorio; esistenza in tabella COM se [D 2 30] = I
+
+                  3 / TITOLARE EFFETTIVO
+Riquadro obbligatorio se [D 65 110]=N oppure V, altrimenti vietato
+E' possibile valorizzare tante occorrenze quante necessarie. Ogni occorrenza di questa sezione è composta dai seguenti campi tra [D 3 10] e [D 3 250]:
+ANAGRAFICA
+D     3     10       codice fiscale                                                   16                     obbligatorio se [D 3 60] = I
+D     3     20       sesso                                                             1                     obbligatorio vale M o F
+D     3     30       cognome                                                          40                     obbligatorio
+D     3     40       nome                                                             40                     obbligatorio
+D     3     50       data di nascita                                                   8      data           obbligatorio
+D     3     60       cittadinanza (codice)                                             3                     obbligatorio, esistenza in tabella STA
+D     3     70       stato di nascita (codice)                                         3                     obbligatorio, esistenza in tabella STA
+D     3     80       provincia di nascita (codice)                                     2                     obbligatorio se [D 3 70]=I, altrimenti vietato; esistenza in tabella PRV
+D     3     90       comune di nascita                                                40                     obbligatorio; esistenza in tabella COM se [D 3 70] = I
+RESIDENZA / DOMICILIO
+E' possibile valorizzare tante occorrenze quante necessarie, ciascuna composta dai seguenti campi tra [D 3 120] e [D 3 220];
+Obbligatoria un'occorrenza con la residenza anagrafica ( R ) , compilare l'occorrenza per il domicilio solo se diverso dalla residenza
+D     3     120     tipo indirizzo                                                         1                     obbligatorio; esistenza in tabella CTE valori ammessi: R, D
+D     3     130     stato (codice)                                                         3                     obbligatorio, esistenza in tabella STA
+D     3     140     provincia (codice)                                                     2                     obbligatorio se [D 3 130]=I, altrimenti vietato; esistenza in tabella PRV
+D     3     150     cap                                                                    5          num        obbligatorio se [D 3 130]=I, altrimenti vietato
+D     3     160     comune                                                                40                     obbligatorio; esistenza in tabella COM se [D 3 130]=I
+D     3     170     frazione o località                                                   40
+D     3     180     via, viale, piazza, …                                                 80                     obbligatorio
+D     3     190     nr. Civico                                                             8                     obbligatorio
+D     3     200     presso od altre indicazioni                                           40
+D     3     210     nome e.mail certificata                                               40                     consentito solo se [D 3 120] = R
+D     3     220     dominio e.mail certificata                                            40                     obbigatorio se valorizzato [D 3 210] altrimenti vietato
+REQUISITI
+E' possibile valorizzare tante occorrenze quante necessarie;
+Obbligatorio almeno un'occorenza con [D 3 250] diverso da "CTR"; Non è possibile valorizzare più occorrenze con lo stesso valore del campo [D 3 250]
+D     3     250     codice requisito                                                        3                    obbligatorio; esistenza in tabella RTE
+
+
+
+
+                                                                                   FINE MODULO TE
+                                                                                                                                                                                                              2
+  B) VARIAZIONI DI CODICI TABELLE
+
+         Nuova tabella CTE:
+
+                                      TABELLA CTE
+
+CODICE                                     DESCRIZIONE
+   A           SEDE AMMINISTRATIVA
+   C           CONFERMA
+   D           DOMICILIO
+   I           IMPRESA
+   L           SEDE LEGALE
+  M            MANDATO FIDUCIARIO
+   N           COMUNICAZIONE
+   P           PERSONA GIURIDICA PRIVATA
+   R           RESIDENZA
+               IL DICHIARANTE, IN QUALITA’ DI AMMINISTRATORE/SINDACO DELLA
+               SOCIETA’ INDICATA, ATTESTA AI SENSI DEGLI ART. 46, 47 E 76 DEL D.P.R.
+      S        445 DEL 2000 CHE I DATI E LE INFORMAZIONI CONTENUTI NELLA
+               PRESENTE COMUNICAZIONE DELLA TITOLARITA’ EFFETTIVA SONO
+               VERITIERI E CORRISPONDENTI A QUANTO PERSONALMENTE ACCERTATO
+      T        TRUST
+               IL DICHIARANTE, IN QUALITA’ DI FONDATORE OPPURE DI
+               RAPPRESENTANTE E AMMINISTRATORE DELL’ENTE INDICATO, ATTESTA
+               AI SENSI DEGLI ART. 46, 47 E 76 DEL D.P.R. 445 DEL 2000, CHE I DATI E LE
+               INFORMAZIONI CONTENUTI NELLA PRESENTE COMUNICAZIONE DELLA
+               TITOLARITA’ EFFETTIVA SONO VERITIERI E CORRISPONDENTI A QUANTO
+      U        PERSONALMENTE ACCERTATO
+      V        VARIAZIONE
+               IL DICHIARANTE, IN QUALITA’ DI FIDUCIARIO DI CUI ALL’ART. 1, C.2
+               LETT. D) DEL D.M. 55/2022, ATTESTA AI SENSI DEGLI ART. 46, 47 E 76 DEL
+               D.P.R. 445 DEL 2000, CHE I DATI E LE INFORMAZIONI CONTENUTI NELLA
+               PRESENTE COMUNICAZIONE DELLA TITOLARITA’ EFFETTIVA SONO
+      Z        VERITIERI E CORRISPONDENTI A QUANTO PERSONALMENTE ACCERTATO
+
+
+             Nuova tabella RTE:
+
+                                      TABELLA RTE
+
+CODICE                                    DESCRIZIONE
+CSA            TITOLARE EFFETTIVO DI COSTITUENTE DI TRUST O ISTITUTO AFFINE
+FDA            TITOLARE EFFETTIVO DI FIDUCIARIO DI TRUST O ISTITUTO AFFINE
+GUA            TITOLARE EFFETTIVO DI GUARDIANO DI TRUST O ISTITUTO AFFINE
+               TITOLARE EFFETTIVO DI SOGGETTO CHE OPERA PER CONTO DEL
+DDA            FIDUCIARIO IN TRUST O ISTITUTO AFFINE
+BNA            TITOLARE EFFETTIVO DI BENEFICIARIO DEL TRUST O ISTITUTO AFFINE
+               TITOLARE EFFETTIVO DI ESERCENTE CONTROLLO SUI BENI IN TRUST O
+TFA            ISTITUTO AFFINE
+CST            COSTITUENTE DI TRUST O ISTITUTO AFFINE
+                                                                                          3
+FDU      FIDUCIARIO DI TRUST O ISTITUTO AFFINE
+GUR      GUARDIANO DI TRUST O ISTITUTO AFFINE
+         SOGGETTO CHE OPERA PER CONTO DEL FIDUCIARIO IN TRUST O
+DDF      ISTITUTO AFFINE
+BNC      BENEFICIARIO DEL TRUST O ISTITUTO AFFINE
+TFC      ESERCENTE CONTROLLO SUI BENI IN TRUST O ISTITUTO AFFINE
+BNP      BENEFICIARIO DELLA PERSONA GIURIDICA PRIVATA
+FND      FONDATORE
+         TITOLARE POTERI DI RAPPRESENTANZA, AMMINISTRAZIONE O
+TRA      DIREZIONE
+         PARTECIPAZIONE PROPRIETARIA DIRETTA SUPERIORE AL VENTICINQUE
+TPD      PER CENTO DEL CAPITALE
+         PARTECIPAZIONE PROPRIETARIA INDIRETTA SUPERIORE AL
+TPI      VENTICINQUE PER CENTO DEL CAPITALE
+         CONTROLLO DI MAGGIORANZA DEI VOTI ESERCITABILI IN ASSEMBLEA
+TCM      ORDINARIA
+         CONTROLLO DI VOTI SUFFICIENTI PER INFLUENZA DOMINANTE IN
+TCE      ASSEMBLEA ORDINARIA
+         ESISTENZA DI VINCOLI CONTRATTUALI PER INFLUENZA DOMINANTE
+TVC      SULLA SOCIETA'
+         CONTROINTERESSATO ALL’ACCESSO PER ESPOSIZIONE A RISCHIO
+         SPROPORZIONATO DI FRODE, RAPIMENTO, RICATTO, ESTORSIONE,
+         MOLESTIA, VIOLENZA, O INTIMIDAZIONE OPPURE PERSONA INCAPACE O
+CTR      MINORE D'ETA’
+
+
+
+      C) AGGIORNAMENTO TABELLA DI DECODIFICA
+
+
+                  TABELLA DECODIFICA
+
+CODICE                     DESCRIZIONE
+CTE      TABELLA CODIFICA MODULO TE
+RTE      TABELLA REQUISITI TITOLARE EFFETTIVO
+
+
+
+
+                                                                         4
+D) AGGIORNAMENTO SPECIFICHE PER LA PREPARAZIONE DEL “FILE-PRATICA”
+  (FILESPE70) ALLA VERSIONE 7.0 PER ACCLUDERE IL NUOVO MODULO TE
+
+
+
+
+                     "InfoCamere"
+
+
+
+                   FEDRA
+                 " DENUNCE AL REGISTRO IMPRESE "
+
+
+
+
+        Specifiche per la preparazione del " file-Pratica "
+
+
+
+                     Aggiornato alla versione 7.0
+
+
+
+
+                                                                   5
+                                             INDICE
+                                                      Pagina
+
+
+1 - Istruzioni per la compilazione                         9
+2 - La "distinta di accompagnamento"                       5
+3 - Il "file-Pratica" : nome del file                      9
+4 - Il "file-Pratica" : la struttura logica               10
+5 - Il "file-Pratica" : la struttura fisica               11
+6 - Il "file-Pratica" : operazioni conclusive             16
+    6.1 - Formattazione del file-pratica                  16
+    6.2 - Targatura del file-pratica                      16
+8 – File-Riepilogo                                        18
+    8.1 – Il “file-Riepilogo”: nome del file              18
+    8.2 – Il “file-Riepilogo”: la struttura logica        18
+    8.3 – Il “file-Riepilogo”: la struttura fisica        19
+
+
+
+
+                                                           6
+1 - Istruzioni per la compilazione
+
+I Moduli compresi nella Modulistica del Registro Imprese e gestiti dai servizi FEDRA sono i seguenti:
+
+MODULO FUNZIONE
+
+       S1        Iscrizione di Società, Consorzio, G.E.I.E., Ente pubblico economico nel Registro delle Imprese
+
+       S2        Modifica di Società, Consorzio, G.E.I.E., Ente pubblico economico
+
+       S3        Scioglimento, liquidazione, cancellazione dal Registro delle Imprese
+
+       S5        Inizio, modifica, cessazione di attività della sede legale di Società, Ente pubblico economico, Consorzio, G.E.I.E. ed altri
+                       soggetti giuridici
+
+
+
+       R         Denuncia al R.E.A. di Associazione, Ente, Impresa estera
+
+
+       I1         Iscrizione di imprenditore individuale
+
+       I2         Modifica e cancellazione di imprenditore individuale
+
+
+
+Intercalare P Atti o fatti relativi a socio o titolare di carica
+Intercalare AA Iscrizione, Modifica, Cessazione all’Albo Artigiani
+
+Modulo S Elenco dei soci e degli altri titolari di diritti su azioni o quote sociali - Pubblicita’ delle societa’ soggette
+                        all’altrui attivita’ di direzione e coordinamento
+
+
+       UL        Denuncia di apertura, modifica, cessazione di localizzazione
+
+
+
+       TA        Atto di trasferimento proprietà o godimento di azienda (Legge n. 310/1993)
+
+       B         Deposito di bilanci di esercizio e situazioni patrimoniali
+
+
+
+        TE       Comunicazione, variazione o conferma Titolare Effettivo
+
+
+
+
+La prima cosa da fare nel preparare una Pratica è quella di individuare l'appropriato modulo da
+compilare a seconda dell' evento che va denunciato; identificato e compilato questo particolare
+modulo (che d'ora in poi definiremo "Modulo-base" ), la Pratica potrà venire corredata da uno o
+più "moduli-allegati" (a seconda della complessità della denuncia).
+
+
+Di seguito la tabella di compatibilità tra i Moduli-base e i possibili Moduli ad essi allegati :
+
+
+
+
+                                                                                                                                                7
+MODULISTICA
+                       RP (1)      S3 S5          S     int P     int     UL      XX (1)
+   Moduli base           (*)        (1)   (1)     (1)     (n)              (n)      (**)
+                                                                  AA
+                                                                   (1)
+       S1                                                                
+       S2                                                              
+       S3                                                                  
+       S5                                                                    
+
+        R                                                                    
+
+        I1                                                                   
+        I2                                                                   
+
+Intercalare P                                                                  
+
+       UL                                                                    
+
+       TA                                                                          
+        B                                                                        
+        S                                                                           
+
+       TE                                                                          
+
+(*) il Modulo RP è obbligatorio allegarlo a qualsiasi pratica. Infatti in questo modulo saranno
+presenti le informazioni di Riepilogo di tutto “l’incartamento” presentato informaticamente. Questo
+normalmente sarà costituito dal file-pratica in oggetto, e da tutti gli altri files a cura dell’utente, che
+conterranno Atti, Certificati ed allegati vari necessari alla presentazione della Pratica al R.I..
+(**) il Modulo XX è fruibile in questi servizi di comunicazione "informatica" tra Utenti e Camere di
+Commercio, per dare la possibilità a chi compila la denuncia di trasmettere alla Camera di
+Commercio informazioni in formato libero che non trovano una precisa collocazione in alcun altro
+Modulo; questo Modulo XX può in definitiva essere considerato il sostituto dei vari Riquadri NOTE.
+Il Modulo XX non è utilizzabile con il Modulo TE.
+
+
+Per far sì che, nel corso dell' istruttoria, la Camera di Commercio non rilevi errori od omissioni tali
+da vedersi costretta a contattare il denunciante e quindi a ritardare l'evasione della Pratica, è
+necessario sottoporre i dati della Pratica ad una serie di controlli.
+L' allegato B-95 riporta le specifiche sui singoli campi (lunghezza, tipo, controlli, chiavi
+di identificazione)
+
+2 - La "distinta di accompagnamento"
+                                                                                                          8
+Per ogni Pratica "informatica" dovrà essere predisposto un documento definito "Distinta di
+accompagnamento della Pratica".
+Questo documento verrà presentato assieme a ulteriori documenti (Atti, Certificati, ecc...) a seconda
+di quanto richiesto dalla Normativa.
+La distinta contiene la visura a quadri dei dati della modulistica informatica ed è identificata dal
+codice documento DIS. Tale documento deve essere firmato digitalmente dal soggetto obbligato alla
+domanda/denuncia, ovvero dal soggetto incaricato della presentazione della stessa ai sensi
+dell'art. 31, comma 2-quater, legge n. 340/2000. Nella trasmissione telematica la distinta va
+sottoscritta digitalmente dall'intermediario, qualora questi sia un soggetto diverso
+dall'obbligato, al fine dell'accettazione della dichiarazione di domiciliazione.
+
+
+
+
+                                                                                                    9
+DISTINTA
+(ESTREMI AUTORIZZAZIONE ASSOLVIMENTO IMPOSTA DI BOLLO VIRTUALE)
+
+
+(ESTREMI E RECAPITO DELLO STUDIO, ASSOCIAZIONE ECC. CHE COMPILA LA DISTINTA)
+
+
+Pratica           Utente                                             / /
+
+Il sottoscritto (Cognome)                           (Nome)
+
+in qualita’ di
+
+del soggetto o istituto
+
+con sede in prov. di       N.R.E.A. Sede         Cod. Fiscale
+
+sezione/i richiesta
+
+presenta per la posizione (sigla pv)                      N.R.E.A.
+
+una domanda/denuncia di
+
+riguardante (solo per pratiche di modifica)
+
+
+
+
+comprendente anche i seguenti moduli in modalità informatica:
+
+ n. mod.         n. mod.           n.         n. mod.                      n. mod.
+ mod.
+
+
+
+e deposita i seguenti atti:
+
+
+
+
+LE EVENTUALI ULTERIORI SOTTOSCRIZIONI DIGITALI SONO APPOSTE AI FINI DELL’ISCRIZIONE.
+
+
+
+
+                                                                                       10
+Andiamo ora ad analizzare in dettaglio il contenuto della Distinta .
+
+     »Dati Utente
+     nell' esempio delle pagine precedenti sono presentati come:
+            ( ESTREMI E RECAPITO DELLO STUDIO, ASSOCIAZIONE ECC. CHE COMPILA LA DISTINTA )
+
+
+     Vi vanno specificate (in formato libero) le generalità del soggetto (studio professionale o altro)
+     che ha provveduto alla predisposizione della Pratica, ad esempio:
+               STUDIO NOTARILE ROSSI - CORSO UMBERTO I, 16 - 35100 PADOVA - TEL. 049/987654
+
+
+     »Codice Pratica, Codice Utente, Userid di registrazione dell’Utente, CCIAA, Data
+     nell' esempio delle pagine precedenti sono presentati come:
+ Pratica     Utente                                                          / /
+
+     Vi vanno impostati il nome attribuito al "file-pratica" (vedi cap. 3), il codice fiscale utente, la sua
+     Userid rilasciata con la registrazione sul sito Internet di Infocamere, la Provincia della CCIAA
+     cui si presenta la Pratica, la data di compilazione della Distinta.
+
+     »Generalità del denunciante
+     nell' esempio delle pagine precedenti sono presentate come:
+                Il sottoscritto (Cognome)                      (Nome)
+
+                in qualita' di
+
+                del soggetto o istituto
+
+                con sede in prov. di        N.R.E.A. Sede     Cod. Fiscale
+
+     Vi vanno specificate le seguenti informazioni:                                              .
+     Cognome e Nome del denunciante;
+      . titolo in base al quale si presenta la denuncia (titolare, amministratore, socio, etc.);
+      . denominazione, sigla provincia e numero REA della Sede (se il soggetto o istituto è già iscritto );
+      . codice fiscale del soggetto o istituto.
+
+     »Sezioni del Registro Imprese
+     nell' esempio delle pagine precedenti è presentato come:
+                sezione/i richiesta
+
+     Questo campo va compilato nel caso di prima iscrizione del soggetto ovvero di richieste
+     successive di iscrizione in altre sezioni.
+
+     »Posizione destinataria, Tipo Denuncia, Riquadri Modulo Base
+     nell' esempio delle pagine precedenti sono presentati come:
+                presenta per la posizione (sigla pv)             N.R.E.A.
+
+                una domanda/denuncia di
+
+                riguardante (solo per pratiche di modifica)
+
+
+
+
+                                                                                                           11
+Vi vanno specificate le seguenti informazioni:                                                .
+Posizione (sigla pv) per la quale la Pratica viene inoltrata;                                 .
+Numero REA (se esistente) del soggetto o istituto presso la CCIAA destinataria della
+pratica;
+ . Tipo denuncia (tipo modulo base e sua descrizione)
+ . solo per Pratiche di Modifica e solo per il Modulo-base: lista dei Riquadri
+        compilati (per ognuno numero riquadro e relativa descrizione)
+
+»Moduli allegati
+nell'esempio delle pagine precedenti sono presentati come:
+           comprendente anche i seguenti moduli in modalità informatica:
+
+           n. mod.       n.              n. mod.                           n. mod.
+           mod.          n.
+           mod.
+
+
+
+Vi vanno descritti il numero ed il tipo dei moduli allegati al Modulo Base e costituenti la Pratica.
+
+»Descrizione Atti depositati
+nell'esempio delle pagine precedenti è presentata come:
+           e deposita i seguenti atti:
+
+
+
+
+Vi vanno indicati (codice Atto + descrizione) gli Atti depositati unitamente alla Distinta.
+
+»Dati Bollo
+nell'esempio delle pagine precedenti sono presentati come:
+            (ESTREMI AUTORIZZAZIONE ASSOLVIMENTO IMPOSTA DI BOLLO VIRTUALE )
+
+           Vi vanno specificati (in formato libero) gli estremi (numero ed Ente rilasciante)
+   dell’autorizzazione all’assolvimento dell’imposta di bollo in modo virtuale.
+
+
+
+
+                                                                                                   12
+3 - Il "file-Pratica": nome del file
+
+
+ Ogni "Pratica automatica" andrà registrata in UN UNICO FILE il cui nome dovrà essere del tipo:
+
+
+                                                abbcddee.fgh
+dove i primi 8 caratteri (nome-file) rappresentano la date-time in cui la pratica è stata costruita,
+secondo le seguenti convenzioni:
+    a ............... mese (1=gennaio, 2=febbraio, ..., 9=settembre, A=ottobre, ..., C=dicembre)
+    bb....... giorno (valori compresi tra 01 e 31)
+    c .......... ora (vengono utilizzate le lettere dell' alfabeto anglosassone: A=ore 1,
+                       B=ore 2, ... , I=ore 9, J=ore 10,         , W=ore 23, X=ore 00 o 24, non è ammesso il
+    carattere @)
+    dd       minuto (valori compresi tra 00 e 59)
+    ee       secondo (valori compresi tra 00 e 59)
+Per quanto riguarda gli ulteriori 3 caratteri (estensione) valgono le seguenti convenzioni:
+    f        tipo pratica (impostare col valore fisso "U")
+    g        tipo di Modulistica (impostare col valore fisso "3")
+    h .......... tipo di file (impostare col valore fisso "T")
+
+
+Facendo un esempio, i dati relativi a una Pratica di Iscrizione di Società preparata il 12 Novembre
+alle ore 16 28' 37" saranno contenuto nel file:
+                                             B12P2837.U3T
+
+
+
+
+                                                                                                           13
+4 - Il "file-Pratica": la struttura logica
+La sequenza logica di memorizzazione dei dati nel file-pratica deve rispettare la logica di composizione
+con il " modulo-base" in testa, ed i possibili allegati a seguire.
+
+
+        Ordine di memorizzazione dei moduli nel "file-pratica":
+
+      Modulo Base
+               Modulo S3 (se previsto)
+               Modulo S5 (se previsto)
+               Modulo S (se previsto)
+               Intercalare P (1) di pertinenza del modulo base (se previsto)
+               .....
+               Intercalare P (n) di pertinenza del modulo base (se previsto)
+               Modulo UL (1) (se previsto)
+                      Intercalare P (1) di pertinenza del precedente UL (se previsto)
+                      .....
+                      Intercalare P (n) di pertinenza del precedente UL (se previsto)
+               .....
+               Modulo UL (n) (se previsto)
+                      Intercalare P (1) di pertinenza del precedente UL (se previsto)
+                      .....
+                      Intercalare P (n) di pertinenza del precedente UL (se previsto)
+               Intercalare AA (se previsto)
+               Modulo XX (se previsto)
+               Modulo TE (se previsto)
+               Modulo RP (obbligatorio sempre)
+
+
+
+
+                                                                                                     14
+   5 - Il "file-Pratica" : la struttura fisica
+
+   Va precisato che, nel caso di presentazione tramite supporto informatico, per ogni
+   supporto consegnato in Camera di Commercio, la pratica dovrà essere registrata con il
+   seguente path:
+
+                                          A:\WFEDRA\DATIRI
+
+
+   Il file-pratica consta di 3 diversi tipi record, di seguito descritti.
+
+           *"RECORD DI TESTA" (presente una sola volta quale primo record del file); ha
+           lunghezza fissa (8 caratteri); il suo tracciato è il seguente:
+descrizione del campo                                       tipo       lunghezza       Contenuto fisso         nota
+Posizione nel file (offset) del "RECORD DI CODA"
+                                                        uns. long           4                                  (a)
+Filler A                                                uns. long           4         360 (esadecimale
+                                                                                      68010000)
+   NOTE: (a) : vi va indicata la posizione (offset) del RECORD DI CODA nel "file-Pratica"
+
+
+
+
+           *"RECORD DI CODA" (presente una sola volta quale ultimo record del file); ha
+           lunghezza fissa (360 caratteri); il suo tracciato è il seguente:
+descrizione del campo                Tipo       lunghezza               contenuto fisso                 Nota
+Filler A                             char [ ]       1                carattere esadecimale 05
+Codice Fiscale soggetto o istituto   char [ ]      16          se di 11 crt inserire spazi a sinistra
+Identificativo source                char [ ]      12                                                    (a)
+Identificativo versione              char [ ]       3                                                    (b)
+Filler B                             char [ ]       6               6 caratteri esadecimale 20
+Numero di Registro REA               char [ ]       7                                                    (c)
+Primo Modulo nella Pratica           char [ ]       1                                                    (d)
+Dati identificativi della Pratica    char [ ]      84                                                    (e)
+Sequenza Enti                        char [ ]       5                                                    (j)
+Sequenza Moduli                      char [ ]      60                                                    (f)
+Userid di registrazione Utente       char [ ]       8                                                    (g)
+Filler D                             char [ ]       2               2 caratteri esadecimale 20
+Origine pratica                      char [ ]       1                carattere esadecimale 46
+Filler E                             char [ ]       2               2 caratteri esadecimale 20
+Dati Utente                          char [ ]      80                                                    (h)
+Filler F                             char [ ]      52               52 caratteri esadecimale 20
+Numero Protocollo Riferimento        char [ ]      20                                                    (i)
+     NOTE :
+     (a) : Identificativo source
+          serve ad identificare la fonte (procedura software) che ha originato la
+          Pratica; specificare in questo campo :
+             - il nome della Società proprietaria del SW che ha generato il file (obbligatorio)
+
+                                                                                                                      15
+ (b) : Identificativo versione
+        -   serve ad identificare la versione del programma : per la corrente vale”700”, in
+            esadecimale “373030” (obbligatorio)
+
+ (c) : Numero di REA (Repertorio Economico Amministrativo)
+     riportare in questo campo il Numero R.E.A. specificato nel modulo-base (ovviamente per
+     Pratiche relative a soggetti o istituti di cui si chiede l'iscrizione questo campo risulterà
+     valorizzato a spazi); essendo questo un dato numerico, quando presente va allineato a
+     destra con riempimento di zeri a sinistra.
+
+(d) : Primo modulo della pratica (MODULO BASE)
+     questo campo va riportato l' identificativo del modulo-base utilizzato nella Pratica (sul
+     concetto di "modulo-base" vedi capitolo 1); gli identificativi dei vari Moduli sono elencati
+     nella sottostante tabella:
+
+
+      TABELLA                         IDENTIFICATIVI MODULI
+        Modulo                                  Identificativo
+          S1                           " 2 " (carattere esadecimale 32)
+          S2                           " 4 " (carattere esadecimale 34)
+          S3                           " 6 " (carattere esadecimale 36)
+          S5                          " C " (carattere esadecimale 43)
+           R                          " R " (carattere esadecimale 52)
+     Intercalare P                    " P " (carattere esadecimale 50)
+           S                           " S " (carattere esadecimale 53)
+           I1                          " 1 " (carattere esadecimale 31)
+           I2                          " 3 " (carattere esadecimale 33)
+          UL                           " 5 " (carattere esadecimale 35)
+          TA                           " T " (carattere esadecimale 54)
+           B                          " B " (carattere esadecimale 42)
+          TE                          " D " (carattere esadecimale 44)
+    Intercalare AA                     " 7 " (carattere esadecimale 37)
+          XX                          " Z " (carattere esadecimale 5A)
+          RP                          " O " (carattere esadecimale 4F)
+
+
+(e) : Dati identificativi della pratica
+    questo campo va sempre impostato con la denominazione del soggetto o istituto oggetto della
+    denuncia.
+    N.B. questo campo va sempre e comunque completato a destra con spazi
+
+(f) : Sequenza moduli
+    vi va impostata la sequenza degli identificativi dei Moduli componenti la Pratica; gli
+    identificativi sono quelli presentati nella tabella precedente; per fare un esempio, per
+    una Pratica composta in sequenza da:
+                                        1 Modulo S2
+                                        2 Intercalari P (di pertinenza della sede della società)
+
+                                                                                                    16
+                                        1 Modulo UL
+                                        1 Intercalare P (di pertinenza dell' Unità Locale)
+                                        1 Modulo RP ( sempre obbligatorio)
+       la corretta sequenza con cui andrà impostato questo campo sarà: 4PP5PO
+       La sequenza sarà troncata ai primi 60 moduli se la pratica ne dovesse contenere un numero
+       maggiore. N.B. questo campo va sempre e comunque completato a destra con spazi
+
+(g) : Userid di registrazione Utente
+      riportare in questo campo la Userid assegnata all’Utente al momento della registrazione
+      sul sito Internet Infocamere di Fedra
+
+(h) : Dati Utente
+      come nella Distinta (capitolo 2) vi vanno specificate (in formato libero) le generalità del
+      soggetto (studio professionale, ecc...) che ha provveduto alla predisposizione della Pratica,
+      per esempio:
+                 Studio FEDRA, via Turazza 15, 35134 PADOVA tel . 049-1234567
+      N.B. questo campo va sempre e comunque completato a destra con spazi
+
+(i)   : Numero Protocollo Riferimento
+       Se la presente pratica rettifica e sostituisce una precedente pratica già inoltrata in CCIAA e da
+      questa anche già protocollata, si può riportare in questo campo il numero di protocollo già
+      assegnato. Si intende che la attuale pratica non vada riprotocollata, bensì agganciata al numero di
+      protocollo indicato. Il numero di protocollo già assegnato va riportato nel campo di 20 caratteri
+      con il seguente formato: PV XX AAAA NNNNNNNNN YYY . Dove PV è la sigla provincia
+      della CCIAA che ha assegnato il protocollo; XX vale “RI” per pratica protocollata per Registro
+      Imprese ; AAAA è l’anno del protocollo ; NNNNNNNNN con eventuali zeri in testa per
+      completare i 9 caratteri , è il numero di protocollo già assegnato ; YYY vale sempre “PRA”.
+
+(j)    : Sequenza Enti ( ex FILLER C )
+      In queste posizioni vanno codificati gli Enti destinatari della pratica nell’ambito della
+      Comunicazione Unica ( L. 40/2007) . Le posizioni non valorizzate vanno lasciate a
+      spazi. Da sinistra verso destra :
+      1) Primo carattere: vale E se la pratica contiene informazioni da inoltrare all’Agenzia delle
+          Entrate ( Int. IVA ); altrimenti vale spazi ( 20 esadecimale ) .
+      2) Secondo carattere:
+           vale G se la pratica contiene informazioni da inoltrare alla gestione agricoli
+          INPS; altrimenti
+          vale C se la pratica contiene informazioni da inoltrare alla gestione commercianti INPS
+          (riquadro AC); altrimenti
+          vale A se la pratica contiene informazioni da inoltrare alla gestione artigiani INPS (Int AA o
+          riq, AA o AB su I1, I2, IntP);
+          altrimenti
+          vale B se la pratica contiene informazioni da inoltrare sia alla gestione commercianti che alla
+          gestione artigiani INPS;
+          altrimenti
+          vale F se la pratica contiene informazioni da inoltrare sia alla gestione commercianti che alla
+          gestione agricoli INPS;
+                                                                                                        17
+           altrimenti
+
+           vale H se la pratica contiene informazioni da inoltrare sia alla gestione artigiani che
+           alla gestione agricoli INPS;
+           altrimenti
+           vale L se la pratica contiene informazioni da inoltrare sia alla gestione commercianti che alla
+           gestione artigiani , che alla gestione agricoli INPS;
+           altrimenti vale spazi ( 20 esadecimale ) .
+      3)   Terzo carattere : vale D se la pratica contiene informazioni da inoltrare alla gestione imprese
+           con dipendenti INPS ; altrimenti vale spazi ( 20 esadecimale ) .
+      4)   Quarto carattere : vale I se la pratica contiene informazioni da inoltrare all’INAIL ; altrimenti
+           vale spazi ( 20 esadecimale ) .
+      5)   Quinto carattere : vale R se la pratica contiene informazioni espressamente per il Registro
+           Imprese; altrimenti vale spazi ( 20 esadecimale ) . La valorizzazione a spazi di questa
+           posizione significa che la pratica non contiene informazioni per il Registro Imprese, ma e’
+           stata predisposta esclusivamente per trasmettere dati agli altri Enti ( ad esempio solo per
+           l’Agenzia delle Entrate, e/o solo per la gestione previdenziale INPS, e/o solo per la gestione
+           assicurativa INAIL ) . Generalmente trasmissioni di dati agli altri Enti sono contestuali
+           all’aggiornamento delle analoghe informazioni al Registro delle Imprese : pertanto il valore R
+           sara’ sempre presente, tranne specifiche eccezioni. Si fa presente che tutte le pratiche
+           contenenti informazioni di tipo artigiano devono valorizzare la R, anche quelle con solo dati
+           di esclusiva competenza della gestione artigiana INPS.
+      6)   Quinto carattere: vale T se la pratica contiene esclusivamente informazioni per il titolare
+           effettivo del soggetto ( pratica di esclusiva comunicazione del titolare effettivo) .
+
+
+      *"RECORD DATI" (ne è presente uno per ogni campo della Pratica che sia stato
+      valorizzato); questi record (di lunghezza variabile) vanno registrati tra il "record di testa" ed il
+      "record di coda" del file; il tracciato di questo tipo record è il seguente:
+descrizione del campo               Tipo       lunghezza        Contenuto fisso        nota
+Coordinata X del campo             char [ ]        1                                    (a)
+Coordinata Y del campo             char [ ]        1                                    (b)
+Coordinata Z del campo            Uns. Short       2                                    (c)
+Filler C                           char [ ]        1        carattere esadecimale 00
+Filler D                           char [ ]        1        carattere esadecimale 00
+Contenuto del campo                char [ ]       nnn                                  (d)
+Filler E                           char [ ]        1        carattere esadecimale 7C
+  NOTE :
+  (a) : Coordinata X del campo
+        vi va impostato il valore della coordinata X del campo, come da allegato B-95
+  (b) : Coordinata Y del campo
+        vi va impostato il valore della coordinata Y del campo, come da allegato B-95
+  (c) : Coordinata Z del campo
+        vi va impostato il valore della coordinata Z del campo, come da allegato B-95
+  (d) : Contenuto del campo
+        impostare questo campo col valore effettivo del dato in questione; gli spazi in testa ed in coda
+        vanno eliminati
+
+
+
+
+                                                                                                           18
+                                           ATTENZIONE
+
+I campi di tipo uns short e uns long vanno registrati su file in formato Intel Dos-Windows.
+I caratteri utilizzabili per i DATI sono i seguenti: da esadecimale 20 a esadecimale 5A
+
+ compresi.
+
+Esclusivamente per i campi riportanti Internet Message Format ( sito internet, nome e sito
+
+ email e Pec ), si adotta la specifica RFC 5322 e quindi si accettano anche caratteri contenuti
+
+ nel range da esadecimale 5E a 7E compresi, ad esclusione comunque del carattere
+
+ esadecimale 7C (utilizzato come carattere di controllo del file) .
+
+ Esclusivamente per i dati dell’EUID sui moduli S1 ed S2, nel campo “EUID-numero
+     registrazione sede” sono ammessi , oltre la suddetta specifica RFC 5322, anche il
+     carattere esadecimale F6 (ö) ed il carattere esadecimale D6 (Ö), come da standard ISO
+     8859-1.
+
+
+
+ I record dati vanno inseriti nel file in ordine sia di riquadro nel modulo, che di campo nel
+
+     riquadro, come elencati nelle specifiche B-95, come d’uso per qualsiasi tracciato
+
+     record informatico.
+
+
+                               nota : record di INIZIO MODULO
+ Come già specificato, anche per le "pratiche-automatiche" il concetto di Modulo continua a rivestire
+ un' importanza fondamentale per la successiva elaborazione da parte della Camera di Commercio; è
+ pertanto necessario che    ogni Modulo registrato nel file-pratica possa venire identificato con
+ precisione; il primo record di ogni Modulo registrato nel file-pratica dovrà avere il seguente
+ particolare contenuto :
+   - coordinata X valorizzata con l'identificativo del Modulo (vedi tabella a pag. 12)
+   - coordinata Y impostata con il valore 0
+   - coordinata Z impostata con il valore 1
+   - contenuto del campo valorizzato con una stringa di 6 caratteri esadecimale 30
+
+                                   nota : campi di tipo " SCELTA "
+ Con questo nome vengono indicate le cosiddette "caselle da barrare" della modulistica cartacea; nella
+ Pratica Telematica una scelta si intende effettuata quando il corrispondente campo viene riempito con
+ una X maiuscola (valore esadecimale 58).
+ Ogni campo di tipo "scelta" è opportunamente evidenziato (colonna "TIPO") nell' allegato B-95.
+
+                                   nota : campi di tipo " TESTO
+ " Riguardo ai campi "tipo-testo", va specificato quanto segue:
+                                                                                                     19
+        -  i campi testuali sono formati da una sequenza di più righe di lunghezza massima pari a
+           80 caratteri;
+       - nel file-pratica ogni riga di un testo va registrata con le medesime coordinate X Y e Z
+       - la sequenza corretta delle righe costituenti il testo sarà determinata dalla
+           sequenza di memorizzazione di questi record nel file-pratica
+       - il numero massimo di righe gestite per ogni campo di tipo testo è di 300
+Ogni campo di tipo "testo" è opportunamente evidenziato (colonna "TIPO") nell' allegato B-95.
+
+
+
+6 - Il "file-Pratica" : operazioni conclusive
+
+Il "file-Pratica" costruito secondo le indicazioni fornite in precedenza, prima di essere
+considerato pronto per l’inoltro, dovrà essere sottoposto alle seguenti due operazioni conclusive.
+
+
+
+   1.1 *6.1 - Formattazione del file-pratica
+
+Ogni "file-pratica" deve essere composto da una serie di record a lunghezza fissa di 80 bytes; la
+formattazione consisterà nel "suddividere virtualmente" (ovvero senza aggiungere nessun carattere
+di fine record) l'intero file precedentemente generato, in tanti "pezzi" di lunghezza uguale pari a 80
+bytes. IMPORTANTE: nella grande maggioranza dei casi, ad operazione conclusa risulterà che
+l'ultimo record così ottenuto avrà una lunghezza inferiore agli 80 bytes; in questi casi occorrerà
+operare un riempimento con spazi a destra di quest’ultimo record, fino a portarne la lunghezza ai
+canonici 80 bytes. Esempio:
+
+Penultimo record generato
+
+ Ultimo record generato
+
+
+
+
+   1.2 *6.2 - Targatura del file-pratica
+
+Consiste semplicemente nell'anteporre al "file-pratica", formattato nel corso della          precedente
+operazione, un record " header " (anch'esso di lunghezza 80 bytes) contenente una serie di
+informazioni più sotto elencate.
+Riepilogando, una volta portate a termine queste due operazioni, la struttura del file pronto per
+l'inoltro in Camera di Commercio, risulterà la seguente:
+
+                                  record "header"
+                                  primo record della "pratica" secondo
+                                  record della "pratica"
+
+                                                                                                         20
+                   ultimo record della "pratica"
+<   80 bytes   >
+
+
+
+
+                                                   21
+                                                ATTENZIONE
+           Dopo la "trasformazione", ogni file dovrà continuare a mantenere il medesimo nome attribuito
+                         al momento della creazione, secondo le regole esposte precedentemente
+
+
+   Il record-header, generato nel corso della targatura del file-pratica, ha lunghezza fissa (80
+   bytes) e la seguente struttura:
+
+
+descrizione del campo                  tipo      lunghezza      contenuto fisso      nota
+Filler A                              char [ ]        21             Spazi
+N° record componenti la pratica       char [ ]        6                               (a)
+Gruppo Destinatario                   char [ ]        2                               (b)
+Filler B                              char [ ]        51             Spazi
+
+   NOTE :
+   (a) : N° record componenti la pratica
+         vi va indicato il numero totale di record che compongono il "file-pratica" ( NON
+         VA OVVIAMENTE CONTEGGIATO IL RECORD "HEADER" ); essendo
+         questo un dato numerico, esso va allineato a destra con riempimento di zeri a
+         sinistra.
+
+   (b) : Gruppo Destinatario
+         va impostato con la sigla Provincia della posizione destinataria.
+
+   8 – File-Riepilogo
+
+   Il "file-Pratica" costruito secondo le indicazioni fornite in precedenza, contiene i dati che
+   saranno gestiti in via automatica dalle procedure del R.I.
+   Genericamente pero’ la Pratica presentata al R.I., sara’ costituita, oltre che dal file di dati , anche
+   da Documenti allegati , come Atti, Certificati ed altro. Nel caso di presentazione informatica
+   della Pratica, gli allegati, secondo certi criteri, saranno contenuti in files distinti da quello dei dati
+   (“file-Pratica”). Inoltre la Distinta stessa sara’ contenuta in un apposito file di tipo PDF.
+   Per la presenza di piu’ oggetti (files) costituenti globalmente la Pratica da presentare al R.I.,
+   sorge la necessita’ di avere un oggetto all’interno della Pratica, che elenchi e riassuma le
+   informazioni contenute in tutti gli altri files costituenti la Pratica.
+   Dalle informazioni in esso contenute si potra’ avere una visione sintetica del tipo di Pratica e dei
+   suoi elementi costituenti; inoltre tramite questo file, si potra’ gestire ed elaborare in modo
+   integrale la pratica informatica per il R.I., dalla fase di preparazione a quella di protocollazione
+   e caricamento, senza incorrere in problemi di perdita di documenti allegati sotto forma di files.
+   A questo oggetto viene assegnato il nome generico di “file-Riepilogo”, le cui specifiche sono
+   piu’ avanti dettagliate.
+
+
+           8.1 – Il “file-Riepilogo”: nome del file
+
+   Il “file-Riepilogo” andrà registrato con un nome del tipo:
+                                                   abbcddee.U3R
+                                                                                                                22
+dove i primi 8 caratteri (nome-file) rappresentano esattamente i medesimi 8 caratteri del “file-
+Pratica” con estensione U3T. I successivi 3 caratteri di estensione avranno il valore fisso
+“U3R”.
+Facendo un esempio, il “file-Riepilogo” relativo ad un “file-Pratica” B12P2837.U3T , sara’
+B12P2837.U3R
+
+   8.2 – Il “file-Riepilogo”: la struttura logica
+Nell’ambito della pratica informatica, un oggetto file contiene un documento.
+Un documento può essere semplice o strutturato. Un documento semplice e’ costituito da un
+oggetto il cui contenuto informativo e’ identificato da un unico codice della tabella “Tipo
+Documento” ; un documento strutturato e’ costituito da un unico oggetto il cui contenuto
+informativo puo’ essere identificato da piu’ codici della tabella “Tipo Documento”, ognuno dei
+quali e’ un “Prospetto”.
+Un documento semplice presenta un solo codice atto.
+
+Per ogni file esistono una o piu' occorrenze di TipoRecord1 sequenziali, ordinate
+tra loro. Un documento semplice presenta una sola occorrenza di TipoRecord1.
+Un documento strutturato presenta un'occorrenza di TipoRecord1 per ogni documento semplice
+componente ( per ogni codice di tipo documento, o ad esempio, per ogni codice atto del
+documento semplice ) .
+
+
+   8.3 – Il “file-Riepilogo”: la struttura fisica
+Le specifiche tecniche sottostanti per la creazione del “file-Riepilogo” in formato TXT sono
+assolutamente omogenee con quelle dei corrispondenti campi del Modulo RP, cui si rimanda
+per ulteriori dettagli.
+
+TipoRecord1: molteplicità n, lunghezza fissa= 320 chrs
+
+Campo1 = NomeFile (80 chrs nome del file, completo di estensione, in cui è inserito il
+                       documento : allineato a sx con blank in coda, e senza indicazione della
+                       path.
+                           Es:
+Nomefilefedra+estensione_U3T) Campo2 =
+TipoDocumento (3 chrs codificato in tabella DOC)
+Campo3 = DescrizioneDoc ( 77 chrs solo per i codici generici 98 e 99 riporta la descrizione del
+                                  documento             immessa      dall’utente, altrimenti la
+                                  decodifica di TipoDocumento da tabella DOC )
+Campo4 = PaginaIniziale (4 chrs numerico con zeri in testa, numero iniziale di pagina
+                                 relativa al TipoDocumento)
+Campo5 = PaginaFinale (4 chrs numerico con zeri in testa, numero finale di pagina relativa al
+
+                                                                                                   23
+                            TipoDocumento)
+Campo6 = CodiceAtto (3 chrs codificato in tabella ATT)
+Campo7 = DescrizioneAtto (77 chrs solo per codice A99 riporta la descrizione
+dell’Atto) Campo8 = DataDocumento (8 chrs ggmmaaaa ; per i Bilanci la data
+chiusura esercizio) Campo9 = Filler9 (1 chr valorizzato a blank)
+Campo10 = FlagProspetto (1 chr ; solo per record di Prospetto vale “P”, altrimenti
+blank) Campo11= Filler11 (20 chrs valorizzati a blank)
+Campo12= Filler12 (2 chrs valorizzati a blank)
+Campo13 = Filler13 (4 chrs valorizzati a blank)
+Campo14 = ModoBollo (1 chr codificato in tabella BOL solo per
+TipoDocumento=DIS) Campo15 = Filler15 (1 chr valorizzato a blank)
+Campo16 = Filler16 (34 chrs valorizzati a blank)
+
+
+I campi non valorizzati, o con numero di caratteri inferiore alla massima lunghezza prevista, vanno
+completati con l’inserimento di blank in coda, o , se numerici, di zeri in testa.
+Per ogni record vanno di norma valorizzati tutti i campi, anche se trattasi di documento semplice
+componente uno strutturato, con eventuali eccezioni, di seguito dettagliate.
+Per il file Fedra U3T i campi PaginaIniziale, PaginaFinale, vanno fillati con il valore 1 .
+Il CodiceAtto va riempito a blank nel caso in cui il TipoDocumento non sia riconducibile ad un
+Atto.
+Il campo FlagProspetto va valorizzato nel caso in cui il documento in oggetto è contenuto
+all’interno di un file portante anche altri tipi documento. In tal caso sono particolarmente
+significativi i valori dei campi PaginaIniziale e PaginaFinale che devono essere riferiti al
+documento in oggetto e riportanti i corrispondenti valori rispetto al totale delle pagine del file.
+
+
+Al momento l’unico documento con struttura particolare è il Bilancio.
+Un Bilancio può essere contenuto in un unico file ( ad es.: Bilancio.pdf ) e generalmente conterrà
+i due Prospetti : “Prospetto contabile” e “Nota integrativa” . Nel “file-Riepilogo” saranno
+generalmente presenti tre record , i cui contenuti saranno:
+Primo record, generalmente sempre presente, con : NomeFile ( es:                     Bilancio.pdf     ),
+TipoDocumento=B00 ( Bilancio), PaginaIniziale = numero iniziale di pagina, generalmente 1,
+PaginaFinale= numero dell’ultima pagina del documento del file, CodiceAtto= codice specifico
+7xx del tipo di Bilancio, DataDocumento= data chiusura dell’esercizio, FlagProspetto non
+valorizzato.
+Secondo     record,   generalmente     presente,   con    :   NomeFile     (   es:   Bilancio.pdf     ),
+TipoDocumento=PC ( Prospetto Contabile), PaginaIniziale = numero iniziale di pagina del
+prospetto, generalmente 1, PaginaFinale= numero dell’ultima pagina del prospetto, CodiceAtto=
+codice specifico 7xx del tipo di Bilancio, DataDocumento= data chiusura dell’esercizio,
+FlagProspetto=P .
+Terzo record, generalmente presente, con : NomeFile ( es: Bilancio.pdf ), TipoDocumento=NI (
+                                                                                                           24
+Nota Integrativa), PaginaIniziale = numero iniziale di pagina della nota integrativa,
+PaginaFinale= numero dell’ultima pagina della nota integrativa, CodiceAtto= codice specifico
+7xx del tipo di Bilancio, DataDocumento= data chiusura dell’esercizio, FlagProspetto=P .
+In alcuni casi, non sussistendo la relativa informazione, uno o piu’ dei tre suddetti record puo’
+essere omesso.
+
+
+Quando il documento da allegare e’ l’atto costitutivo contenente anche lo statuto, e’ necessario
+inserire due record, il primo con il campo TipoDocumento=C01 ( Atto Costitutivo ) , ed il
+secondo con TipoDocumento=C02 ( Statuto ) , completi naturalmente di tutte le altre
+informazioni. Nel caso il file fosse unico e contenente entrambi i documenti, per entrambi i
+record occorrera’ valorizzare il FlagProspetto=P
+
+
+
+
+                                                                                                    25
+    E) CONTROLLI AUTOMATICI IN FASE DI SPEDIZIONE DELLA PRATICA DI TITOLARE
+       EFFETTIVO
+
+Si descrivono di seguito le regole utilizzate per controllare la correttezza, coerenza e completezza di una pratica di
+Titolare Effettivo. Le regole descritte sono conformi ai vincoli tecnico-strutturali indicati nelle specifiche tecniche
+Fedra, alle specifiche tecniche descritte nell’allegato B95 e introducono ulteriori controlli.
+
+I controlli per ciascun campo e/o modello sono effettuati all’atto della spedizione della pratica dai sistemi di
+trasmissione delle Camere di Commercio.
+
+A seguito dei controlli qualora la pratica presenti uno o più errori, la spedizione non andrà a buon fine e il sistema
+ne darà informativa al mittente.
+
+Per tutte le pratiche di Titolare Effettivo (modulo TE) si applicano i seguenti controlli:
+
+    A) la pratica deve utilizzare specifiche di modulistica vigenti (compresi i periodi di convivenza di due serie di
+       specifiche diverse, di volta in volta comunicate dal Ministero delle Imprese e del Made in Italy);
+    B) la pratica deve rispettare i vincoli tecnico-strutturali, descritti nelle specifiche Fedra versione 7.0 e
+       successive;
+    C) la pratica deve rispettare le specifiche tecniche descritte nell’allegato B-95 versione 7.0 e successive;
+    D) le date devono essere scritte nel seguente formato ggmmaaaa (2 cifre per il giorno, seguite da 2 cifre per il
+       mese, seguite da 4 cifre per l’anno). Le date devono essere posteriori al 1899. Non è possibile inserire date
+       successive a quella della spedizione della pratica telematica;
+    E) i codici fiscali devono essere formalmente corretti e congruenti con il check digit; per le persone fisiche
+       devono essere congruenti con cognome, nome, sesso e data di nascita dichiarati;
+    F) i campi devono rispettare la lunghezza prevista nel tracciato dati dell’allegato B-95;
+    G) se nella coordinata [D 65 50] il valore inserito coincide con “T”, il numero rea non deve essere presente
+       nel “record di coda" del file-pratica;
+    H) la pratica può contenere esclusivamente allegati in formato PDF/A ad uso interno (codice documento 98)
+       firmati digitalmente;
+    I) in caso di valore CTR in corrispondenza di almeno un’occorrenza della coordinata [D 3 250], deve essere
+       presente il nome e-mail certificata riferibile al Titolare Effettivo nelle coordinata [D 3 210];
+    J) nel caso di comunicazione del mandato fiduciario (valore coordinata [D 65 50] = M), il titolare effettivo in
+       qualità di fiduciario (da indicare, normalmente, nel riq. 3) non deve essere indicato: non è quindi possibile
+       inserire nella coordinata [D 3 250] il requisito “FDU - FIDUCIARIO DI TRUST O ISTITUTO AFFINE”
+       o “FDA - TITOLARE EFFETTIVO DI FIDUCIARIO DI TRUST O ISTITUTO AFFINE”;
+    K) nel caso di imprese dotate di personalità giuridica:
+
+         1.          che risultano essere iscritte nel registro delle imprese con una delle seguenti forme giuridiche (censite
+                    nella “tabella FGO” delle specifiche tecniche e versioni precedenti):
+                          RR - SOCIETÀ A RESPONSABILITÀ LIMITATA A CAPITALE RIDOTTO;
+                          RS - SOCIETÀ A RESPONSABILITÀ LIMITATA SEMPLIFICATA;
+                          SL - SOCIETÀ CONSORTILE A RESPONSABILITÀ LIMITATA;
+                          SR - SOCIETÀ A RESPONSABILITÀ LIMITATA;
+                          SU - SOCIETÀ A RESPONSABILITÀ LIMITATA CON UNICO SOCIO;
+
+                                                               e
+
+         2.         che dichiarano - per le persone fisiche individuate quale titolare effettivo - il requisito “TPD -
+                    PARTECIPAZIONE PROPRIETARIA DIRETTA SUPERIORE AL VENTICINQUE PER CENTO
+                    DEL CAPITALE” censito nella “tabella RTE” delle specifiche tecniche;
+
+                                               allora, la persona fisica DEVE:
+
+               I.       essere presente nell'elenco soci dell’impresa dotata di personalità giuridica per la quale si sta
+                        effettuando l’adempimento in una singola quota o più quote
+
+                                                               e
+
+              II.       la somma dei valori nominali di tali quote deve essere superiore al 25% del capitale sociale
+                        sottoscritto.
+                                                                                                                            26
+        L) in caso di soggetto indicato come titolare effettivo con cittadinanza estera (valore coordinata [D 3 60] ≠ I) e
+           residenza in Italia (valore coordinate [D 3 120 = R] e [D 3 130 = I], allora DEVE essere indicato il codice
+           fiscale (valore coordinata [D 3 10]);
+        M) la forma giuridica dei soggetti per i quali si effettua l’adempimento di comunicazione della titolarità effettiva
+           deve rientrare in almeno una delle seguenti macro tipologie (ad esclusione dei trust e istituti giuridici affini):
+                a. società a responsabilità limitata;
+                b. società per azioni;
+                c. società in accomandita per azioni;
+                d. società cooperative;
+                e. persone giuridiche private (tra cui associazioni, fondazioni e le altre istituzioni di carattere privato).
+        N) in caso di valorizzazione del campo [D 65 50] con il valore
+                a. “I”, allora il tipo dichiarazione del campo [D 65 120] deve essere “S”;
+                b. “P”, allora il tipo dichiarazione del campo [D 65 120] deve essere “U”;
+                c. “T” o “M”, allora il tipo dichiarazione del campo [D 65 120] deve essere “Z”;
+        O) i codici requisito utilizzabili all’interno del campo [D 3 250] in base al tipo di soggetto o istituto dichiarato
+           nel campo [D 65 50] devono rispettare le combinazioni sotto riportate:
+
+                                                               Tipo soggetto o istituto [D 65 50]
+                      Tipo di requisito [D 3 250]
+                                                              I            P             T            M
+                      = esistenza in tabella CTE
+                     CSA                                    -            -          ammesso      ammesso
+                     FDA                                    -            -          ammesso         -
+                     GUA                                    -            -          ammesso      ammesso
+                     DDA                                    -            -          ammesso      ammesso
+                     BNA                                    -            -          ammesso      ammesso
+                     TFA                                    -            -          ammesso      ammesso
+                     CST                                    -            -          ammesso      ammesso
+                     FDU                                    -            -          ammesso         -
+                     GUR                                    -            -          ammesso      ammesso
+                     DDF                                    -            -          ammesso      ammesso
+                     BNC                                    -            -          ammesso      ammesso
+                     TFC                                    -            -          ammesso      ammesso
+                     BNP                                    -         ammesso    -       -
+                     FND                                    -         ammesso    -       -
+                     TRA                                 ammesso      ammesso    -       -
+                     TPD                                 ammesso         -       -       -
+                     TPI                                 ammesso         -       -       -
+                     TCM                                 ammesso         -       -       -
+                     TCE                                 ammesso         -       -       -
+                     TVC                                 ammesso         -       -       -
+                     CTR                                 ammesso      ammesso ammesso ammesso
+
+        P) in caso di valore “I” o “P” nel campo [D 65 50], il codice requisito da indicare nel campo [D 3 250] deve
+           rispettare il seguente vincolo: qualora almeno uno dei titolari effettivi dichiarati utilizzi il codice requisito
+           “TRA”, possono essere indicati nella comunicazione, complessivamente, solo titolari effettivi con il codice
+           requisito “TRA” e/o “CTR”;
+        Q) il valore data inserito nel campo “data evento” [D 65 150] NON DEVE:
+                a. essere successivo alla data di invio della comunicazione TE;
+                b. essere antecedente, in caso di [D 65 110] = V, alla data di avvio della c.d. “Campagna di
+                     comunicazione TE” stabilita dal Ministero delle Imprese e del Made in Italy con apposito
+                     provvedimento.
+
+Per quanto riguarda la Comunicazione Unica, si applicano i seguenti controlli:
+
+   i.       le pratiche di Titolare Effettivo rientrano tra gli adempimenti di sola modifica della posizione e pertanto
+            l’adempimento deve essere di variazione (codice 04);
+  ii.       come ente destinatario della Comunicazione Unica deve essere indicato esclusivamente il Registro delle
+            Imprese;
+                                                                                                                          27
+iii.   il dichiarante della Comunica dovrà avere la qualifica:
+            o in caso di impresa dotata di personalità giuridica (Tipo soggetto = I): “LEGALE
+                 RAPPRESENTANTE”,           “AMMINISTRATORE”,       “LIQUIDATORE”,  “COMMISSARIO
+                 GIUDIZIARIO” o “ALTRO PREVISTO DALLA VIGENTE NORMATIVA”;
+            o in caso di persona giuridica privata (Tipo soggetto = P): “LEGALE RAPPRESENTANTE”,
+                 “AMMINISTRATORE”, “LIQUIDATORE” o “ALTRO PREVISTO DALLA VIGENTE
+                 NORMATIVA;
+            o in caso di trust (Tipo soggetto = T): “ALTRO PREVISTO DALLA VIGENTE NORMATIVA”;
+            o in caso di mandato fiduciario (Tipo soggetto = M): “ALTRO PREVISTO DALLA VIGENTE
+                 NORMATIVA”;
+
+
+
+
+                                                                                             28
+F) APPUNTO N. 1685/A – ISTRUZIONI MODULO TE”
+
+MODULO TE
+Comunicazione o conferma della titolarità effettiva
+
+AVVERTENZE GENERALI
+
+Soggetti utilizzatori del modulo
+Tutti i soggetti tenuti alla comunicazione dei dati e delle informazioni relativi alla titolarità effettiva di
+imprese, persone giuridiche private (di seguito PGP), trust e istituti affini (ivi inclusi i mandati fiduciari) per
+l’iscrizione nella sezione autonoma o nella sezione speciale del R.I.
+Nelle indicazioni riportate nel presente modulo, dove si parla genericamente di “persona” deve intendersi
+persona fisica o giuridica.
+Per le imprese, si riporta di seguito l’elenco delle cariche di tipo amministrativo dei soggetti obbligati alla
+comunicazione:
+CODICE            DESCRIZIONE
+AMD AMMINISTRATORE DELEGATO
+AMG AMMINISTRATORE GIUDIZIARIO
+AMM AMMINISTRATORE
+AMP AMMINISTRATORE PROVVISORIO
+AMS AMMINISTRATORE STRAORDINARIO
+AUN AMMINISTRATORE UNICO
+CGE CONSIGLIERE DI GESTIONE
+CM       COMMISSARIO MINISTERIALE
+CMS COMMISSARIO STRAORDINARIO
+COD CONSIGLIERE DELEGATO
+COL COMMISSARIO LIQUIDATORE
+CON CONSIGLIERE
+COV COMMISSARIO GOVERNATIVO
+COZ COMMISSARIO GIUDIZIALE
+DLR DESIGNATO COME RAPPRESENT. DELLA SOC. AMMINISTRATRICE
+LER LEGALE RAPPRESENTANTE
+LI       LIQUIDATORE
+LRC LEGALE RAPPRESENTANTE CONGIUNTAMENTE
+LRD LEGALE RAPPRESENTANTE DISGIUNTAMENTE
+LRL LEGALE RAPPRESENTANTE CON LIMITAZIONI
+MCD MEMBRO COMITATO DIRETTIVO
+MCE MEMBRO COMITATO ESECUTIVO
+MCG MEMBRO COMITATO DI GESTIONE
+MGD MEMBRO CONSIGLIO DIRETTIVO
+OAS ACCOMANDATARIO DI SAPA
+PCA PRESIDENTE CONSIGLIO AMMINISTRAZIONE
+PCD PRESIDENTE COMITATO DIRETTIVO
+PCE PRESIDENTE COMITATO ESECUTIVO
+PGD PRESIDENTE CONSIGLIO DIRETTIVO
+PGS PRESIDENTE DEL CONSIGLIO DI GESTIONE
+PRE PRESIDENTE
+VIC VICE PRESIDENTE
+VPA VICE PRESIDENTE DEL CONSIGLIO D'AMMINISTRAZIONE
+
+Di seguito si riportano le cariche che compongono l’organo di controllo che possono provvedere alla
+comunicazione laddove non venga effettuata dagli amministratori:
+
+PCS PRESIDENTE DEL COLLEGIO SINDACALE
+PCV PRESIDENTE CONSIGLIO DI SORVEGLIANZA
+SIE SINDACO
+SIP SINDACO PROTEMPORE
+                                                                                                                29
+SIS    SINDACO SUPPLENTE.
+
+Finalità del modulo
+Il modulo va utilizzato singolarmente. Non può essere allegato a nessuno dei moduli esistenti.
+Il modulo viene inviato alla sola Camera di Commercio competente. Non è ammesso l’invio contestuale ad
+altri enti destinatari.
+
+Ufficio competente alla ricezione del modulo
+In caso di comunicazione o conferma dei dati e delle informazioni relativi alla titolarità effettiva di imprese,
+PGP, trust e istituti affini l’ufficio competente è quello della camera di commercio titolare del dato ossia ove
+l’impresa e la PGP hanno la propria sede legale oppure, nel caso di trust, nella provincia in cui è stato
+costituito. Solo in caso di trust (o istituto assimilato) residente in Italia, ma costituito all’estero, la Camera di
+Commercio competente è quella di compensazione (Roma).
+Solo in caso di mandato fiduciario la provincia di competenza è quella della sede della società fiduciaria alla
+quale il mandato fa riferimento.
+
+Avvertenze per i singoli riquadri
+Il modulo informatico si compone in una unica sezione principale “ESTREMI DELLA
+COMUNICAZIONE” suddivisa in tre riquadri: PGP - INFORMAZIONI IDENTIFICATIVE, TRUST -
+INFORMAZIONI IDENTIFICATIVE, TITOLARE EFFETTIVO.
+La sezione individua automaticamente i riquadri che devono essere obbligatoriamente compilati.
+
+A/ ESTREMI DELLA COMUNICAZIONE
+Vanno indicati la provincia, il codice fiscale e la tipologia di soggetto o istituto per il quale si sta effettuando
+la comunicazione indicando nell’apposito campo se si tratta di impresa, PGP, trust o istituto affine (in
+quest’ultimo caso, il mandato fiduciario).
+Solo in caso di PGP per la quale non esistono iscrizioni nel R.I. o nel REA e di trust, è obbligatorio indicare
+anche la denominazione del soggetto.
+Per tutte le PGP deve essere indicato un indirizzo di posta elettronica certificata.
+Deve essere obbligatoriamente indicata la tipologia di denuncia se COMUNICAZIONE, VARIAZIONE
+oppure CONFERMA. La pratica di VARIAZIONE e/o CONFERMA può essere presentata soltanto una
+volta effettuata la prima COMUNICAZIONE. Solo in caso di tipo denuncia = CONFERMA è vietata la
+compilazione dei riquadri successivi.
+Deve essere obbligatoriamente valorizzato il campo “tipo dichiarazione” con il corrispettivo codice presente
+in tabella.
+Per tutti i soggetti tenuti alla comunicazione, soltanto in caso di adempimento di variazione, il campo “data
+evento” deve essere obbligatoriamente valorizzato con la data dell’evento che ha comportato la modifica
+della titolarità effettiva.
+Inoltre, per le PGP, anche per le nuove comunicazioni, il campo “data evento” deve essere obbligatoriamente
+valorizzato indicando la data dell’evento coincidente con l’iscrizione nel Registro competente.
+In caso di comunicazione del mandato fiduciario il codice fiscale deve corrispondere a quello della società
+fiduciaria alla quale il mandato fa riferimento. Devono essere inoltre indicati gli estremi del mandato
+fiduciario, ossia il numero o codice assegnato al mandato dalla società fiduciaria ai sensi dell’art. 15, comma
+1, del DM 16 gennaio 1995, oggetto di comunicazione. È possibile comunicare un solo mandato fiduciario
+per pratica.
+
+1/ PGP - INFORMAZIONI IDENTIFICATIVE
+Il riquadro è previsto solo per le PGP che non sono iscritte nel R.I. o nel REA.
+Va indicata obbligatoriamente la sede legale con tutti gli estremi identificativi della localizzazione.
+Se presenti anche altre localizzazioni possono essere aggiunti ulteriori occorrenze tante quante necessarie e
+ciascuna compilata con tutti gli estremi identificativi delle localizzazioni.
+
+2/ TRUST INFORMAZIONI IDENTIFICATIVE
+Il riquadro è previsto solo per i trust.
+In caso di trust costituito in Italia sono obbligatori tutti i campi previsti nel riquadro, viceversa se il trust è
+stato costituito in altro Stato non devono essere indicati la provincia e il Comune.
+
+                                                                                                                  30
+3/ TITOLARE EFFETTIVO
+Il riquadro è previsto per tutti i soggetti per i quali è prevista la comunicazione dei dati e delle informazioni
+relativi alla titolarità effettiva ed è suddiviso in tre blocchi: “ANAGRAFICA”,
+“RESIDENZA/DOMICILIO”, “REQUISITI”.
+Per ogni impresa, PGP, trust e mandato fiduciario deve essere obbligatoriamente indicato almeno un titolare
+effettivo. Devono essere indicati tanti titolari effettivi quanti sono quelli individuati applicando i criteri
+previsti dall’art. 20 e dall’art. 22, comma 5, del d.lgs 231/2007.
+In caso di mandato fiduciario devono essere indicati, almeno, il costituente (ovverosia il fiduciante) e il
+beneficiario.
+
+Anagrafica
+Vanno indicati, per ciascuna persona fisica individuata quale titolare effettivo, i dati anagrafici completi.
+Solo se la persona comunicata ha cittadinanza italiana, deve essere indicato obbligatoriamente anche il
+codice fiscale, la provincia di nascita e il comune di nascita.
+
+Residenza/Domicilio
+Va indicata obbligatoriamente la residenza della persona fisica individuata come titolare effettivo, completa
+di tutti gli elementi essenziali per la sua individuazione.
+Se la persona fisica individuata come titolare effettivo, nell’apposito campo del riquadro “REQUISITI”,
+risulta avere un c.d. controinteresse all’accesso di terzi poiché persona esposta a un rischio sproporzionato di
+frode, rapimento, ricatto, estorsione, molestia, violenza o intimidazione ovvero qualora il titolare
+effettivo sia una persona incapace o minore d'età, deve essere obbligatoriamente indicato l’indirizzo di
+posta elettronica certificata idoneo a ricevere le comunicazioni da parte della camera di commercio in caso di
+richiesta di accesso.
+Se diverso dalla residenza deve essere indicato il domicilio della persona fisica individuata come titolare
+effettivo, completo di tutti gli elementi essenziali per la sua individuazione.
+
+Requisiti
+Il presente riquadro permette la gestione contestuale del requisito che qualifica la persona fisica individuata
+come titolare effettivo e dell’eventuale situazione di controinteresse all’accesso da parte di terzi.
+Tra i requisiti deve essere selezionato obbligatoriamente uno dei criteri previsti dall’art. 20 e dall’art. 22,
+comma 5, del d.lgs 231/2007, che qualificano il titolare effettivo, i cui codici sono disponibili nell’apposita
+tabella RTE.
+Nel caso di impresa dotata di personalità giuridica se, dall'applicazione sia del criterio della partecipazione
+diretta sia del criterio della partecipazione indiretta al capitale, la persona fisica individuata quale titolare
+effettivo risulta avere partecipazioni dirette e indirette ciascuna inferiore al 25%, ma dalla cui somma si
+ottiene almeno il 25%, il requisito da indicare nel campo è PARTECIPAZIONE PROPRIETARIA
+INDIRETTA SUPERIORE AL VENTICINQUE PER CENTO DEL CAPITALE.
+Nel caso in cui il titolare effettivo di trust o del mandato fiduciario sia ricoperto, ad esempio, da una persona
+giuridica, è possibile indicare il titolare effettivo persona fisica utilizzando uno dei requisiti disponibili nella
+tabella RTE censiti con il prefisso “TITOLARE EFFETTIVO DI”. Ad esempio: “TITOLARE EFFETTIVO
+DI COSTITUENTE DI TRUST O ISTITUTO AFFINE.
+Se la persona fisica individuata quale titolare effettivo risulta essere anche controinteressata all’accesso di
+terzi, è possibile indicare, in aggiunta al requisito che qualifica la persona, come titolare effettivo, anche
+l’apposito valore, presente nella medesima tabella “CONTROINTERESSATO ALL’ACCESSO PER
+ESPOSIZIONE A RISCHIO SPROPORZIONATO DI FRODE, RAPIMENTO, RICATTO, ESTORSIONE,
+MOLESTIA, VIOLENZA O INTIMIDAZIONE OPPURE PERSONA INCAPACE O MINORE D'ETÀ”.
+In caso di presenza del controinteresse all’accesso ai terzi dovrà essere fornito obbligatoriamente anche un
+indirizzo di posta elettronica certificata nel riquadro relativo alle informazioni relative alla residenza del
+titolare effettivo indicato (come indicato nel riquadro della residenza).
+
+
+FIRMA
+Il modulo va sottoscritto dal soggetto tenuto alla comunicazione o conferma dei dati e delle informazioni
+della titolarità effettiva.
+
+
+                                                                                                                 31
+

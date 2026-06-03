@@ -1,0 +1,328 @@
+                                                                                  MODULO I2
+COORDINATA
+
+                                                                  LU      TI
+X   Y    Z     CONTENUTO                                            NG       PO    CONTROLLI
+                                                                                                                                                                   Modulistica 2026
+                                                                                                                                                                        Modulo I2
+              A / ESTREMI ISCRIZIONE DELLA DOMANDA
+3 65    30     Posizione (sigla pv.)                              2                obbligatorio ; esistenza in tabella PRV
+3 65    40     nr. R.E.A.                                         7      num
+
+ATTENZIONE : i controlli di ognuno dei Riquadri che seguono vanno attivati SOLO nel caso in cui il Riquadro venga
+             compilato, ovvero che le informazioni gestite in quel Riquadro siano oggetto di denuncia alla Camera.
+
+          B / ESTREMI DELL'ATTO
+ATTENZIONE : per questo riquadro è possibile valorizzare una occorrenza per ogni Atto.
+             Ogni occorrenza e' costituita da tutti i campi del riquadro.
+3 66 20 codice forma atto                                         1             obbligatorio se valorizzato il riquadro; esistenza in tabella FAT
+3 66 40 codice atto                                               3             obbligat. per codici P, A campo [3 66 20 ]; esistenza in tabella ATTI
+3 66 140 data atto                                                8    data     obbligatorio se valorizzato il campo [2 66 40]
+3 66 150 nr. repertorio                                         15
+3 66 190 data registrazione atto                                  8    data
+3 66 220 nr. registrazione                                      15
+3 66 230 codice ufficio registrazione                             3             esistenza in tabella CUR
+3 66 240 allegato statuto/patto integrale                         1             obbligatorio vale S o N
+
+              16 / VARIAZIONE SEZIONI/QUALIFICHE REGISTRO IMPRESE
+3 17 10           dal ...                                   8   data               obbligatorio
+3 17 20         Isc in piccoli imprenditori                 1 scelta [w]           è obbligatorio effettuare una tra queste scelte [w]
+3 17 30         Isc in imprenditori commerciali             1 scelta [w]           è obbligatorio effettuare una tra queste scelte [w]
+3 17 40         Isc in piccoli impr. (coltivatore diretto)  1 scelta [w]           è obbligatorio effettuare una tra queste scelte [w]
+3 17 50         Isc in imprenditori agricoli                1 scelta [w]           è obbligatorio effettuare una tra queste scelte [w]
+3 17 60         Canc da piccoli imprenditori                1 scelta [w]           è obbligatorio effettuare una tra queste scelte [w]
+3 17 70         Canc da imprenditori commerciali            1 scelta [w]           è obbligatorio effettuare una tra queste scelte [w]
+3 17 80         Canc da piccoli impr. (coltivatore diretto) 1 scelta [w]           è obbligatorio effettuare una tra queste scelte [w]
+3 17 90         Canc da imprenditori agricoli               1 scelta [w]           è obbligatorio effettuare una tra queste scelte [w]
+3 17 200       tipologia (codice)                           2                      obbligatorio; vale DI=ditta individuale o PF=persona fisica
+
+              1 / NUOVO C. F. - DATI ANAGRAFICI
+3   1    10     dal                                              8     data      obbligatorio
+3   1    20     modifica del Codice Fiscale                      1    scelta [a] è obbligatorio effettuare una e una sola tra queste scelte [a]
+3   1    30     modifica della Partita IVA                       1    scelta [a] è obbligatorio effettuare una e una sola tra queste scelte [a]
+3   1    40     nuovo C.F. / P. IVA                             16               obbligatorio
+3   1   110     sesso                                            1               impostare con M o F
+3   1   120     cognome                                         25               obbligatorio
+3   1   130     nome                                            25               obbligatorio
+3   1   140     data di nascita                                  8     data      obbligatorio
+3   1   150     cittadinanza (codice)                            3               esistenza in tabella STA
+3   1   160     stato nascita (codice)                           3               obbligatorio; esistenza in tabella STA
+3   1   170     provincia nascita (codice)                       2               obbligatorio se stato = ITALIA, altrimenti vietato ; esistenza in tabella PRV
+3   1   180     comune nascita                                  30               obbligatorio ; esistenza in tabella COM se stato = ITALIA
+
+              2 / RESIDENZA ANAGRAFICA
+3   2   10      dal                                              8       data      obbligatorio
+3   2   20      stato (codice)                                   3                 obbligatorio; esistenza in tabella STA
+3   2   30      provincia (codice )                              2                 obbligatorio se stato = ITALIA, altrimenti vietato ; esistenza in tabella PRV
+3   2   40      cap                                              5       num       obbligatorio se stato = ITALIA,
+3   2   50      comune                                          30                 obbligatorio ; esistenza in tabella COM se stato = ITALIA
+3   2   60      frazione o località'                            25
+3   2   70      via, viale, piazza, ...                         30                 obbligatorio
+3   2   80      nr. civico                                       8                 obbligatorio
+3   2   90      presso od altre indicazioni                     30
+
+              3 / LIMITAZIONE ALLA CAPACITA' DI AGIRE
+3 28    10      dal                                               8    data      obbligatorio
+3 28    20      è attribuito lo stato di ...                      1   scelta [b] è obbligatorio effettuare una e una sola tra queste scelte [b]
+3 28    30      è cessato lo stato di ...                         1   scelta [b] è obbligatorio effettuare una e una sola tra queste scelte [b]
+3 28    40      limitazione (codice)                              2              esistenza in tabella CAG; obbligatorio se valorizzato il campo [ 3 28 20 ]
+
+              4 / NUOVA DITTA
+3 23    10      dal                                              8       data      obbligatorio
+3 23    20      nuova denominazione 1° riga                     65                 obbligatorio
+3 23    30      nuova denominazione 2° riga                     80
+3 23    40      nuova denominazione 3° riga                     80
+3 23    50      nuova denominazione 4° riga                     80
+3 23    60      sigla denominazione                             30
+
+              5 / INDIRIZZO DELLA SEDE
+3 25     10     dal                                              8       data      obbligatorio se valorizzato il Riquadro
+3 25     20     stato (codice)                                   3                 obbligatorio; esistenza in tabella STA
+3 25     30     provincia (codice )                              2                 obbligatorio se stato = ITALIA, altrimenti vietato ; esistenza in tabella PRV
+3 25     40     cap                                              5       num       obbligatorio se stato = ITALIA,
+3 25     50     comune                                          30                 obbligatorio ; esistenza in tabella COM se stato = ITALIA
+3 25     60     frazione o località'                            25
+3 25     70     via, viale, piazza, ...                         30                 obbligatorio
+3 25     80     nr. civico                                       8                 obbligatorio
+3 25     90     presso od altre indicazioni                     30
+3 25    100     prefisso telefono                                4                 obbligatorio se valorizzato campo [ 3 25 110]
+3 25    110     nr. telefono                                    11       num       obbligatorio se valorizzato campo [ 3 25 100]
+3 25    120     prefisso telefax                                 4                 obbligatorio se valorizzato campo [ 3 25 130]
+3 25    130     telefax                                         11       num       obbligatorio se valorizzato campo [ 3 25 120]
+3 25    140     sito internet                                   80
+3 25    150     indirizzo e.mail nome                           40
+3 25    160     indirizzo e.mail sito                           40
+3 25    230     nome e.mail certificata                         40                 obbligatorio se valorizzato campo [ 3 25 240]; i campi possono essere presenti da soli sul riquadro
+3 25    240     dominio e.mail certificata                      40                 obbligatorio se valorizzato campo [ 3 25 230]: i campi possono essere presenti da soli sul riquadro
+
+
+
+
+                                                                                                                                                                                         1
+                                                                                     MODULO I2
+              6 / VARIAZIONE DI INSEGNA DELLA SEDE
+3 52    10      dal                                                 8     data      obbligatorio
+3 52    20      è stata eliminata ogni insegna                      1    scelta [c] è obbligatorio effettuare una e una sola tra queste scelte [c]
+3 52    30      la nuova insegna è                                  1    scelta [c] è obbligatorio effettuare una e una sola tra queste scelte [c]
+3 52    40      nuova insegna                                      80               obbligatorio se effettuata la scelta campo [ 3 52 30 ]
+
+           7 / VARIAZIONI DI ATTIVITA' NELLA SEDE
+3   9    10  dal ...                                             8    data         obbligatorio se valorizzato il campo [ 3 9 20 ]
+3   9    20    è INIZIATA l' attività                            1 scelta          obbligatorio se valorizzato il campo [ 3 9 10 ]
+3   9    30  descrizione attività iniziata                     80     testo        consentito solo se valorizzato il campo [ 3 9 10 ]
+3   9    40  dal ...                                             8    data         obbligatorio se valorizzato il campo [ 3 9 50 ] o [ 3 9 60 ]
+3   9    50    è SOSPESA TUTTA l' attività                       1 scelta          le scelte [ 3 9 50 ] e [ 3 9 60 ] sono alternative tra loro; obbligatorie se valorizzato [ 3 9 40 ]
+3   9    60    è SOSPESA PARTE dell' attività                    1 scelta          le scelte [ 3 9 50 ] e [ 3 9 60 ] sono alternative tra loro; obbligatorie se valorizzato [ 3 9 40 ]
+3   9    70  descrizione attività sospesa                      80     testo        consentito solo se valorizzato il campo [ 3 9 40 ]
+3   9    80  dal ...                                             8    data         obbligatorio se valorizzato il campo [ 3 9 90 ] o [ 3 9 100 ]
+3   9    90    è RIPRESA TUTTA l' attività                       1 scelta          le scelte [ 3 9 90 ] e [ 3 9 100 ] sono alternative tra loro; obbligatorie se valorizzato [ 3 9 80 ]
+3   9   100    è RIPRESA PARTE dell' attività                    1 scelta          le scelte [ 3 9 90 ] e [ 3 9 100 ] sono alternative tra loro; obbligatorie se valorizzato [ 3 9 80 ]
+3   9   110  descrizione attività ripresa                      80     testo        consentito solo se valorizzato il campo [ 3 9 80 ]
+3   9   120  dal ...                                             8    data         obbligatorio se valorizzato il campo [ 3 9 130 ] o [ 3 9 140 ]
+3   9   130    è CESSATA TUTTA l' attività                       1 scelta          scelta alternativa a [3 9 20, 50, 60, 90, 100, 140]; obbligatorie se valorizz. [ 3 9 120 ]
+3   9   140    è CESSATA PARTE dell' attività                    1 scelta          le scelte [ 3 9 130 ] e [ 3 9 140 ] sono alternative tra loro; obbligatorie se valorizz. [ 3 9 120 ]
+3   9   150  descrizione attività cessata                      80     testo        consentito solo se valorizzato il campo [ 3 9 120 ]
+             A seguito delle modifiche, riportare integralmente la descrizione della:
+3   9   210 attivita' risultante primaria                      80     testo        obbligatorio, salvo se valorizzato campo [3 9 130 ]
+3   9   220 attività risultante secondaria                     80     testo        consentito se valorizzato campo [3 9 210 ]
+
+              7B / ATTIVITA' AGRICOLA DELL' IMPRESA
+3 60    10     dal ...                                              8    data         obbligatorio
+3 60    20     descrizione integrale nuova attivita'               80    testo        obbligatorio
+
+          9 / ATTIVITA' PREVALENTE DELL' IMPRESA
+3 54 10 dal ...                                                8   data         obbligatorio se valorizzato [ 3 54 20 ] o [ 3 54 30]
+3 54 20 descrizione integrale nuova attività                  80   testo        obbligatorio se valorizzato [ 3 54 10 ]
+ATTENZIONE : è possibile valorizzare tante occorrenze quante necessarie, senza duplicazioni di codici
+3 54 30 categoria opere ( codice )                             5                esistenza in tabella AQL
+
+              9B / DICHIARAZIONE DI IMPRENDITORE AGRICOLO PROFESSIONALE
+3 62    10     data denuncia                               8   data
+
+              30/ NUMERO DI ADDETTI DELL'IMPRESA
+3 26    10     dal ...                                              8     data        obbligatorio se valorizzato il Riquadro; altrimenti vietato
+3 26    20     numero addetti dipendenti                            6     num
+3 26    30     collaboratori componenti nucleo famil.               2     num
+
+          20 / VARIAZIONI DI LAVORO PRESTATO DA TERZI E FAMILIARI PARTECIPI ALL' ATTIVITA' DELL' IMPRESA
+3 24    10  dal                                                 8    data      obbligatorio se valorizzato il campo [ 3 24 20 ] ;
+3 24    20    lavoratori a tempo indeterminato                  4    num       obbligatorio se valorizzato il campo [ 3 24 10 ] ;
+3 24    30  dal                                                 8    data      obbligatorio se valorizzato il campo [ 3 24 40 ] ;
+3 24    40    giornate lavorative prestate                      4    num       obbligatorio se valorizzato il campo [ 3 24 30 ] ;
+3 24    50  dal ... i familiari partecipi ...                   8    data      obbligatorio se valorizzato il campo [ 3 24 110 ] ; altrimenti vietato
+           familiari partecipi all'attività dell' Impresa
+ATTENZIONE : è possibile valorizzare fino a un massimo di 8 occorrenze composte dai seguenti campi :
+3 24 110 cognome                                               30              obbligatorio per ogni occorrenza valorizzata
+3 24 120 nome                                                  30              obbligatorio per ogni occorrenza valorizzata
+3 24 130 codice fiscale                                        16              obbligatorio per ogni occorrenza valorizzata
+3 24 140 coltivatore diretto : SI / NO                          1              obblig. per ogni occorr. valorizz.; S se coltivatore diretto, N in caso contrario
+
+          11 / ISCRIZIONI IN ALBI, RUOLI, ...ED ISCRIZIONI ABILITANTI
+3 58 5      dal                                                 8    data      obbligatorio se valorizzato il campo [ 3 58 10 ] ; altrimenti vietato
+ATTENZIONE : è possibile valorizzare fino a un massimo di 8 occorrenze composte dai seguenti campi :
+3 58 10 ente o autorità ( codice )                              2              obbligatorio per ogni occorrenza valorizzata; esistenza in tabella ALB
+3 58 20 denominazione albo ( codice )                           2              obbligatorio per ogni occorrenza valorizzata; esistenza in tabella RAL
+3 58 25 lettera                                                 3               esistenza in tabella LET
+3 58 30 data                                                    8    data
+3 58 40 numero                                                  7
+3 58 50 provincia (codice)                                      2              obbligatorio per ogni occorrenza valorizzata; esistenza in tabella PRV
+3 58 55 ulteriori informazioni attivita'                       80   testo      massimo 320 caratteri
+ATTENZIONE : i seguenti campi possono essere presenti in unica occorrenza e sono specifici per le Imprese di Pulizia :
+3 58 80 dal                                                     8    data      obbligatorio se valorizzato il campo [ 3 58 100 ] ;
+3 58 90 fascia di classificazione (codice)                      1               esistenza in tabella CIP
+3 58 100 data denuncia                                          8    data      obbligatorio se valorizzato il campo [ 3 58 80 ] ;
+ATTENZIONE : i seguenti campi possono essere presenti in unica occorrenza e sono specifici per le Imprese di Facchinaggio :
+3 58 120 dal                                                    8    data      obbligatorio se valorizzato il campo [ 3 58 140]
+3 58 130 fascia di classificazione (codice)                     1               esistenza in tabella CIF
+3 58 140 data denuncia                                          8    data      obbligatorio se valorizzato il campo [ 3 58 120 ] ;
+
+          12 / LICENZE O AUTORIZZAZIONI
+3 44 5      dal                                                 8    data      obbligatorio se valorizzato il Riquadro; altrimenti vietato
+ATTENZIONE : è possibile valorizzare fino a un massimo di 2 occorrenze composte dai seguenti campi :
+3 44 10 ente o autorità ( codice )                              2              obbligatorio per ogni occorrenza valorizzata; esistenza in tabella LIC
+3 44 20 denominazione licenza ( codice )                        3              obbligatorio per ogni occorrenza valorizzata; esistenza in tabella LDN
+3 44 30 data                                                    8    data
+3 44 40 numero                                                 10
+
+              13 / SEGNALAZIONE CERTIFICATA DI INIZIO ATTIVITA'
+3 48    110    data segnalazione inizio attività              8           data        obbligatorio se valorizzato il Riquadro
+3 48    120    ente o autorità ( codice )                     2                       obbligatorio se valorizzato il Riquadro; esistenza in tabella LIC
+3 48    210    data segnalazione inizio attività     (2)      8           data        permesso se valorizzato il campo [3 48 110]
+3 48    220    ente o autorità ( codice )            (2)      2                       obbligatorio se valorizzato il campo [3 48 210]; esistenza in tabella LIC
+
+              19 / COMMERCIO AL DETTAGLIO IN SEDE FISSA (D.LGS. 114/1998)
+3 64    10     dal                                           8    data                obbligatorio se valorizzato il Riquadro
+3 64    20     superficie di vendita mq                      6    num                 obbligatorio se valorizzato il Riquadro
+3 64    30     settore merceologico                          1                        obbligatorio se valorizzato il Riquadro; esistenza in tabella MER
+
+              21 / ABILITAZIONI PROFESSIONALI
+3 30    10     dal                                                  8    data         obbligatorio se valorizzato il Riquadro
+3 30    20     descrizione abilitazioni                            80    testo        obbligatorio se valorizzato il Riquadro
+                                                                                                                                                                                          2
+                                                                                   MODULO I2
+            15 / CANCELLAZIONE
+3 15     10 - cessazione di ogni attività                             1   scelta [f] è obbligatorio effettuare una e una sola tra le scelte [f]
+3 15     20 - cessione dell' azienda                                  1   scelta [f] è obbligatorio effettuare una e una sola tra le scelte [f]
+3 15     80 - altro motivo                                            1   scelta [f] è obbligatorio effettuare una e una sola tra le scelte [f]
+3 15    110 data cessazione                                           8    data      obbligatorio
+3 15    120 causale cessazione (codice)                               2              obbligatorio ; esistenza in tabella CRD
+
+              17 / SOGGETTO SUBENTRANTE
+3 36     10    denominazione (1° riga)                              65                  obbligatorio se valorizzato il Riquadro
+3 36     30    codice fiscale                                       16                  obbligatorio se valorizzato il Riquadro
+3 36     70    titolo del subentro (codice)                          2                  esistenza in tabella SUB
+
+              29 / TRASFERIMENTO DA ALTRA PROVINCIA
+3 40     20    Posizione di provenienza (sigla pv.)                   2                 obbligatorio se valorizzato il riquadro; esistenza in tabella PRV
+3 40     30    numero R.E.A.                                          7    num
+3 40     40    cessaz.totale attivita' in prov. : SI/NO               1                 obbligatorio vale S o N
+3 40     50    all'indirizzo continua l'attività : SI/NO              1                 obbligatorio vale S o N
+
+          31/ ALTRI ATTI E FATTI SOGGETTI A ISCRIZIONE E A DEPOSITO
+ATTENZIONE : è possibile valorizzare fino a un massimo di 10 occorrenze composte dai seguenti campi : senza duplicazioni di codici
+3 19 30 tipo atto/fatto ( codice )                              3              obbligatorio per ogni occorrenza valorizzata; esistenza in tab. ATF
+3 19 40 descrizione tipo atto/fatto                           80    testo      obbligatorio per ogni occorrenza valorizzata
+
+              10 / COMUNICAZIONE CURATORE ( ART.29 DL 78/2010 )
+3 10 10        Tribunale                                  30                            obbligatorio esistenza in tabella TRI
+3 10 20        nr. provvedimento                          15                            obbligatorio
+3 10 30        data provvedimento                          8    data                    obbligatorio
+3 10 40        data udienza esame stato passivo            8    data                    obbligatorio
+3 10 50        data termine domanda ammissione             8    data                    obbligatorio
+3 10 60        luogo udienza                              80                            obbligatorio
+3 10 70        giudice delegato nome                      25                            obbligatorio
+3 10 80        giudice delegato cognome                   25                            obbligatorio
+3 10 100       ulteriori informazioni                     80    testo
+
+          32 / RETI DI IMPRESE
+3 27 10 tipo adempimento                                      1                obbligatorio , esistenza in tab. CRI
+3 27 20 nr. Repertorio precedente                            15                obbligatorio se [3 27 10 ] diverso da A, B
+3 27 30 nr. Registrazione precedente                         15                obbligatorio se [3 27 10 ] diverso da A, B
+3 27 50 nome contratto di rete                               80                obbligatorio
+3 27 60 codice fiscale                                       11
+3 27 70 data scadenza                                         8     data
+3 27 80 obiettivi contratto                                  80     testo      obbligatorio se [3 27 10 ] vale A, ammesso se [3 27 10 ] vale D
+3 27 90 programma di rete                                    80     testo      obbligatorio se [3 27 10 ] vale A, ammesso se [3 27 10 ] vale D
+3 27 100 durata contratto                                    80     testo      obbligatorio se [3 27 10 ] vale A, ammesso se [3 27 10 ] vale D
+3 27 120 organo comune                                       80     testo
+3 27 130 fondo patrimoniale                                  80     testo
+3 27 140 modalita' assunzione decisioni                      80     testo      obbligatorio se [3 27 10 ] vale A, ammesso se [3 27 10 ] vale D
+3 27 150 asseverazione                                       80     testo
+ATTENZIONE : sono ammesse piu' occorrenze solo se [3 27 10] vale A, D (non inserire il medesimo C.F. in occorrenze diverse) :
+3 27 200 CF impresa partecipante o di riferimento            16                obbligatorio indicare almeno l'impresa di riferimento
+3 27 210 denominazione impresa                               80                obbligatorio
+3 27 220 soggetto mandatario comune                           1                obbligatorio vale S o N
+
+              35 / IMPRESA CULTURALE E CREATIVA
+Se valorizzato il riquadro, è ammesso all'interno del modulo il solo ulteriore riquadro "A / ESTREMI ISCRIZIONE DELLA DOMANDA"
+ 3 71 10 tipologia richiesta                                        1                 obbligatorio; esistenza in tabella ICC valori ammessi: N, C
+ 3 71 20 Dicitura nella denominazione sociale                       1                 permesso se [3 71 10] = N; esitenza tabella ICC. Valori ammessi A, B
+ 3 71 30 Dichiarazione                                              1                 obbligatorio se [3 71 10] = N, altrimenti vietato; esistenza in tabella ICC: vale D
+
+           AB / DATI ARTIGIANI
+3 18     10  dal                                                8    data         obbligatorio se valorizzato il Riquadro; altrimenti vietato
+3 18     60  informazioni supplementari                        80    testo
+            familiari collaboratori del titolare:
+ATTENZIONE : è possibile valorizzare tante occorrenze quante sono necessarie, ciascuna composta dai seguenti campi : [110 230]
+ 3 18 110 cognome                                              25                 obbligatorio, per ogni occorrenza valorizzata
+ 3 18 120 nome                                                 25                 obbligatorio, per ogni occorrenza valorizzata
+ 3 18 130 codice fiscale                                       16                 obbligatorio
+ 3 18 140 data nascita                                          8    data         obbligatorio, per ogni occorrenza valorizzata
+ 3 18 150 sesso                                                 1                 obbligatorio, per ogni occorrenza valorizzata
+ 3 18 160 cittadinanza (codice)                                 3                 esistenza in tabella STA
+ 3 18 170 stato nascita (codice)                                3                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella STA
+ 3 18 180 provincia nascita (codice)                            2                 obbligatorio se stato = ITALIA, altrimenti vietato; esistenza in tabella PRV
+ 3 18 190 comune nascita                                       30                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella COM se stato = ITALIA
+ 3 18 200 grado parentela (codice)                              2                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella PAR
+ 3 18 220 data inizio/cessaz/sosp. collaborazione               8    data         obbligatorio, per ogni occorrenza valorizzata
+ 3 18 230 iscrizione/cancellazione/sospensione                  1                 obbligatorio esistenza in tabella TEV
+
+
+
+
+                                                                                                                                                                              3
+                                                                                  MODULO I2
+
+              AC / INPS-ASSICURAZIONE PREVIDENZIALE COMMERCIO
+3 33     20    dal                                        8   data                  obbligatorio
+3 33     30    Dichiarazione cancellazione                1 scelta                  alternativo ai campi [ 3 33 70] e [ 3 33 80]
+3 33     40    data inizio/fine attivita'                 8   data                  obbligatorio se valorizzato [ 3 33 30 ] o [3 33 70]; altrimenti vietato
+3 33     50    Dichiarazione prosecuzione                 1 scelta                  consentito se valorizzato [ 3 33 30]
+                                                                                    obbligatorio se valorizzato ([ 3 33 30 ] e [ 3 33 50 ] e se [ 3 33 90 ] vale 1 o 3) oppure ([ 3 33 80 ]
+3 33 60      codice fiscale impresa/ente                       16                   e se [ 3 33 90] vale 1 o 3); altrimenti vietato
+3 33 70      Dichiarazione iscrizione                           1 scelta            alternativo ai campi [ 3 33 30 ] e [ 3 33 80 ]
+3 33 80      Dichiarazione NON iscrizione                       1 scelta            alternativo ai campi [3 33 30] e [ 3 33 70]
+3 33 90      codice dichiarazione                               1                   obbligatorio se valorizzato [ 3 33 80 ] o [3 33 30] esistenza in tabella TPC; altrimenti vietato
+3 33 100     altre informazioni                                80    testo
+            collaboratori del titolare:
+ATTENZIONE : è possibile valorizzare tante occorrenze quante sono necessarie, ciascuna composta dai seguenti campi : [110 360]
+ 3 33 110 cognome                                              25                 obbligatorio, per ogni occorrenza valorizzata
+ 3 33 120 nome                                                 25                 obbligatorio, per ogni occorrenza valorizzata
+ 3 33 130 codice fiscale                                       16                 obbligatorio
+ 3 33 140 data nascita                                          8    data         obbligatorio, per ogni occorrenza valorizzata
+ 3 33 150 sesso                                                 1                 obbligatorio, per ogni occorrenza valorizzata
+ 3 33 160 cittadinanza (codice)                                 3                 esistenza in tabella STA
+ 3 33 170 stato nascita (codice)                                3                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella STA
+ 3 33 180 provincia nascita (codice)                            2                 obbligatorio se stato = ITALIA, altrimenti vietato; esistenza in tabella PRV
+ 3 33 190 comune nascita                                       30                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella COM se stato = ITALIA
+ 3 33 200 grado parentela (codice)                              2                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella PAR
+ 3 33 230 provincia residenza(codice )                          2                 obbligatorio ; esistenza in tabella PRV
+ 3 33 240 cap                                                   5    num
+ 3 33 250 comune                                               30                 esistenza in tabella COM
+ 3 33 260 frazione o localita'                                 25
+ 3 33 270 via, viale, piazza, ...                              30
+ 3 33 280 nr. civico                                            8
+ 3 33 320 collaboratore di titolare non iscrivibile             1                 vale S o N; obbligatorio e vale 'N' se valorizzato [ 3 33 70] e [3 33 360 ] vale 'I' o 'M'
+ 3 33 330 data inizio attivita'                                 8    data
+ 3 33 340 data fine attivita'                                   8    data
+ 3 33 350 data effetto                                          8    data         obbligatorio, per ogni occorrenza valorizzata
+ 3 33 360 tipo evento                                           1                 obbligatorio esistenza in tabella TEV
+
+
+                                                                                  FINE MODULO I-2
+
+
+
+
+                                                                                                                                                                                              4
+

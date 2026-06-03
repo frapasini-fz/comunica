@@ -1,0 +1,368 @@
+                                                                                     MODULO INT/P
+
+COORDINATA
+
+                                                                     LU      TI
+X    Y    Z     CONTENUTO                                              NG       PO     CONTROLLI
+                                                                                                                                                                     Modulistica 2026
+                                                                                                                                                                       Intercalare P
+               A / ESTREMI ISCRIZIONE DELLA DOMANDA
+P 65     30      Posizione (sigla pv.)                               2                 obbligatorio se valorizzato il campo [ P 65 40 ] ; esistenza in tabella PRV
+P 65     40      nr. R.E.A.                                          7      num        obbligatorio se valorizzato il Riquadro
+
+               TIPO DOMANDA / DENUNCIA
+P 85     110     NUOVA persona                                       1    scelta [x] è obbligatorio effettuare una ed una sola tra queste scelte [x]
+P 85     120     MODIFICA persona                                    1    scelta [x] è obbligatorio effettuare una ed una sola tra queste scelte [x]
+P 85     130     CESSAZIONE persona                                  1    scelta [x] è obbligatorio effettuare una ed una sola tra queste scelte [x]
+
+           SEZIONE A : NOMINA DI NUOVA PERSONA
+           1 / DATI ANAGRAFICI
+ATTENZIONE : QUESTO RIQUADRO VA SEMPRE COMPILATO
+P 1     10 PERSONA FISICA                                            1    scelta [a] è obbligatorio effettuare una e una sola tra queste scelte [a]
+P 1     20 codice fiscale                                           16               obbligatorio se valorizzata questa sezione
+P 1     30 sesso                                                     1               impostare con M o F
+P 1     40 cognome                                                  25               obbligatorio se valorizzata questa sezione
+P 1     50 nome                                                     25               obbligatorio se valorizzata questa sezione
+P 1     60 data di nascita                                           8     data      obbligatorio se valorizzata questa sezione
+P 1     70 cittadinanza (codice)                                     3               esistenza in tabella STA
+P 1     80 stato nascita (codice)                                    3               obbligatorio se valorizzata questa sezione; esistenza in tabella STA
+P 1     90 provincia nascita (codice)                                2               obbligatorio se stato = ITALIA, altrimenti vietato; esistenza in tabella PRV
+P 1 100 comune nascita                                              30               obbligatorio se valorizzata questa sezione ; esistenza in tabella COM
+P 1 110 rappresentante dell' impresa                                 1               obbligatorio vale S o N
+
+P   1    210    SOCIETA'                                             1    scelta [a] è obbligatorio effettuare una e una sola tra queste scelte [a]
+P   1    220    codice fiscale                                      11               obbligatorio se valorizzato [ P 1 290 ] vale I
+P   1    250    denominazione società (1° riga)                     65               obbligatorio se valorizzata questa sezione
+P   1    260    denominazione società (2° riga)                     65
+P   1    290    stato costituzione (codice)                          3                 obbligatorio se valorizzata questa sezione; esistenza in tabella STA
+
+            2 / DOMICILIO DELLA PERSONA ( o eventuale indirizzo della sede della società socia )
+P   2     10 stato (codice)                                    3                 obbligatorio; esistenza in tabella STA
+P   2     20 provincia (codice )                               2                 obbligatorio se stato = ITALIA, altrimenti vietato ; esistenza in tabella PRV
+P   2     30 cap                                               5    num          obbligatorio se stato = ITALIA,
+P   2     40 comune                                           30                 obbligatorio ; esistenza in tabella COM
+P   2     50 frazione o localita'                             25
+P   2     60 via, viale, piazza, ...                          30                 obbligatorio
+P   2     70 nr. civico                                        8                 obbligatorio
+P   2     80 presso od altre indicazioni                      30
+P   2     90 nome e.mail certificata                          40                 obbligatorio se valorizzato campo [ P 2 100]
+P   2    100 dominio e.mail certificata                       40                 obbligatorio se valorizzato campo [ P 2 90]
+P   2    130 prefisso telefono                                 4                 obbligatorio se valorizzato campo [ P 2 140]
+P   2    140 nr. telefono                                     11    num          obbligatorio se valorizzato campo [ P 2 130]
+P   2    150 prefisso telefax                                  4                 obbligatorio se valorizzato campo [ P 2 160]
+P   2    160 telefax                                          11    num          obbligatorio se valorizzato campo [ P 2 150]
+
+           3 / CARICHE o QUALIFICHE
+ATTENZIONE : è possibile valorizzare tante occorrenze quante sono necessarie, ciascuna composta dai seguenti campi : [110 185]
+P 3 110 carica (codice)                                         3                 obbligatorio se valorizzato il Riquadro; esistenza in tabella CAM
+P 3 115 carica (descrizione)                                   40                 obbligatorio se valorizzato il Riquadro; esistenza in tabella CAM
+P 3 120 data nomina                                             8    data         obbligatorio se valorizzato il Riquadro
+P 3 130 data notifica conferimento                              8    data
+P 3 140 data termine                                            8    data
+P 3 150 durata (codice)                                         2                 esistenza in tabella DUR
+P 3 155 durata (descrizione)                                   40                 esistenza in tabella DUR; obbligatorio e permesso se valorizzato il campo [ P 3 150 ]
+P 3 160 durata (n° anni / esercizi)                             2    num          obbligatorio se codice durata = n° anni o n° esercizi
+P 3 170 durata (data del bilancio)                              8    data         obbligatorio se codice durata = fino approvazione bilancio
+P 3 180 potere di agire da sola                                 1 scelta
+P 3 185 potere di agire congiuntamente                          1 scelta
+
+            5 / POTERI DI RAPPRESENTANZA
+ATTENZIONE : è possibile valorizzare massimo 5 occorrenze composte dai seguenti campi : senza duplicazioni di cod. carica
+ P 5    10 carica (codice)                                    3                 obblig. per ogni occorrenza valorizzata; esistenza in tabella ORG
+ P 5    20 descrizione poteri                                80     testo       obbligatorio per ogni occorrenza valorizzata
+
+               6 / CONFERIMENTI, PRESTAZIONI, QUOTE
+ P 6    80       prestazioni d' opera e servizi                    80    testo
+ P 6    90       partecipazione agli utili                         80    testo
+ATTENZIONE :     è possibile valorizzare tante occorrenze quante sono necessarie, ciascuna composta dai seguenti campi : [110 220]
+ P 6 110         la quota di partecipazione è di                   13    num          obbligatorio se valorizzata l'occorrenza
+ P 6 120         quota partecipazione... decimali                   2    num          obbligatorio se valorizzata l'occorrenza
+ P 6 130         in ragione di numeratore                          15    num          obbligatorio se valorizzato il campo [ P 6 140 ]
+ P 6 140         in ragione di denominatore                        15    num          obbligatorio se valorizzato il campo [ P 6 130 ]
+ P 6 150         tipo diritto ( codice )                            2                 obbligatorio se valorizzata l'occorrenza, esistenza in tabella TQP
+ P 6 160         altro diritto ( descrizione )                     40                 obbligatorio e consentito solo per codice 99 del campo [ P 6 150 ]
+ P 6 170         cognome o denominazione                           65                 obbligatorio per ogni altro soggetto con partecipazione, diverso dal socio
+ P 6 180         codice fiscale                                    16                 obbligatorio se PERSONA FISICA
+ P 6 190         nome                                              25                 solo in caso di PERSONA FISICA
+ P 6 200         data nascita                                       8    data         solo in caso di PERSONA FISICA
+ P 6 210         sesso                                              1                 solo in caso di PERSONA FISICA
+ P 6 220         cittadinanza (codice)                              3                 obbligatorio se valorizzaro [P 6 170]; esistenza in tabella STA
+ATTENZIONE :     è possibile valorizzare massimo 5 occorrenze composte dai seguenti campi : senza duplicazioni di cod. informazioni
+ P 6 310         informazione (codice)                              3                 obbligatorio per ogni occorrenza valorizzata; esistenza in tabella INP
+ P 6 320         descrizione informazione                          80    testo        obbligatorio per ogni occorrenza valorizzata
+
+           7 / ALTRE CARICHE O QUALIFICHE (REA)
+ATTENZIONE : è possibile valorizzare tante occorrenze quante sono necessarie, ciascuna composta dai seguenti campi : [110 150]
+P 7 110 carica (codice)                                         3                 obbligatorio se valorizzato il Riquadro; esistenza in tabella CAT
+P 7 120 data nomina                                             8    data         obbligatorio se valorizzato il Riquadro
+P 7 130 data termine                                            8    data
+P 7 140 durata (codice)                                         2                 esistenza in tabella DUR
+P 7 150 durata (n° anni / esercizi)                             2    num          obbligatorio se codice durata = n° anni o n° esercizi; altrimenti vietato
+
+
+                                                                                                                                                                                        1
+                                                                             MODULO INT/P
+            8 / LIMITAZIONE ALLA CAPACITA' DI AGIRE
+P 14      10 limitazione (codice)                                   2                 esistenza in tabella CAG
+
+           9 / ISCRIZIONI IN ALBI, RUOLI, ...ED ISCRIZIONI ABILITANTI
+ATTENZIONE : è possibile valorizzare fino a un massimo di 8 occorrenze composte dai seguenti campi :
+P 41 10 ente o autorità ( codice )                               2              obbligatorio per ogni occorrenza valorizzata; esistenza in tabella ALB
+P 41 20 denominazione albo (codice )                             2              obbligatorio per ogni occorrenza valorizzata; esistenza in tabella RAL
+P 41 25 lettera                                                  3              esistenza in tabella LET
+P 41 30 data                                                     8    data
+P 41 40 numero                                                   7
+P 41 50 provincia (codice)                                       2              obbligatorio per ogni occorrenza valorizzata; esistenza in tabella PRV
+P 41 55 ulteriori informazioni attivita'                        80    testo     massimo 320 caratteri
+
+               10 / ABILITAZIONI PROFESSIONALI
+P 10      10    descrizione abilitazioni                           80    testo
+
+            AA / DATI ARTIGIANI
+P   9     10 dal                                                8    data         obbligatorio
+P   9     30 partecipazione al lavoro                           1                 vale S=SI o N=NO
+P   9     50 assunzione gestione con grado parentela           25                 esistenza in tabella PAR
+P   9     60 informazioni supplementari                        80    testo
+            familiari collaboratori del socio:
+ATTENZIONE : è possibile valorizzare tante occorrenze quante sono necessarie, ciascuna composta dai seguenti campi : [110 230]
+ P 9 110 cognome                                               25                 obbligatorio, per ogni occorrenza valorizzata
+ P 9 120 nome                                                  25                 obbligatorio, per ogni occorrenza valorizzata
+ P 9 130 codice fiscale                                        16                 obbligatorio
+ P 9 140 data nascita                                           8    data         obbligatorio, per ogni occorrenza valorizzata
+ P 9 150 sesso                                                  1                 obbligatorio, per ogni occorrenza valorizzata
+ P 9 160 cittadinanza (codice)                                  3                 esistenza in tabella STA
+ P 9 170 stato nascita (codice)                                 3                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella STA
+ P 9 180 provincia nascita (codice)                             2                 obbligatorio se stato = ITALIA, altrimenti vietato; esistenza in tabella PRV
+ P 9 190 comune nascita                                        30                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella COM
+ P 9 200 grado parentela (codice)                               2                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella PAR
+ P 9 220 data inizio collaborazione                             8    data         obbligatorio, per ogni occorrenza valorizzata
+ P 9 230 iscrizione                                             1                 obbligatorio esistenza in tabella TEV
+
+            AC / INPS-ASSICURAZIONE PREVIDENZIALE COMMERCIO
+P   31    30 Dichiarazione iscrizione                           1 scelta           in alternativa obbligatoria con il campo [ P 31 50]
+P   31    40 data inizio attivita'                              8    data         obbligatorio se valorizzato [ P 31 30 ]; altrimenti vietato
+P   31    50 Dichiarazione NON iscrizione                       1 scelta           in alternativa obbligatoria con il campo [ P 31 30]
+P   31    60 codice dichiarazione                               1                 obbligatorio se valorizzato [ P 31 50 ] esistenza in tabella TPC; altrimenti vietato
+P   31    70 codice fiscale impresa/ente                       16
+P   31    90 altre informazioni                                80    testo
+            collaboratori del socio:
+ATTENZIONE : è possibile valorizzare tante occorrenze quante sono necessarie, ciascuna composta dai seguenti campi : [110 360]
+ P 31 110 cognome                                              25                 obbligatorio, per ogni occorrenza valorizzata
+ P 31 120 nome                                                 25                 obbligatorio, per ogni occorrenza valorizzata
+ P 31 130 codice fiscale                                       16                 obbligatorio
+ P 31 140 data nascita                                          8    data         obbligatorio, per ogni occorrenza valorizzata
+ P 31 150 sesso                                                 1                 obbligatorio, per ogni occorrenza valorizzata
+ P 31 160 cittadinanza (codice)                                 3                 esistenza in tabella STA
+ P 31 170 stato nascita (codice)                                3                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella STA
+ P 31 180 provincia nascita (codice)                            2                 obbligatorio se stato = ITALIA, altrimenti vietato; esistenza in tabella PRV
+ P 31 190 comune nascita                                       30                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella COM se stato = ITALIA
+ P 31 200 grado parentela (codice)                              2                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella PAR
+ P 31 230 provincia residenza(codice )                          2                 obbligatorio ; esistenza in tabella PRV
+ P 31 240 cap                                                   5    num          obbligatorio
+ P 31 250 comune                                               30                 obbligatorio ; esistenza in tabella COM
+ P 31 260 frazione o localita'                                 25
+ P 31 270 via, viale, piazza, ...                              30                 obbligatorio
+ P 31 280 nr. civico                                            8                 obbligatorio
+ P 31 320 collaboratore di socio non iscrivibile                1                 obbligatorio,vale S o N
+ P 31 330 data inizio attivita'                                 8    data         obbligatorio
+
+
+ATTENZIONE : i controlli di ognuno dei Riquadri che seguono vanno attivati SOLO nel caso in cui il Riquadro venga
+               compilato, ovvero che le informazioni gestite in quel Riquadro siano oggetto di denuncia alla Camera.
+
+               SEZIONE B : MODIFICA DI PERSONA
+
+           1 / DATI ANAGRAFICI
+ATTENZIONE : IN CASO DI MODIFICA DI PERSONA QUESTO RIQUADRO VA SEMPRE COMPILATO
+P 21 10 PERSONA FISICA                                 1 scelta [a] è obbligatorio effettuare una e una sola tra queste scelte [a]
+P 21 20 codice fiscale                                16            obbligatorio se valorizzata questa sezione
+P 21 30 sesso                                          1            impostare con M o F
+P 21 40 cognome                                       25            obbligatorio se valorizzata questa sezione
+P 21 50 nome                                          25            obbligatorio se valorizzata questa sezione
+P 21 60 data di nascita                                8   data     obbligatorio se valorizzata questa sezione
+P 21 70 cittadinanza (codice)                          3            esistenza in tabella STA
+P 21 80 stato nascita (codice)                         3            obbligatorio se valorizzata questa sezione; esistenza in tabella STA
+P 21 90 provincia nascita (codice)                     2            obbligatorio se stato = ITALIA, altrimenti vietato ; esistenza in tabella PRV
+P 21 100 comune nascita                               30            obbligatorio se valorizzata questa sezione ; esistenza in tabella COM
+P 21 110 rappresentante dell' impresa                  1            obbligatorio vale S o N
+P 21 210 SOCIETA'                                      1 scelta [a] è obbligatorio effettuare una e una sola tra queste scelte [a]
+P 21 220 codice fiscale                               11            obbligatorio se valorizzato [ P 21 290 ] vale I
+P 21 250 denominazione società (1° riga)              65            obbligatorio se valorizzata questa sezione
+P 21 260 denominazione società (2° riga)              65
+P 21 290 stato costituzione (codice)                   3            obbligatorio se valorizzata questa sezione; esistenza in tabella STA
+P 21 310 data modifica                                 8   data     da compilare solo in caso di modifica anagrafica o per persona recessa, altrimenti vietato
+
+
+
+
+                                                                                                                                                                              2
+                                                                                  MODULO INT/P
+            2 / DOMICILIO DELLA PERSONA ( o eventuale indirizzo della sede della società socia )
+P   22    10 stato (codice)                                    3                 obbligatorio se non valorizzato campo [P 22 90] o [P 22 105]; esistenza in tabella STA
+P   22    20 provincia (codice )                               2                 obbligatorio se stato = ITALIA, altrimenti vietato ; esistenza in tabella PRV
+P   22    30 cap                                               5    num          obbligatorio se stato = ITALIA,
+P   22    40 comune                                           30                 obbligatorio se valorizzato campo [P 22 10]; esistenza in tabella COM
+P   22    50 frazione o localita'                             25
+P   22    60 via, viale, piazza, ...                          30                 obbligatorio se valorizzato campo [P 22 10]
+P   22    70 nr. civico                                        8                 obbligatorio se valorizzato campo [P 22 10]
+P   22    80 presso od altre indicazioni                      30
+P   22    90 nome e.mail certificata                          40
+P   22   100 dominio e.mail certificata                       40                 obbligatorio se valorizzato campo [ P 22 90]
+P   22   105 cancellazione e.mail certificata                  1 scelta          vietato se valorizzato [P 22 90]
+P   22   110 data variazione                                   8    data         obbligatorio
+P   22   130 prefisso telefono                                 4                 obbligatorio se valorizzato campo [ P 22 140]
+P   22   140 nr. telefono                                     11    num          obbligatorio se valorizzato campo [ P 22 130]
+P   22   150 prefisso telefax                                  4                 obbligatorio se valorizzato campo [ P 22 160]
+P   22   160 telefax                                          11    num          obbligatorio se valorizzato campo [ P 22 150]
+
+           3 / CARICHE o QUALIFICHE
+P 23 10 dal                                                     8    data         obbligatorio
+ATTENZIONE : è possibile valorizzare tante occorrenze quante sono necessarie, ciascuna composta dai seguenti campi : [20 120]
+P 23 20 è stata nominata alla                                   1 scelta [c] è obbligatorio effettuare una e una sola tra le scelte [c]
+P 23 30 è stata confermata nella                                1 scelta [c] è obbligatorio effettuare una e una sola tra le scelte [c]
+P 23 40 è cessata dalla                                         1 scelta [c] è obbligatorio effettuare una e una sola tra le scelte [c]
+P 23 50 carica (codice)                                         3                 obbligatorio; esistenza in tabella CAM
+P 23 55 carica (descrizione)                                   40                 obbligatorio; esistenza in tabella CAM
+P 23 60 data notifica conferimento carica                       8    data
+P 23 70 data termine                                            8    data
+P 23 80 durata (codice)                                         2                 esistenza in tabella DUR
+P 23 85 durata (descrizione)                                   40                 esistenza in tabella DUR; obbligatorio e permesso se valorizzato il campo [ P 23 80 ]
+P 23 90 durata (n° anni / esercizi)                             2    num          obbligatorio se codice durata = n° anni o n° esercizi, altrimenti vietato
+P 23 100 durata (data del bilancio)                             8    data         obbligatorio se codice durata = fino approvazione bilancio, altrimenti vietato
+P 23 110 potere di agire da sola                                1 scelta
+P 23 120 potere di agire congiuntamente                         1 scelta
+
+               5 / POTERI DI RAPPRESENTANZA
+ P 25 10         dal                                              8     data        obbligatorio
+ATTENZIONE :     è possibile valorizzare massimo 5 occorrenze composte dai seguenti campi : senza duplicazioni di cod. carica
+ P 25 110        carica (codice)                                  3                 obbligatorio per ogni occorrenza valorizzata; esistenza in tabella ORG
+ P 25 120        descrizione poteri                              80     testo       obbligatorio per ogni occorrenza valorizzata
+ P 25 130        poteri integrativi/sostitutivi                   1                 obbligatorio per ogni occorrenza valorizzata vale I=Integrativi o S=Sostitutivi
+
+               6 / CONFERIMENTI, PRESTAZIONI, QUOTE
+ P 26 75         dal ...                                            8    data         obbligatorio e permesso se valorizzato il campo [ P 26 80 ] o [ P 26 90 ]
+ P 26 80         prestazioni d'opera e servizi                     80    testo
+ P 26 90         partecipazione agli utili                         80    testo
+ P 26 100        dal ...                                            8    data         obbligatorio e permesso se valorizzata una successiva occorrenza
+ATTENZIONE :     è possibile valorizzare tante occorrenze quante sono necessarie, ciascuna composta dai seguenti campi : [110 220]
+ P 26 110        la quota di partecipazione è di                   13    num          obbligatorio se valorizzata l'occorrenza
+ P 26 120        quota partecipazione... decimali                   2    num          obbligatorio se valorizzata l'occorrenza
+ P 26 130        in ragione di numeratore                          15    num          obbligatorio se valorizzato il campo [ P 26 140 ]
+ P 26 140        in ragione di denominatore                        15    num          obbligatorio se valorizzato il campo [ P 26 130 ]
+ P 26 150        tipo diritto ( codice )                            2                 obbligatorio se valorizzata l'occorrenza, esistenza in tabella TQP
+ P 26 160        altro diritto ( descrizione )                     40                 obbligatorio e consentito solo per codice 99 del campo [ P 26 150 ]
+ P 26 170        cognome o denominazione                           65                 obbligatorio per ogni altro soggetto con partecipazione, diverso dal socio
+ P 26 180        codice fiscale                                    16                 obbligatorio se PERSONA FISICA
+ P 26 190        nome                                              25                 solo in caso di PERSONA FISICA
+ P 26 200        data nascita                                       8    data         solo in caso di PERSONA FISICA
+ P 26 210        sesso                                              1                 solo in caso di PERSONA FISICA
+ P 26 220        cittadinanza (codice)                              3                 obbligatorio se valorizzaro [P 26 170]; esistenza in tabella STA
+ATTENZIONE :     è possibile valorizzare massimo 5 occorrenze composte dai seguenti campi : senza duplicazioni di cod. informazioni
+ P 26 310        informazione (codice)                              3                 obbligatorio per ogni occorrenza valorizzata; esistenza in tabella INP
+ P 26 320        descrizione informazione                          80    testo        obbligatorio per ogni occorrenza valorizzata
+
+           7 / ALTRE CARICHE O QUALIFICHE (REA)
+P 27 110 dal                                                    8    data         obbligatorio
+ATTENZIONE : è possibile valorizzare tante occorrenze quante sono necessarie, ciascuna composta dai seguenti campi : [120 180]
+P 27 120 è stata nominata alla                                  1 scelta [x] è obbligatorio effettuare una e una sola tra le scelte [x]
+P 27 130 è stata confermata nella                               1 scelta [x] è obbligatorio effettuare una e una sola tra le scelte [x]
+P 27 140 è cessata dalla                                        1 scelta [x] è obbligatorio effettuare una e una sola tra le scelte [x]
+P 27 150 carica (codice)                                        3                 obbligatorio; esistenza in tabella CAT
+P 27 160 conferita fino al                                      8    data         in alternativa con il campo [ P 27 170 ]
+P 27 170 durata (codice)                                        2                 esistenza in tabella DUR ; in alternativa con il campo [P 27 160]
+P 27 180 durata (n° anni / esercizi)                            2    num          obbligatorio se codice durata = n° anni o n° esercizi, altrimenti vietato
+
+               8 / LIMITAZIONE ALLA CAPACITA' DI AGIRE
+P   28   10      dal                                                 8     data      obbligatorio
+P   28   20      è attribuito lo stato di ...                        1    scelta [b] è obbligatorio effettuare una e una sola tra queste scelte [b]
+P   28   30      è cessato lo stato di ...                           1    scelta [b] è obbligatorio effettuare una e una sola tra queste scelte [b]
+P   28   40      limitazione (codice)                                2               esistenza in tabella CAG; obbligatorio se valorizzato il campo [ P 28 20 ]
+
+           9 / ISCRIZIONI IN ALBI, RUOLI, ...ED ISCRIZIONI ABILITANTI
+P 42 5       dal                                                 8    data      obbligatorio
+ATTENZIONE : è possibile valorizzare fino a un massimo di 8 occorrenze composte dai seguenti campi :
+P 42 10 ente o autorità ( codice )                               2              obbligatorio per ogni occorrenza valorizzata; esistenza in tabella ALB
+P 42 20 denominazione albo ( codice )                            2              obbligatorio per ogni occorrenza valorizzata; esistenza in tabella RAL
+P 42 25 lettera                                                  3              esistenza in tabella LET
+P 42 30 data                                                     8    data
+P 42 40 numero                                                   7
+P 42 50 provincia (codice)                                       2              obbligatorio per ogni occorrenza valorizzata; esistenza in tabella PRV
+P 42 55 ulteriori informazioni attivita'                        80    testo     massimo 320 caratteri
+
+               10 / ABILITAZIONI PROFESSIONALI
+P 30     10     dal                                                  8    data         obbligatorio
+P 30     20     descrizione abilitazioni                            80    testo        obbligatorio
+
+
+
+
+                                                                                                                                                                          3
+                                                                                MODULO INT/P
+            AB / DATI ARTIGIANI
+ P 29 10 dal                                                    8    data         obbligatorio
+ P 29 30 partecipazione al lavoro                              45                 esistenza in tabella APL
+ P 29 50 assunzione gestione con grado parentela               25                 esistenza in tabella PAR
+ P 29 60 informazioni supplementari                            80    testo
+            familiari collaboratori del socio:
+ATTENZIONE : è possibile valorizzare tante occorrenze quante sono necessarie, ciascuna composta dai seguenti campi : [110 230]
+ P 29 110 cognome                                              25                 obbligatorio, per ogni occorrenza valorizzata
+ P 29 120 nome                                                 25                 obbligatorio, per ogni occorrenza valorizzata
+ P 29 130 codice fiscale                                       16                 obbligatorio
+ P 29 140 data nascita                                          8    data         obbligatorio, per ogni occorrenza valorizzata
+ P 29 150 sesso                                                 1                 obbligatorio, per ogni occorrenza valorizzata
+ P 29 160 cittadinanza (codice)                                 3                 esistenza in tabella STA
+ P 29 170 stato nascita (codice)                                3                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella STA
+ P 29 180 provincia nascita (codice)                            2                 obbligatorio se stato = ITALIA, altrimenti vietato; esistenza in tabella PRV
+ P 29 190 comune nascita                                       30                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella COM
+ P 29 200 grado parentela (codice)                              2                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella PAR
+ P 29 220 data inizio/cessaz/sosp. collaborazione               8    data         obbligatorio, per ogni occorrenza valorizzata
+ P 29 230 iscrizione/cancellazione/sospensione                  1                 obbligatorio esistenza in tabella TEV
+
+               AC / INPS-ASSICURAZIONE PREVIDENZIALE COMMERCIO
+P   33    20    dal                                        8               data        obbligatorio
+P   33    30    Dichiarazione cancellazione                1              scelta       alternativo ai campi [ P 33 70] e [ P 33 80]
+P   33    40    data inizio/fine attivita'                 8               data        obbligatorio se valorizzato [ P 33 30 ] o [P 33 70]; altrimenti vietato
+P   33    50    Dichiarazione prosecuzione                 1              scelta       consentito se valorizzato [ P 33 30]
+                                                                                       obbligatorio se valorizzato ([P 33 30 ] e [ P 33 50 ] e se [P 33 90 ] vale 1 o 3) oppure ([ P 33 80 ] e
+P   33 60    codice fiscale impresa/ente                       16                      se [P 33 90 ] vale 1 o 3); altrimenti vietato
+P   33 70    Dichiarazione iscrizione                           1 scelta               alternativo ai campi [ P 33 30 ] e [ P 33 80]
+P   33 80    Dichiarazione NON iscrizione                       1 scelta               alternativo ai campi [ P 33 30 ] e [ P 33 70]
+P   33 90    codice dichiarazione                               1                      obbligatorio se valorizzato [ P 33 80 ] o [P 33 30]; esistenza in tabella TPC; altrimenti vietato
+P   33 100   altre informazioni                                80    testo
+            collaboratori del socio:
+ATTENZIONE : è possibile valorizzare tante occorrenze quante sono necessarie, ciascuna composta dai seguenti campi : [110 360]
+ P 33 110 cognome                                              25                 obbligatorio, per ogni occorrenza valorizzata
+ P 33 120 nome                                                 25                 obbligatorio, per ogni occorrenza valorizzata
+ P 33 130 codice fiscale                                       16                 obbligatorio
+ P 33 140 data nascita                                          8    data         obbligatorio, per ogni occorrenza valorizzata
+ P 33 150 sesso                                                 1                 obbligatorio, per ogni occorrenza valorizzata
+ P 33 160 cittadinanza (codice)                                 3                 esistenza in tabella STA
+ P 33 170 stato nascita (codice)                                3                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella STA
+ P 33 180 provincia nascita (codice)                            2                 obbligatorio se stato = ITALIA, altrimenti vietato; esistenza in tabella PRV
+ P 33 190 comune nascita                                       30                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella COM se stato = ITALIA
+ P 33 200 grado parentela (codice)                              2                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella PAR
+ P 33 230 provincia residenza(codice )                          2                 obbligatorio ; esistenza in tabella PRV
+ P 33 240 cap                                                   5    num
+ P 33 250 comune                                               30                 esistenza in tabella COM
+ P 33 260 frazione o localita'                                 25
+ P 33 270 via, viale, piazza, ...                              30
+ P 33 280 nr. civico                                            8
+ P 33 320 collaboratore di socio non iscrivibile                1                 vale S o N; obbligatorio e vale 'N' se valorizzato [ P 33 70] e [P 33 360 ] vale 'I' o 'M'
+ P 33 330 data inizio attivita'                                 8    data
+ P 33 340 data fine attivita'                                   8    data
+ P 33 350 data effetto                                          8    data         obbligatorio, per ogni occorrenza valorizzata
+ P 33 360 tipo evento                                           1                 obbligatorio esistenza in tabella TEV
+
+
+               SEZIONE C : CESSAZIONE DA TUTTE LE CARICHE DI PERSONA
+
+               / PERSONA RECESSA : utilizzare riquadro 1/dati anagrafici della sezione B ed i soli ulteriori riquadri consentiti AB ed AC
+
+
+                                                                             FINE MODULO INTERCALARE P
+
+
+
+
+                                                                                                                                                                                                 4
+

@@ -1,0 +1,194 @@
+                                                                                    MODULO I1
+
+COORDINATA
+
+                                                                   LU       TI
+X   Y     Z     CONTENUTO                                            NG        PO    CONTROLLI
+                                                                                                                                                                     Modulistica 2026
+                                                                                                                                                                          Modulo I1
+               TIPO DOMANDA
+1   85   110     in qualita' di coltivatore diretto                 1     scelta      in alternativa con il campo [ 1 85 120] ; vietato se [1 85 200] = PF
+1   85   120     in qualita' di imprenditore agricolo               1     scelta      in alternativa con il campo [ 1 85 110] ; vietato se [1 85 200] = PF
+1   85   130     in qualità di impresa commerciale                  1     scelta      in alternativa con il campo [ 1 85 140] ; vietato se [1 85 200] = PF
+1   85   140     in qualità di piccolo imprenditore                 1     scelta     in alternativa con il campo [ 1 85 130] ; vietato se [1 85 200] = PF
+1   85   180     data costituzione impresa                          8      data      obbligatorio
+1   85   200     tipologia (codice)                                 2                obbligatorio; vale DI=ditta individuale o PF=persona fisica
+
+               1 / DATI ANAGRAFICI
+1   1     10     codice fiscale                                    16                obbligatorio
+1   1     20     P. IVA                                            11
+1   1     30     sesso                                              1                impostare con M o F
+1   1     40     cognome                                           25                obbligatorio
+1   1     50     nome                                              25                obbligatorio
+1   1     60     data di nascita                                    8     data       obbligatorio
+1   1     70     cittadinanza (codice)                              3                esistenza in tabella STA
+1   1     80     stato nascita (codice)                             3                obbligatorio; esistenza in tabella STA
+1   1     90     provincia nascita (codice)                         2                obbligatorio se stato = ITALIA, altrimenti vietato ; esistenza in tabella PRV
+1   1    100     comune nascita                                    30                obbligatorio; esistenza in tabella COM se stato = ITALIA
+
+               2 / RESIDENZA ANAGRAFICA
+1   2    10      stato (codice)                                     3                obbligatorio; esistenza in tabella STA
+1   2    20      provincia (codice )                                2                obbligatorio se stato = ITALIA, altrimenti vietato ; esistenza in tabella PRV
+1   2    30      cap                                                5     num        obbligatorio se stato = ITALIA,
+1   2    40      comune                                            30                obbligatorio ; esistenza in tabella COM se stato = ITALIA
+1   2    50      frazione o località'                              25
+1   2    60      via, viale, piazza, ...                           30                obbligatorio
+1   2    70      nr. civico                                         8                obbligatorio
+1   2    80      presso od altre indicazioni                       30
+
+               3 / LIMITAZIONE ALLA CAPACITA' DI AGIRE
+1 14     10      limitazione (codice)                               2                esistenza in tabella CAG
+
+               4 / DITTA
+1   3    10      denominazione 1° riga                             65                obbligatorio
+1   3    20      denominazione 2° riga                             80
+1   3    30      denominazione 3° riga                             80
+1   3    40      denominazione 4° riga                             80
+1   3    60      sigla denominazione                               30
+
+               5 / SEDE DELL'IMPRESA
+1   5     10     stato (codice)                                     3                obbligatorio; esistenza in tabella STA
+1   5     20     provincia (codice )                                2                obbligatorio se stato = ITALIA, altrimenti vietato ; esistenza in tabella PRV
+1   5     30     cap                                                5     num        obbligatorio se stato = ITALIA,
+1   5     40     comune                                            30                obbligatorio ; esistenza in tabella COM se stato = ITALIA
+1   5     50     frazione o località'                              25
+1   5     60     via, viale, piazza, ...                           30                obbligatorio
+1   5     70     nr. civico                                         8                obbligatorio
+1   5     80     presso od altre indicazioni                       30
+1   5     90     prefisso telefono                                  4                obbligatorio se valorizzato campo [ 1 5 100]
+1   5    100     nr. telefono                                      11     num        obbligatorio se valorizzato campo [ 1 5 90]
+1   5    110     prefisso telefax                                   4                obbligatorio se valorizzato campo [ 1 5 120]
+1   5    120     telefax                                           11     num        obbligatorio se valorizzato campo [ 1 5 110]
+1   5    130     sito internet                                     80
+1   5    140     indirizzo e.mail nome                             40
+1   5    150     indirizzo e.mail sito                             40
+1   5    230     nome e.mail certificata                           40                obbligatorio se campo [ 1 85 200] vale DI o se valorizzato [1 5 240]
+1   5    240     dominio e.mail certificata                        40                obbligatorio se campo [ 1 85 200] vale DI o se valorizzato [1 5 230]
+
+               12 / AMMONTARE DEL CAPITALE INVESTITO
+1 10     10     il capitale ... ammonta a ...                      12     num        obbligatorio se valorizzato il riquadro
+1 10     20     capitale decimali                                   2     num        permesso se valorizzato il campo [ 1 10 10 ] altrimenti vietato
+
+               13 / NUMERO DI ADDETTI DELL' IMPRESA
+1 57     10     dipendenti                                          6     num
+1 57     20     collaboratori componenti nucleo famil.              2     num
+
+               8 / ATTIVITA' ESERCITATE NELLA SEDE
+1 55     10     descrizione attivita' primaria                     80     testo
+1 55     20     descrizione attivita' secondaria                   80     testo      consentito se valorizzato campo [1 55 10]
+1 55     30     data inizio attività sede                           8     data       obbligatorio se valorizzato il riquadro
+
+               9 / ATTIVITA' AGRICOLA DELL' IMPRESA
+1 59     10      descrizione                                       80     testo
+
+            10 / ATTIVITA' PREVALENTE DELL' IMPRESA
+1 53     10 descrizione                                            80     testo      obbligatorio se campo [1 53 20] vale N
+1 53     20 l'att. coincide con la primaria della sede : SI/NO      1                obbligatorio vale S o N
+
+               11 / DICHIARAZIONE DI IMPRENDITORE AGRICOLO PROFESSIONALE
+1 61     10     data dichiarazione                           8   data
+
+           20 / LAVORO PRESTATO DA TERZI E FAMILIARI PARTECIPI ALL' ATTIVITA' DELL' IMPRESA
+1   4    10  lavoratori a tempo indeterminato                    4    num
+1   4    20  giornate lavorative                                 4    num
+            familiari che partecipano all'attività
+ATTENZIONE : è possibile valorizzare fino a un massimo di 8 occorrenze composte dai seguenti campi :
+1 4 110 cognome                                                 30              obbligatorio per ogni occorrenza valorizzata
+1 4 120 nome                                                    30              obbligatorio per ogni occorrenza valorizzata
+1 4 130 codice fiscale                                          16              obbligatorio per ogni occorrenza valorizzata
+1 4 140 coltivatore diretto : SI / NO                            1              obbligat. per ogni occorr. valorizz.; S se coltivatore diretto, N in caso contrario
+                                                                                  MODULO I1
+
+               DATA INIZIO ATTIVITA' IMPRESA
+1 49     120    data inizio attività impresa                        8    data        vietato se campo [1 85 200] vale PF
+
+            14 / INSEGNA DELLA SEDE
+1 51     10 insegna                                                80
+
+           15 / ISCRIZIONI IN ALBI, RUOLI, ...ED ISCRIZIONI ABILITANTI
+ATTENZIONE : è possibile valorizzare fino a un massimo di 8 occorrenze composte dai seguenti campi :
+1 41 10 ente o autorità (codice )                                 2             obbligatorio per ogni occorrenza valorizzata; esistenza in tabella ALB
+1 41 20 denominazione albo (codice)                               2             obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella RAL
+1 41 25 lettera                                                   3              esistenza in tabella LET
+1 41 30 data                                                      8    data
+1 41 40 numero                                                    7
+1 41 50 provincia (codice)                                        2             obbligatorio per ogni occorrenza valorizzata; esistenza in tabella PRV
+1 41 55 ulteriori informazioni attivita'                        80    testo     massimo 320 caratteri
+ATTENZIONE : i seguenti campi possono essere presenti in unica occorrenza e sono specifici per le Imprese di Pulizia :
+1 41 60 fascia di classificazione (codice)                        1              esistenza in tabella CIP
+1 41 70 data denuncia                                             8    data     obbligatorio se valorizzato il campo [ 1 41 60 ] ;
+ATTENZIONE : i seguenti campi possono essere presenti in unica occorrenza e sono specifici per le Imprese di Facchinaggio :
+1 41 130 fascia di classificazione (codice)                       1              esistenza in tabella CIF
+1 41 140 data denuncia                                            8    data     obbligatorio se valorizzato il campo [ 1 41 130 ] ;
+
+           16 / LICENZE O AUTORIZZAZIONI
+ATTENZIONE : è possibile valorizzare fino a un massimo di 2 occorrenze composte dai seguenti campi :
+1 43 10 ente o autorità (codice )                                2              obbligatorio per ogni occorrenza valorizzata; esistenza in tabella LIC
+1 43 20 denominazione licenza (codice)                           3              obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella LDN
+1 43 30 data                                                     8    data
+1 43 40 numero                                                  10
+
+               17 / SEGNALAZIONE CERTIFICATA DI INIZIO ATTIVITA'
+1   47    10    data segnalazione inizio attività     (1)        8       data        obbligatorio se valorizzato il Riquadro ;
+1   47    20    ente o autorità (codice )             (1)        2                   obbligatorio se valorizzato il Riquadro; esistenza in tabella LIC
+1   47   110    data segnalazione inizio attività     (2)        8       data        obbligatorio se valorizzata questa occorrenza (2)
+1   47   120    ente o autorità (codice )             (2)        2                   obbligatorio se valorizzata questa occorrenza (2) ; esistenza in tabella LIC
+
+               18 / COMMERCIO AL DETTAGLIO IN SEDE FISSA (D.LGS. 114/1998)
+1 63     10     dal                                            8    data             obbligatorio se valorizzato il Riquadro
+1 63     20     superficie di vendita mq                       6    num              obbligatorio se valorizzato il Riquadro
+1 63     30     settore merceologico                           1                     obbligatorio se valorizzato il Riquadro; esistenza in tabella MER
+
+               21 / ABILITAZIONI PROFESSIONALI
+1 20     10     descrizione abilitazioni                           80    testo
+
+            AA / DATI ARTIGIANI
+1   6    60  informazioni supplementari                         80    testo
+            familiari collaboratori del titolare:
+ATTENZIONE : è possibile valorizzare tante occorrenze quante sono necessarie, ciascuna composta dai seguenti campi : [110 230]
+ 1 6 110 cognome                                                25                 obbligatorio, per ogni occorrenza valorizzata
+ 1 6 120 nome                                                   25                 obbligatorio, per ogni occorrenza valorizzata
+ 1 6 130 codice fiscale                                         16                 obbligatorio
+ 1 6 140 data nascita                                            8    data         obbligatorio, per ogni occorrenza valorizzata
+ 1 6 150 sesso                                                   1                 obbligatorio, per ogni occorrenza valorizzata
+ 1 6 160 cittadinanza (codice)                                   3                 esistenza in tabella STA
+ 1 6 170 stato nascita (codice)                                  3                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella STA
+ 1 6 180 provincia nascita (codice)                              2                 obbligatorio se stato = ITALIA, altrimenti vietato; esistenza in tabella PRV
+ 1 6 190 comune nascita                                         30                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella COM se stato = ITALIA
+ 1 6 200 grado parentela (codice)                                2                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella PAR
+ 1 6 220 data inizio collaborazione                              8    data         obbligatorio, per ogni occorrenza valorizzata
+ 1 6 230 iscrizione                                              1                 obbligatorio esistenza in tabella TEV
+
+            AC / INPS-ASSICURAZIONE PREVIDENZIALE COMMERCIO
+1   31   30  Dichiarazione iscrizione                            1 scelta          in alternativa obbligatoria con il campo [ 1 31 50]
+1   31   40  data inizio attivita'                               8    data         obbligatorio se valorizzato [ 1 31 30 ]; altrimenti vietato
+1   31   50  Dichiarazione NON iscrizione                        1 scelta          in alternativa obbligatoria con il campo [ 1 31 30]
+1   31   60  codice dichiarazione                                1                 obbligatorio se valorizzato [ 1 31 50 ] esistenza in tabella TPC; altrimenti vietato
+1   31   70  codice fiscale impresa/ente                        16
+1   31   90  altre informazioni                                 80    testo
+            collaboratori del titolare:
+ATTENZIONE : è possibile valorizzare tante occorrenze quante sono necessarie, ciascuna composta dai seguenti campi : [110 360]
+ 1 31 110 cognome                                               25                 obbligatorio, per ogni occorrenza valorizzata
+ 1 31 120 nome                                                  25                 obbligatorio, per ogni occorrenza valorizzata
+ 1 31 130 codice fiscale                                        16                 obbligatorio
+ 1 31 140 data nascita                                           8    data         obbligatorio, per ogni occorrenza valorizzata
+ 1 31 150 sesso                                                  1                 obbligatorio, per ogni occorrenza valorizzata
+ 1 31 160 cittadinanza (codice)                                  3                 esistenza in tabella STA
+ 1 31 170 stato nascita (codice)                                 3                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella STA
+ 1 31 180 provincia nascita (codice)                             2                 obbligatorio se stato = ITALIA, altrimenti vietato; esistenza in tabella PRV
+ 1 31 190 comune nascita                                        30                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella COM se stato = ITALIA
+ 1 31 200 grado parentela (codice)                               2                 obbligatorio per ogni occorrenza valorizzata ; esistenza in tabella PAR
+ 1 31 230 provincia residenza(codice )                           2                 obbligatorio ; esistenza in tabella PRV
+ 1 31 240 cap                                                    5    num          obbligatorio
+ 1 31 250 comune                                                30                 obbligatorio ; esistenza in tabella COM
+ 1 31 260 frazione o localita'                                  25
+ 1 31 270 via, viale, piazza, ...                               30                 obbligatorio
+ 1 31 280 nr. civico                                             8                 obbligatorio
+ 1 31 320 collaboratore di titolare non iscrivibile              1                 obbligatorio,vale S o N
+ 1 31 330 data inizio attivita'                                  8    data         obbligatorio
+
+
+
+
+                                                                                  FINE MODULO I-1
+
