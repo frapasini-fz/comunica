@@ -116,26 +116,6 @@
     color: var(--muted);
     font-style: italic;
   }
-  .legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin: 1rem 0;
-    font-size: var(--fs-mini);
-  }
-  .legend span {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25em 0.6em;
-    border-radius: 4px;
-    border: 1px solid;
-  }
-  .lg-mc { background: #dbeafe; border-color: #1e40af; color: #1e3a8a; }
-  .lg-ri { background: #dcfce7; border-color: #15803d; color: #14532d; }
-  .lg-ae { background: #fee2e2; border-color: #b91c1c; color: #7f1d1d; }
-  .lg-il { background: #fed7aa; border-color: #c2410c; color: #7c2d12; }
-  .lg-dm { background: #e9d5ff; border-color: #7e22ce; color: #581c87; }
-  .lg-sp { background: #e5e7eb; border-color: #374151; color: #1f2937; }
   ul.compact { margin: 0.4em 0; padding-left: 1.5em; }
   ul.compact li { margin-bottom: 0.2em; }
   details {
@@ -318,15 +298,6 @@
 
 <h3 id="diagramma">Diagramma decisionale della pratica</h3>
 <p>Layout verticale (top-down), <strong>albero di decisione a bivi unici</strong>. Scope: impresa individuale non agricola. Esempio: <code>cod-pratica = B12P2837</code> — questo codice è riportato in ogni file nominato. Il primo bivio è <em>l'operazione</em> (apertura/variazione/cessazione); ogni domanda compare <strong>una sola volta</strong> e <strong>ogni condizione è espressa come decisione</strong> (nessun «se» nascosto nelle foglie). I diamanti arancioni tratteggiati sono <em>decisioni</em>; i riquadri verdi sono le <em>foglie base</em> (composizione minima: file + moduli/quadri + enti-destinatari); ogni «Sì» della cascata aggancia un <em>blocco add-on</em> colorato per ente che si somma. Anche le <strong>variazioni sono add-on cumulabili</strong>: in una stessa ComUnica se ne possono combinare più di una.</p>
-
-<div class="legend">
-  <span class="lg-mc">Modello Comunicazione</span>
-  <span class="lg-ri">RI</span>
-  <span class="lg-ae">AdE</span>
-  <span class="lg-il">INAIL</span>
-  <span class="lg-dm">INPS DM</span>
-  <span class="lg-sp">SUAP</span>
-</div>
 
 <div class="mermaid">
 flowchart TB
