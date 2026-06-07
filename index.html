@@ -195,6 +195,16 @@
   .copy-btn:hover { background: var(--bg-soft); }
   .copy-btn.ok { background: #dcfce7; border-color: #15803d; color: #14532d; }
   .copy-bar { margin: 1.5rem 0 0.5rem; }
+  /* Diagramma: testo delle foglie/box allineato a sinistra */
+  .mermaid g.node.leaf foreignObject div { text-align: left !important; }
+  .mermaid g.node.leaf .nodeLabel { text-align: left !important; }
+  /* Appendice B: tabelle ExtraService.data a colonne omogenee */
+  table.cu-data { table-layout: fixed; width: 100%; }
+  table.cu-data th, table.cu-data td { overflow-wrap: anywhere; }
+  table.cu-data th:nth-child(1), table.cu-data td:nth-child(1) { width: 18%; }
+  table.cu-data th:nth-child(2), table.cu-data td:nth-child(2) { width: 20%; }
+  table.cu-data th:nth-child(3), table.cu-data td:nth-child(3) { width: 42%; }
+  table.cu-data th:nth-child(4), table.cu-data td:nth-child(4) { width: 20%; }
 </style>
 </head>
 <body>
@@ -205,151 +215,21 @@
 <div class="toc">
   <strong>Contenuti</strong>
   <ol>
-    <li><a href="#introduzione">Cos'è la ComUnica — struttura della pratica</a></li>
-    <li><a href="#naming">Nomi standard dei file (codice pratica + estensioni)</a></li>
-    <li><a href="#diagramma">Diagramma generale (Mermaid LR)</a></li>
-    <li><a href="#modello">Modello Comunicazione — root della pratica</a>
-      <ul><li><a href="#modulo-mc-xml">4.1 modello-unico-di-comunicazione (CUI.xml)</a></li></ul>
-    </li>
-    <li><a href="#ri">Modulistica Registro Imprese (RI) — solo Ditta Individuale</a>
-      <ul>
-        <li><a href="#fedra">5.1 Tracciato FEDRA</a></li>
-        <li><a href="#modulo-i1">5.2 Modulo I1</a></li>
-        <li><a href="#modulo-i2">5.3 Modulo I2</a></li>
-        <li><a href="#modulo-ul">5.4 Modulo UL</a></li>
-        <li><a href="#modulo-intercalarep">5.5 Modulo IntercalareP</a></li>
-        <li><a href="#modulo-intercalareaa">5.6 Modulo IntercalareAA</a></li>
-        <li><a href="#modulo-ta">5.7 Modulo TA</a></li>
-        <li><a href="#modulo-rp">5.8 Modulo RP</a></li>
-      </ul>
-    </li>
-    <li><a href="#ade">Modulistica Agenzia delle Entrate (AdE) — solo AA9/12</a>
-      <ul><li><a href="#modulo-aa9-12">6.1 Modello AA9/12</a></li></ul>
-    </li>
-    <li><a href="#inail">Modulistica INAIL — escluso QuadroP categorie speciali</a>
-      <ul>
-        <li><a href="#inail-iscrizione">7.1 Iscrizione</a></li>
-        <li><a href="#inail-variazione">7.2 Variazione</a></li>
-        <li><a href="#inail-cessazione">7.3 Cessazione</a></li>
-      </ul>
-    </li>
-    <li><a href="#inps-dm">Modulistica INPS DM — imprese con dipendenti</a>
-      <ul>
-        <li><a href="#inps-dm-iad">8.1 IAD — Iscrizione</a></li>
-        <li><a href="#inps-dm-vae">8.2 VAE — Var. Attività</a></li>
-        <li><a href="#inps-dm-vda">8.3 VDA — Var. Denominazione</a></li>
-        <li><a href="#inps-dm-vsa">8.4 VSA — Var. Stato (incl. cessazione)</a></li>
-        <li><a href="#inps-dm-vsl">8.5 VSL — Var. Sede Legale</a></li>
-        <li><a href="#inps-dm-vso">8.6 VSO — Var. Sede Operativa</a></li>
-      </ul>
-    </li>
-    <li><a href="#suap">Modulistica SUAP — SCIA Contestuale via SSU</a>
-      <ul>
-        <li><a href="#suap-flow">9.1 Flusso end-to-end</a></li>
-        <li><a href="#suap-prereqs">9.2 Prerequisiti tecnici (QWAC, OAuth2+mTLS)</a></li>
-        <li><a href="#suap-cui-xml">9.3 File CUI.SUAP.xml — cosa contiene</a></li>
-        <li><a href="#suap-callback">9.4 Callback suap_send_instance + general_index</a></li>
-        <li><a href="#suap-fallback">9.5 Fallback Comune non attivato SSU</a></li>
-        <li><a href="#suap-ri-xml">9.6 File SUAP-RI.XML generato dal RI</a></li>
-      </ul>
-    </li>
+    <li><a href="#introduzione">Struttura della pratica e nomi dei file</a></li>
+    <li><a href="#modello">Modello Comunicazione — root della pratica</a></li>
+    <li><a href="#ri">Modulistica RI — solo Ditta Individuale</a></li>
+    <li><a href="#ade">Modulistica AdE — solo AA9/12</a></li>
+    <li><a href="#inail">Modulistica INAIL — escluso QuadroP categorie speciali</a></li>
+    <li><a href="#inps-dm">Modulistica INPS DM — imprese con dipendenti</a></li>
+    <li><a href="#suap">Modulistica SUAP — SCIA Contestuale via SSU</a></li>
   </ol>
+  <p style="margin:0.4em 0 0 1.4em"><a href="#fedra">Appendice A — Tracciato FEDRA</a></p>
+  <p style="margin:0.2em 0 0 1.4em"><a href="#appendice-data">Appendice B — ExtraService.data (dati del servizio)</a></p>
 </div>
 
-<div class="note">
-  <strong>Mapping verso app.fiscozen.it</strong> — ogni tabella di input ha colonne aggiuntive:
-  <em>Quando compilare</em> (quando il campo va valorizzato), <em>Origine</em> e <em>Come compilare</em>
-  (come ottenere il valore in concreto, inclusa la fonte nel DB Fiscozen). Legenda dell'<strong>Origine</strong>:
-  <div class="legend" style="margin-top:0.6rem">
-    <span class="org org-auto">Auto</span> = ottenuto automaticamente: dal DB Fiscozen, per
-    derivazione/codifica da tabella, come valore costante/strutturale della ditta individuale, oppure
-    assegnato dal sistema/ente. La colonna <em>Come compilare</em> spiega il metodo preciso.
-    <span class="org org-cli">Cliente</span> = dato dell'impresa non presente in Fiscozen né
-    derivabile: va chiesto al cliente.
-  </div>
-  <p style="margin:0.6rem 0 0">
-    <strong>Verifica e revisione</strong>: usa il pulsante <em>📋 Copia tabella</em> sotto ogni tabella
-    (o <em>📋 Copia tutte le tabelle</em> qui sotto) per copiarla e incollarla in un Google Doc, dove
-    una persona può verificarne e modificarne il contenuto.
-  </p>
-  <div class="copy-bar"><button type="button" class="copy-btn" data-copy-all>📋 Copia tutte le tabelle</button></div>
-</div>
+<h2 id="introduzione">1. Struttura della pratica e nomi dei file</h2>
 
-<h2 id="introduzione">1. Cos'è la ComUnica — struttura della pratica</h2>
-
-<p>Ogni comunicazione unica d'impresa è una <strong>collezione di file</strong>, strutturata in sezioni dedicate a ciascun ente destinatario. Estratto dalla <a href="specs/Specifiche_tecniche_comunicazione_unicapdf.pdf">spec ComUnica v3.1</a>:</p>
-
-<h3>Modello Comunicazione</h3>
-<ul class="compact">
-  <li>Un file con i dati del <strong>modello-unico-di-comunicazione</strong>, con la funzione di descrivere il soggetto, l'oggetto della comunicazione, il riepilogo degli altri file allegati (relativi a modulistiche e atti) con l'impronta digitale di ciascuno.</li>
-  <li>Un <strong>file-distinta-della-comunicazione</strong> con la rappresentazione di stampa (PDF) del modello-unico-di-comunicazione, da sottoscrivere digitalmente.</li>
-  <li>Le relative specifiche sono riportate nel <a href="specs/Specifiche_tecniche_comunicazione_unicapdf.pdf">documento ufficiale Spec ComUnica v3.1</a>.</li>
-</ul>
-
-<h3>Modulistica Registro Imprese</h3>
-<p>In formato specificato dal Decreto del Ministero dello Sviluppo Economico, contenente la modulistica ai fini INPS (Artigiani e Commercianti) in base al c.8, art 44, DL 269 30.9.03 e successive modificazioni. Modulistica Albo Artigiani, integrata con la modulistica RI, secondo le specifiche tecniche indicate dalle amministrazioni competenti:</p>
-<ul class="compact">
-  <li>Un <strong>file-pratica-registro-imprese</strong>: file informatico sulla modulistica RI, contenente i dati previsti dai paragrafi precedenti.</li>
-  <li>Eventuali <strong>moduli aggiuntivi</strong>: documenti informatici da allegare a particolari adempimenti, es. modello di iscrizione all'Albo delle Cooperative, da sottoscrivere digitalmente.</li>
-  <li>Eventuali <strong>documenti allegati</strong>: documenti informatici previsti per alcuni adempimenti, es. copia autentica dell'atto, da sottoscrivere digitalmente.</li>
-  <li>Un <strong>file-distinta</strong>: documento informatico firmato digitalmente, che riporta in formato di stampa le informazioni del modello così come scritte nel file-pratica, da sottoscrivere digitalmente.</li>
-  <li>Un <strong>file-riepilogo</strong>.</li>
-</ul>
-<p>I riferimenti alle relative specifiche sono nel documento <a href="specs/Allegato_A_Specifiche_tecniche_vers.7.0.pdf"><em>SPECIFICHE TECNICHE PER I DATI DESTINATI AL REGISTRO DELLE IMPRESE E AL R.E.A., VALIDI AI FINI INPS PER ARTIGIANI E COMMERCIANTI</em></a> (Allegato A v7.0+) e nel relativo <a href="specs/Decreto_v7.0.pdf">Decreto v7.0</a>.</p>
-
-<h3>Modulistica Agenzia delle Entrate</h3>
-<p>AA7 e AA9 come prevista dai provvedimenti dell'Agenzia Entrate:</p>
-<ul class="compact">
-  <li>Un <strong>file-pratica-AA7/AA9</strong>.</li>
-  <li>Un <strong>file-distinta-della-dichiarazione</strong> con la rappresentazione di stampa (PDF), da sottoscrivere digitalmente.</li>
-</ul>
-<p>Sul <a href="https://www.agenziaentrate.gov.it/portale/web/guest/schede/istanze/aa9_11-apertura-variazione-chiusura-pf">sito internet istituzionale dell'ente</a> sono pubblicati tutti i riferimenti tecnici relativi al tracciato.</p>
-
-<h3>Modulistica INAIL</h3>
-<ul class="compact">
-  <li>Un <strong>file-pratica</strong> conforme a <a href="specs/InvioDenunce.xsd"><code>InvioDenunce.xsd</code></a>.</li>
-  <li>Un <strong>file-distinta-della-dichiarazione</strong> con la rappresentazione di stampa (PDF), da sottoscrivere digitalmente.</li>
-</ul>
-<p>Sul <a href="https://www.inail.it">sito istituzionale INAIL</a> sono pubblicati tutti i riferimenti tecnici relativi al tracciato.</p>
-
-<h3>Modulistica INPS per imprese con dipendenti (DM)</h3>
-<ul class="compact">
-  <li>Un <strong>file-pratica</strong> conforme a <a href="specs/PraticaINPS-DM_IAD.xsd"><code>PraticaINPS-DM_IAD.xsd</code></a> (iscrizione) o ai relativi XSD di variazione.</li>
-  <li>Un <strong>file-distinta-della-dichiarazione</strong> con la rappresentazione di stampa (PDF), da sottoscrivere digitalmente.</li>
-</ul>
-
-<h3>Modulistica INPS per imprese agricole (Modello DA)</h3>
-<ul class="compact">
-  <li>Un <strong>file-pratica</strong> conforme a <code>ModelloDA.xsd</code>.</li>
-  <li>Un <strong>file-distinta-della-dichiarazione</strong> con la rappresentazione di stampa (PDF), da sottoscrivere digitalmente.</li>
-</ul>
-<p class="source"><em>Fuori scope di questo documento</em> — agricolo.</p>
-
-<h3>Modulistica INPS per coltivatori diretti (Modello CD)</h3>
-<ul class="compact">
-  <li>Un <strong>file-pratica</strong> conforme a <code>PraticaINPS-PI.xsd</code>.</li>
-  <li>Un <strong>file-distinta-della-dichiarazione</strong> con la rappresentazione di stampa (PDF), da sottoscrivere digitalmente.</li>
-</ul>
-<p class="source"><em>Fuori scope</em> — agricolo.</p>
-
-<h3>Modulistica INPS per imprenditori agricoli professionali (Modello IAP)</h3>
-<ul class="compact">
-  <li>Un <strong>file-pratica</strong> conforme a <code>PraticaINPS-PI_IAP.xsd</code>.</li>
-  <li>Un <strong>file-distinta-della-dichiarazione</strong> con la rappresentazione di stampa (PDF), da sottoscrivere digitalmente.</li>
-</ul>
-<p class="source"><em>Fuori scope</em> — agricolo.</p>
-
-<h3>Modulistica SUAP</h3>
-<ul class="compact">
-  <li>Un <strong>file dati in formato XML</strong>, contenente al suo interno il file della pratica SUAP (<code>&lt;codice-pratica-suap&gt;.SUAP.zip</code>) previsto nelle <em>Specifiche tecniche per il regolamento di cui all'art 38 del D.L. 112/2008 - Impresa in un giorno</em>.</li>
-</ul>
-<p>Nel portale <a href="https://www.impresainungiorno.gov.it">impresainungiorno.gov.it</a>, alla sezione "regole tecniche", sono pubblicati i documenti che dettagliano le specifiche tecniche. Materiale rilevante incluso localmente: <a href="specs/Struttura_pratica_SUAP_e_integrazione_SCIA_in_ComUnica.pdf">Struttura pratica SUAP e integrazione SCIA in ComUnica</a> + <a href="specs/Manuale_Operativo_Servizio_integrazione_applicativa_Comunicazione_Unica_con_SCIA_contestuale.pdf">Manuale Operativo SCIA contestuale</a>.</p>
-
-<p class="source">Sui siti internet istituzionali, come stabilito dal DPCM previsto all'art. 9 del D.L. n.7/2007, convertito con modificazioni con legge n. 40/2007, sono pubblicati tutti i riferimenti alle specifiche di tracciato. Vedi anche: <a href="specs/Manuale_Operativo_Servizio_per_il_controllo_e_la_trasmissione_delle_pratiche_di_Comunicazione_Unica_e_Bilancio.pdf">Manuale Operativo per il controllo e trasmissione ComUnica e Bilancio</a>.</p>
-
-<h2 id="naming">2. Nomi standard dei file</h2>
-
-<p>Ogni pratica informatica ha un <strong>codice pratica di 8 caratteri</strong>, indicato come <code>abbcddee</code>, che codifica la data-ora di costruzione della pratica:</p>
+<p>Ogni comunicazione unica d'impresa è una <strong>collezione di file</strong>, strutturata in sezioni dedicate a ciascun ente destinatario (<a href="specs/Specifiche_tecniche_comunicazione_unicapdf.pdf">spec ComUnica v3.1</a>). Ogni pratica informatica ha un <strong>codice pratica di 8 caratteri</strong> <code>abbcddee</code> che codifica la data-ora di costruzione:</p>
 
 <table>
   <tr><th>Codice</th><th>Significato</th><th>Valori</th></tr>
@@ -361,104 +241,86 @@
 </table>
 
 <div class="note">
-<strong>Esempio:</strong> il codice per una pratica preparata il <strong>12 Novembre alle ore 16:28:37</strong> è <code>B12P2837</code>.
-<ul class="compact" style="margin-top:0.4em">
-  <li><code>B</code> = Novembre (mese 11)</li>
-  <li><code>12</code> = giorno 12</li>
-  <li><code>P</code> = ora 16 (P è la 16ª lettera dell'alfabeto inglese: A=1, B=2, ..., P=16)</li>
-  <li><code>28</code> = minuto 28</li>
-  <li><code>37</code> = secondo 37</li>
-</ul>
-È il codice di esempio usato in tutto questo documento e nel diagramma.
+<strong>Esempio:</strong> il codice per una pratica preparata il <strong>12 Novembre alle ore 16:28:37</strong> è <code>B12P2837</code> (<code>B</code>=Novembre, <code>12</code>=giorno, <code>P</code>=ora 16, <code>28</code>=minuto, <code>37</code>=secondo). È il codice di esempio usato in tutto il documento e nel diagramma.
 </div>
 
-<h3>Nomi file per modulistica</h3>
+<h3>File e moduli per ente destinatario</h3>
+<p>Per ciascun ente: i file prodotti (nome con codice <code>B12P2837</code>), il loro contenuto e le specifiche tecniche di riferimento. Il <strong>file-distinta</strong> è in ogni caso la rappresentazione di stampa PDF del modello, da sottoscrivere digitalmente.</p>
 
 <table>
-  <tr><th>Tipologia / Modulistica</th><th>Nome file (con codice <code>B12P2837</code>)</th></tr>
+  <tr><th>Modulistica / Ente</th><th>File prodotti (codice <code>B12P2837</code>)</th><th>Contenuto</th><th>Specifiche</th></tr>
   <tr>
-    <td><strong>Modello unico di comunicazione</strong> (obbligatorio)</td>
-    <td>
-      • file-pratica XML: <code>B12P2837.CUI.xml</code><br>
-      • file-distinta firmata: <code>B12P2837.CUI.PDF.P7M</code>
-    </td>
+    <td><strong>Modello unico di comunicazione</strong> (sempre obbligatorio)</td>
+    <td>• <code>B12P2837.CUI.xml</code> — file-pratica XML<br>• <code>B12P2837.CUI.PDF.P7M</code> — file-distinta firmata</td>
+    <td>Descrive il soggetto, l'oggetto della comunicazione e il riepilogo degli altri file allegati con l'impronta digitale di ciascuno.</td>
+    <td><a href="specs/Specifiche_tecniche_comunicazione_unicapdf.pdf">Spec ComUnica v3.1</a></td>
   </tr>
   <tr>
-    <td><strong>Registro Imprese / Albo Artigiani / INPS Artigiani-Commercianti</strong></td>
-    <td>
-      • file-pratica (obbligatorio): <code>B12P2837.U3T</code><br>
-      • file-distinta (obbligatorio): <code>B12P2837.PDF.P7M</code><br>
-      • file-riepilogo (obbligatorio): <code>B12P2837.U3R</code><br>
-      • eventuali altri allegati: nome libero in PDF/TIF/TXT con firma digitale
-    </td>
+    <td><strong>RI / Albo Artigiani / INPS Artigiani-Commercianti</strong></td>
+    <td>• <code>B12P2837.U3T</code> — file-pratica (obbligatorio)<br>• <code>B12P2837.PDF.P7M</code> — file-distinta (obbligatorio)<br>• <code>B12P2837.U3R</code> — file-riepilogo (obbligatorio)<br>• eventuali moduli aggiuntivi / allegati (PDF/TIF/TXT firmati)</td>
+    <td>Modulistica RI nel formato del Decreto MISE, comprensiva dei dati INPS Artigiani e Commercianti (c.8 art.44 DL 269/2003) e dell'Albo Artigiani. Moduli aggiuntivi (es. iscrizione Albo Cooperative) e documenti allegati (es. copia autentica dell'atto) da firmare digitalmente.</td>
+    <td><a href="specs/Allegato_A_Specifiche_tecniche_vers.7.0.pdf">Allegato A v7.0+</a> · <a href="specs/Decreto_v7.0.pdf">Decreto v7.0</a></td>
   </tr>
   <tr>
-    <td><strong>Agenzia delle Entrate</strong> (AA7/AA9)</td>
-    <td>
-      • file-pratica: <code>B12P2837.IVA</code><br>
-      • file-distinta firmata: <code>B12P2837.IVA.PDF.P7M</code>
-    </td>
+    <td><strong>AdE</strong> (AA7/AA9)</td>
+    <td>• <code>B12P2837.IVA</code> — file-pratica<br>• <code>B12P2837.IVA.PDF.P7M</code> — file-distinta firmata</td>
+    <td>Dichiarazione AA7/AA9 di inizio/variazione/cessazione attività ai fini IVA, come da provvedimenti dell'AdE.</td>
+    <td><a href="https://www.agenziaentrate.gov.it/portale/web/guest/schede/istanze/aa9_11-apertura-variazione-chiusura-pf">sito AdE — AA9</a></td>
   </tr>
   <tr>
     <td><strong>INAIL</strong></td>
-    <td>
-      • file-pratica: <code>B12P2837.INAIL.xml</code><br>
-      • file-distinta firmata: <code>B12P2837.INAIL.PDF.P7M</code>
-    </td>
+    <td>• <code>B12P2837.INAIL.xml</code> — file-pratica<br>• <code>B12P2837.INAIL.PDF.P7M</code> — file-distinta firmata</td>
+    <td>File-pratica conforme allo schema <code>InvioDenunce.xsd</code> (denuncia di iscrizione/variazione/cessazione assicurativa).</td>
+    <td><a href="specs/InvioDenunce.xsd"><code>InvioDenunce.xsd</code></a> · <a href="https://www.inail.it">sito INAIL</a></td>
   </tr>
   <tr>
     <td><strong>INPS DM</strong> (imprese con dipendenti)</td>
-    <td>
-      • file-pratica: <code>B12P2837.INPS.xml</code><br>
-      • file-distinta firmata: <code>B12P2837.INPS.PDF.P7M</code>
-    </td>
+    <td>• <code>B12P2837.INPS.xml</code> — file-pratica<br>• <code>B12P2837.INPS.PDF.P7M</code> — file-distinta firmata</td>
+    <td>File-pratica conforme a <code>PraticaINPS-DM_IAD.xsd</code> (iscrizione) o ai relativi XSD di variazione (VAE/VDA/VSA/VSL/VSO).</td>
+    <td><a href="specs/PraticaINPS-DM_IAD.xsd"><code>PraticaINPS-DM_IAD.xsd</code></a></td>
   </tr>
   <tr>
-    <td><strong>INPS DA</strong> (imprese agricole)</td>
-    <td>
-      • file-pratica: <code>B12P2837.INPSDA.xml</code><br>
-      • file-distinta firmata: <code>B12P2837.INPSDA.PDF.P7M</code>
-    </td>
+    <td><strong>INPS DA</strong> (imprese agricole) — <em>fuori scope</em></td>
+    <td>• <code>B12P2837.INPSDA.xml</code><br>• <code>B12P2837.INPSDA.PDF.P7M</code></td>
+    <td>File-pratica conforme a <code>ModelloDA.xsd</code>. <em>Fuori scope — agricolo.</em></td>
+    <td>—</td>
   </tr>
   <tr>
-    <td><strong>INPS CD</strong> (coltivatori diretti)</td>
-    <td>
-      • file-pratica: <code>B12P2837.INPSCD.xml</code><br>
-      • file-distinta firmata: <code>B12P2837.INPSCD.PDF.P7M</code><br>
-      <em>Nota: INPS-CD e INPS-IAP sono mutualmente esclusive — solo una può essere allegata a una pratica ComUnica.</em>
-    </td>
+    <td><strong>INPS CD</strong> (coltivatori diretti) — <em>fuori scope</em></td>
+    <td>• <code>B12P2837.INPSCD.xml</code><br>• <code>B12P2837.INPSCD.PDF.P7M</code></td>
+    <td>File-pratica conforme a <code>PraticaINPS-PI.xsd</code>. <em>Fuori scope — agricolo.</em> Mutualmente esclusiva con INPS-IAP.</td>
+    <td>—</td>
   </tr>
   <tr>
-    <td><strong>INPS IAP</strong> (imprenditori agricoli professionali)</td>
-    <td>
-      • file-pratica: <code>B12P2837.INPSIAP.xml</code><br>
-      • file-distinta firmata: <code>B12P2837.INPSIAP.PDF.P7M</code><br>
-      <em>Nota: vedi sopra — mutualmente esclusiva con INPS-CD.</em>
-    </td>
+    <td><strong>INPS IAP</strong> (imprenditori agricoli professionali) — <em>fuori scope</em></td>
+    <td>• <code>B12P2837.INPSIAP.xml</code><br>• <code>B12P2837.INPSIAP.PDF.P7M</code></td>
+    <td>File-pratica conforme a <code>PraticaINPS-PI_IAP.xsd</code>. <em>Fuori scope — agricolo.</em> Mutualmente esclusiva con INPS-CD.</td>
+    <td>—</td>
   </tr>
   <tr>
     <td><strong>SUAP</strong> (Sportello Unico Attività Produttive)</td>
-    <td>
-      • file-pratica wrapper XML: <code>B12P2837.CUI.SUAP.xml</code> (contiene al suo interno <code>&lt;codice-pratica-suap&gt;.SUAP.zip</code>)<br>
-      Per la struttura interna dello ZIP SUAP vedi <a href="specs/Struttura_pratica_SUAP_e_integrazione_SCIA_in_ComUnica.pdf">Struttura pratica SUAP e integrazione SCIA in ComUnica</a> e <a href="specs/Manuale_Operativo_Servizio_integrazione_applicativa_Comunicazione_Unica_con_SCIA_contestuale.pdf">Manuale Operativo SCIA contestuale</a>.
-    </td>
+    <td>• <code>B12P2837.CUI.SUAP.xml</code> — wrapper XML (contiene <code>&lt;codice-pratica-suap&gt;.SUAP.zip</code>)</td>
+    <td>File dati XML che incapsula la pratica SUAP (Impresa in un giorno, art. 38 D.L. 112/2008). Per la struttura interna dello ZIP vedi le specifiche.</td>
+    <td><a href="https://www.impresainungiorno.gov.it">impresainungiorno.gov.it</a> · <a href="specs/Struttura_pratica_SUAP_e_integrazione_SCIA_in_ComUnica.pdf">Struttura pratica SUAP</a> · <a href="specs/Manuale_Operativo_Servizio_integrazione_applicativa_Comunicazione_Unica_con_SCIA_contestuale.pdf">Manuale SCIA contestuale</a></td>
   </tr>
 </table>
 
-<h2 id="diagramma">3. Diagramma generale</h2>
-<p>Layout left-to-right, <strong>decision tree</strong>. Scope: impresa individuale non agricola. Esempio: <code>cod-pratica = B12P2837</code> — questo codice è riportato in ogni file nominato. I diamanti arancioni tratteggiati sono <em>decisioni</em>; i riquadri verdi sono <em>foglie</em> = composizione fissa di contenuto da serializzare nei file dichiarati a livello di ente. Ogni file che la ComUnica trasporta è esplicitato come nodo.</p>
+<p class="source">Sui siti istituzionali, come stabilito dal DPCM previsto all'art. 9 del D.L. n. 7/2007 (conv. legge n. 40/2007), sono pubblicati tutti i riferimenti alle specifiche di tracciato. Vedi anche: <a href="specs/Manuale_Operativo_Servizio_per_il_controllo_e_la_trasmissione_delle_pratiche_di_Comunicazione_Unica_e_Bilancio.pdf">Manuale Operativo per il controllo e trasmissione ComUnica e Bilancio</a>.</p>
+
+<h3 id="diagramma">Diagramma decisionale della pratica</h3>
+<p>Layout verticale (top-down), <strong>albero di decisione a bivi unici</strong>. Scope: impresa individuale non agricola. Esempio: <code>cod-pratica = B12P2837</code> — questo codice è riportato in ogni file nominato. Il primo bivio è <em>l'operazione</em> (apertura/variazione/cessazione); ogni domanda compare <strong>una sola volta</strong> e <strong>ogni condizione è espressa come decisione</strong> (nessun «se» nascosto nelle foglie). I diamanti arancioni tratteggiati sono <em>decisioni</em>; i riquadri verdi sono le <em>foglie base</em> (composizione minima: file + moduli/quadri + enti-destinatari); ogni «Sì» della cascata aggancia un <em>blocco add-on</em> colorato per ente che si somma. Anche le <strong>variazioni sono add-on cumulabili</strong>: in una stessa ComUnica se ne possono combinare più di una.</p>
 
 <div class="legend">
   <span class="lg-mc">Modello Comunicazione</span>
-  <span class="lg-ri">Registro Imprese</span>
-  <span class="lg-ae">Agenzia Entrate</span>
+  <span class="lg-ri">RI</span>
+  <span class="lg-ae">AdE</span>
   <span class="lg-il">INAIL</span>
   <span class="lg-dm">INPS DM</span>
   <span class="lg-sp">SUAP</span>
 </div>
 
 <div class="mermaid">
-flowchart LR
+flowchart TB
   classDef mc fill:#dbeafe,stroke:#1e40af,color:#1e3a8a;
   classDef ri fill:#dcfce7,stroke:#15803d,color:#14532d;
   classDef ae fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d;
@@ -466,147 +328,103 @@ flowchart LR
   classDef dm fill:#e9d5ff,stroke:#7e22ce,color:#581c87;
   classDef sp fill:#e5e7eb,stroke:#374151,color:#1f2937;
   classDef hub fill:#fff,stroke:#111827,color:#111827,stroke-width:2px;
-  classDef dec fill:#fff7ed,stroke:#c2410c,color:#9a3412,stroke-dasharray: 4 3;
-  classDef leaf fill:#f0fdf4,stroke:#15803d,color:#14532d,stroke-width:2px;
+  classDef dec fill:#fff7ed,stroke:#c2410c,color:#9a3412,stroke-dasharray: 4 3,font-size:14px;
+  classDef leaf fill:#dbeafe,stroke:#1e40af,color:#1e3a8a,stroke-width:2px;
   classDef file fill:#eff6ff,stroke:#2563eb,color:#1e3a8a;
   classDef add fill:#fefce8,stroke:#ca8a04,color:#713f12;
 
-  CU(["ComUnica<br/>cod-pratica = B12P2837<br/>impresa individuale non agricola"]):::hub
+  CU(["ComUnica — cod-pratica = B12P2837<br/>impresa individuale non agricola"]):::hub
+  CU --> OP{operazione ?}:::dec
 
-  CU --> MC["Modello Comunicazione - SEMPRE PRESENTE<br/>FILES prodotti:<br/>B12P2837.CUI.xml<br/>B12P2837.CUI.PDF.P7M"]:::mc
-  CU --> RI["Pratica RI<br/>FILES prodotti:<br/>B12P2837.U3T file-pratica FEDRA<br/>B12P2837.PDF.P7M distinta firmata<br/>B12P2837.U3R file-riepilogo"]:::ri
-  CU --> AE["Pratica AdE AA9/12<br/>FILES prodotti:<br/>B12P2837.IVA file-pratica<br/>B12P2837.IVA.PDF.P7M distinta firmata"]:::ae
-  CU --> IL["Pratica INAIL<br/>FILES prodotti:<br/>B12P2837.INAIL.xml InvioDenunce.xsd<br/>B12P2837.INAIL.PDF.P7M distinta firmata"]:::il
-  CU --> IPDM["Pratica INPS DM<br/>FILES prodotti:<br/>B12P2837.INPS.xml file-pratica DM<br/>B12P2837.INPS.PDF.P7M distinta firmata"]:::dm
-  CU --> SP["Pratica SUAP<br/>FILE wrapper:<br/>B12P2837.CUI.SUAP.xml<br/>ZIP base64 dentro ModelloBase"]:::sp
-  CU --> ADL["Allegati documentali aggiuntivi 0..N<br/>referenziati in MC@allegati con impronta digitale:<br/>B12P2837.001.PDF.P7M<br/>B12P2837.002.PDF.P7M<br/>B12P2837.NNN.PDF.P7M<br/>es. procure, certificati, copie atti"]:::add
+  %% ===================== APERTURA =====================
+  OP -->|Apertura| AP_art{attivita artigiana ?}:::dec
+  AP_art -->|No commerciale| BASE_C["• B12P2837.CUI.xml — Modello Comunicazione<br/>• B12P2837.CUI.PDF.P7M — distinta firmata<br/>• B12P2837.U3T — RI: I1 + sez. AC commercianti + RP<br/>• B12P2837.PDF.P7M — distinta firmata<br/>• B12P2837.U3R — riepilogo<br/>• B12P2837.IVA — AdE: AA9/12 Quadri A+B+C<br/>• B12P2837.IVA.PDF.P7M — distinta firmata"]:::leaf
+  AP_art -->|Si artigiana| BASE_A["• B12P2837.CUI.xml — Modello Comunicazione<br/>• B12P2837.CUI.PDF.P7M — distinta firmata<br/>• B12P2837.U3T — RI: I1 + sez. AA + sez. AC artigiani + IntercalareAA + RP<br/>• B12P2837.PDF.P7M — distinta firmata<br/>• B12P2837.U3R — riepilogo<br/>• B12P2837.IVA — AdE: AA9/12 Quadri A+B+C<br/>• B12P2837.IVA.PDF.P7M — distinta firmata<br/>• B12P2837.INAIL.xml — QuadroA + A1 + QuadroB con D + D1<br/>• B12P2837.INAIL.PDF.P7M — distinta firmata"]:::leaf
+  BASE_C --> AP_dip{con dipendenti ?}:::dec
+  BASE_A --> AP_dip
+  AP_dip -->|Si| ADD_DIP["AGGIUNGI:<br/>• B12P2837.INPS.xml — IAD (PraticaINPS-DM_IAD.xsd)<br/>• B12P2837.INPS.PDF.P7M — distinta firmata<br/>• B12P2837.INAIL.xml — QuadroB con C + C1 (+ QuadroA + A1)"]:::leaf
+  AP_dip -->|No| AP_sil{rischio silicosi o asbestosi ?}:::dec
+  ADD_DIP --> AP_sil
+  AP_sil -->|Si| ADD_SIL["AGGIUNGI:<br/>• B12P2837.INAIL.xml — + QuadroO"]:::leaf
+  AP_sil -->|No| AP_reg{"Attivita con e-commerce,<br/>operazioni estere (UE/VIES)<br/>o rappresentante fiscale ?"}:::dec
+  ADD_SIL --> AP_reg
+  AP_reg -->|Si| ADD_REG["AGGIUNGI:<br/>• B12P2837.IVA — + Quadri D / E / F / I"]:::leaf
+  AP_reg -->|No| AP_fam{familiari collaboratori ?}:::dec
+  ADD_REG --> AP_fam
+  AP_fam -->|Si| ADD_FAM["AGGIUNGI:<br/>• B12P2837.U3T — + IntercalareP × N (uno per familiare)"]:::leaf
+  AP_fam -->|No| AP_ul{unita locali ?}:::dec
+  ADD_FAM --> AP_ul
+  AP_ul -->|Si| ADD_UL["AGGIUNGI:<br/>• B12P2837.U3T — + UL × N (una per unita locale)"]:::leaf
+  AP_ul -->|No| AP_scia{"ATECO soggetto a SCIA<br/>al SUAP ?"}:::dec
+  ADD_UL --> AP_scia
+  AP_scia -->|Si| AP_ssu{Comune attivato su SSU ?}:::dec
+  AP_ssu -->|OK| ADD_SCIA["AGGIUNGI:<br/>• B12P2837.CUI.SUAP.xml (wrapper SSU)<br/>• a valle: B12P2837.SUAP-RI.XML generato dal RI"]:::leaf
+  AP_ssu -->|HTTP 503| ADD_PEC["fallback: SCIA via PEC, fuori ComUnica"]:::leaf
 
-  %% ===== MODELLO COMUNICAZIONE =====
-  MC --> MC_q{adempimento ?}:::dec
-  MC_q -->|01 Nuova impresa con inizio| MC_q01{artigiana ?}:::dec
-  MC_q -->|02 Costituzione senza inizio| L_mc_02["enti-destinatari = RI"]:::mc
-  MC_q -->|03 Inizio attivita su iscritta| L_mc_03["enti-destinatari = AE + IL + IP"]:::mc
-  MC_q -->|04 Variazione| L_mc_04["enti-destinatari = RI + altri secondo atto"]:::mc
-  MC_q -->|05 Cessazione| L_mc_05["enti-destinatari = AE + IL + IP + RI"]:::mc
-  MC_q -->|06 Cancellazione RI| L_mc_06["enti-destinatari = RI"]:::mc
-  MC_q01 -->|No commerciale| L_mc_01c["01: enti-destinatari = AE + IL + IP + RI"]:::mc
-  MC_q01 -->|Si artigiana| L_mc_01a["01: enti-destinatari = AE + IL + IP + RI + AA"]:::mc
+  %% ===================== VARIAZIONE (add-on cumulabili) =====================
+  OP -->|Variazione| VAR_base["• B12P2837.CUI.xml — Modello Comunicazione (sempre presente)<br/>• B12P2837.U3T — file-pratica RI (quando la variazione tocca il RI)<br/>• B12P2837.PDF.P7M — distinta firmata<br/>• B12P2837.U3R — riepilogo (RP)"]:::leaf
+  VAR_base --> VA_anag{varia anagrafica titolare ?}:::dec
+  VA_anag -->|Si| ADD_anag["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 riq. 2/5"]:::leaf
+  VA_anag -->|No| VA_sede{trasferimento sede ?}:::dec
+  ADD_anag --> VA_sede
+  VA_sede -->|Si| VA_sede_q{sede legale o operativa ?}:::dec
+  VA_sede -->|No| VA_att{varia attivita ?}:::dec
+  VA_sede_q -->|Legale| ADD_sede_l["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 riq. 5<br/>• B12P2837.INPS.xml — VSL (sede legale)"]:::leaf
+  VA_sede_q -->|Operativa| ADD_sede_o["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 riq. 5<br/>• B12P2837.INPS.xml — VSO (sede operativa)"]:::leaf
+  ADD_sede_l --> VA_att
+  ADD_sede_o --> VA_att
+  VA_att -->|Si| ADD_att["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 riq. 7<br/>• B12P2837.IVA — AdE: AA9/12 variazione (A+B+C)<br/>• B12P2837.INPS.xml — VAE"]:::leaf
+  VA_att -->|No| VA_add{varia addetti ?}:::dec
+  ADD_att --> VA_risk{"La nuova attivita ricade<br/>in una voce di tariffa INAIL<br/>diversa da quella assicurata ?"}:::dec
+  VA_risk -->|Si| ADD_risk["AGGIUNGI:<br/>• B12P2837.INAIL.xml — variazione attivita/rischio"]:::leaf
+  VA_risk -->|No| VA_add
+  ADD_risk --> VA_add
+  VA_add -->|Si| ADD_add["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 riq. 30"]:::leaf
+  VA_add -->|No| VA_fam{aggiunta o modifica familiare ?}:::dec
+  ADD_add --> VA_fam
+  VA_fam -->|Si| ADD_vfam["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 + IntercalareP × N"]:::leaf
+  VA_fam -->|No| VA_albo{iscrizione o modifica Albo Artigiani ?}:::dec
+  ADD_vfam --> VA_albo
+  VA_albo -->|Si| ADD_albo["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 + sez. AB + IntercalareAA"]:::leaf
+  VA_albo -->|No| VA_ces{cessione o affitto azienda ?}:::dec
+  ADD_albo --> VA_ces
+  VA_ces -->|Si| ADD_vces["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 + TA"]:::leaf
+  VA_ces -->|No| VA_prev{varia previdenza o denominazione INPS ?}:::dec
+  ADD_vces --> VA_prev
+  VA_prev -->|Si| VA_prev_q{denominazione, forma o attivita ?}:::dec
+  VA_prev -->|No| VA_susp{sospensione o riattivazione ?}:::dec
+  VA_prev_q -->|Denominazione o forma| ADD_vda["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 + sez. AC<br/>• B12P2837.INPS.xml — VDA"]:::leaf
+  VA_prev_q -->|Attivita| ADD_vae["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 + sez. AC<br/>• B12P2837.INPS.xml — VAE"]:::leaf
+  ADD_vda --> VA_susp
+  ADD_vae --> VA_susp
+  VA_susp -->|Si| ADD_vsa["AGGIUNGI:<br/>• B12P2837.INPS.xml — VSA (SOSPENSIONE / RIATTIVAZIONE)"]:::leaf
+  VA_susp -->|No| VA_ul{operazione su unita locale ?}:::dec
+  ADD_vsa --> VA_ul
+  VA_ul -->|Si| VA_ul_q{quale operazione UL ?}:::dec
+  VA_ul_q -->|Apertura| ADD_ul_a["AGGIUNGI:<br/>• B12P2837.U3T — RI: UL apertura"]:::leaf
+  VA_ul_q -->|Modifica| ADD_ul_m["AGGIUNGI:<br/>• B12P2837.U3T — RI: UL modifica"]:::leaf
+  VA_ul_q -->|Cessazione| ADD_ul_c["AGGIUNGI:<br/>• B12P2837.U3T — RI: UL cessazione"]:::leaf
 
-  %% ===== REGISTRO IMPRESE =====
-  RI --> RI_op{operazione ?}:::dec
-  RI_op -->|Apertura iscrizione| RI_ap_q1{attivita<br/>artigiana ?}:::dec
-  RI_op -->|Variazione| RI_va_q{quale atto<br/>di variazione ?}:::dec
-  RI_op -->|Cessazione| L_ri_ce["contenuto B12P2837.U3T:<br/>I2 con riq. 15 + causale<br/>+ RP riepilogo"]:::ri
-
-  RI_ap_q1 -->|No commerciale| RI_ap_cf{familiari<br/>collaboratori ?}:::dec
-  RI_ap_q1 -->|Si artigiana| RI_ap_af{familiari<br/>collaboratori ?}:::dec
-  RI_ap_cf -->|No| RI_ap_cfn{UL aggiuntive ?}:::dec
-  RI_ap_cf -->|Si| RI_ap_cfs{UL aggiuntive ?}:::dec
-  RI_ap_af -->|No| RI_ap_afn{UL aggiuntive ?}:::dec
-  RI_ap_af -->|Si| RI_ap_afs{UL aggiuntive ?}:::dec
-
-  RI_ap_cfn -->|No| L_ap_1["contenuto B12P2837.U3T:<br/>I1 + sez. AC commercianti + RP"]:::ri
-  RI_ap_cfn -->|Si| L_ap_2["contenuto B12P2837.U3T:<br/>I1 + sez. AC commercianti<br/>+ UL × N + RP"]:::ri
-  RI_ap_cfs -->|No| L_ap_3["contenuto B12P2837.U3T:<br/>I1 + sez. AC commercianti<br/>+ IntercalareP × N familiari + RP"]:::ri
-  RI_ap_cfs -->|Si| L_ap_4["contenuto B12P2837.U3T:<br/>I1 + sez. AC commercianti<br/>+ IntercalareP × N + UL × N + RP"]:::ri
-  RI_ap_afn -->|No| L_ap_5["contenuto B12P2837.U3T:<br/>I1 + sez. AA + sez. AC artigiani<br/>+ IntercalareAA Albo + RP"]:::ri
-  RI_ap_afn -->|Si| L_ap_6["contenuto B12P2837.U3T:<br/>I1 + sez. AA + sez. AC artigiani<br/>+ IntercalareAA + UL × N + RP"]:::ri
-  RI_ap_afs -->|No| L_ap_7["contenuto B12P2837.U3T:<br/>I1 + sez. AA + sez. AC artigiani<br/>+ IntercalareAA<br/>+ IntercalareP × N + RP"]:::ri
-  RI_ap_afs -->|Si| L_ap_8["contenuto B12P2837.U3T:<br/>I1 + sez. AA + sez. AC artigiani<br/>+ IntercalareAA<br/>+ IntercalareP × N + UL × N + RP"]:::ri
-
-  RI_va_q -->|Anagrafica titolare| L_va_1["contenuto B12P2837.U3T:<br/>I2 riq. 2/5 + RP"]:::ri
-  RI_va_q -->|Trasferimento sede| L_va_2["contenuto B12P2837.U3T:<br/>I2 riq. 5 + RP"]:::ri
-  RI_va_q -->|Variazione attivita| L_va_3["contenuto B12P2837.U3T:<br/>I2 riq. 7<br/>+ sez. AC se cambia previdenza<br/>+ RP"]:::ri
-  RI_va_q -->|Variazione addetti| L_va_4["contenuto B12P2837.U3T:<br/>I2 riq. 30 + RP"]:::ri
-  RI_va_q -->|Aggiunta o modifica familiare| L_va_5["contenuto B12P2837.U3T:<br/>I2 + IntercalareP × N + RP"]:::ri
-  RI_va_q -->|Iscrizione Albo Artigiani| L_va_6["contenuto B12P2837.U3T:<br/>I2 + sez. AB + IntercalareAA + RP"]:::ri
-  RI_va_q -->|Modifica o cessazione Albo Artigiani| L_va_7["contenuto B12P2837.U3T:<br/>I2 + sez. AB + IntercalareAA + RP"]:::ri
-  RI_va_q -->|Cessione azienda| L_va_8["contenuto B12P2837.U3T:<br/>I2 + TA + RP"]:::ri
-  RI_va_q -->|Variazione previdenza INPS| L_va_9["contenuto B12P2837.U3T:<br/>I2 + sez. AC + RP"]:::ri
-  RI_va_q -->|Operazione su unita locale| RI_ul_q{operazione UL ?}:::dec
-
-  RI_ul_q -->|Apertura UL| L_ul_n["contenuto B12P2837.U3T:<br/>UL apertura + RP"]:::ri
-  RI_ul_q -->|Modifica UL| L_ul_m["contenuto B12P2837.U3T:<br/>UL modifica + RP"]:::ri
-  RI_ul_q -->|Cessazione UL| L_ul_c["contenuto B12P2837.U3T:<br/>UL cessazione + RP"]:::ri
-
-  %% ===== AdE =====
-  AE --> AE_op{operazione ?}:::dec
-  AE_op -->|Inizio attivita| AE_in_q{regimi speciali ?<br/>e-commerce o rapp. fiscali}:::dec
-  AE_op -->|Variazione dati| AE_va_q{regimi speciali ?}:::dec
-  AE_op -->|Cessazione attivita| L_ae_ce["contenuto B12P2837.IVA:<br/>Quadri A + C"]:::ae
-  AE_in_q -->|No| L_ae_in_1["contenuto B12P2837.IVA:<br/>Quadri A + B + C"]:::ae
-  AE_in_q -->|Si| L_ae_in_2["contenuto B12P2837.IVA:<br/>Quadri A + B + C<br/>+ D/E/F/I condizionali"]:::ae
-  AE_va_q -->|No| L_ae_va_1["contenuto B12P2837.IVA:<br/>Quadri A + B + C"]:::ae
-  AE_va_q -->|Si| L_ae_va_2["contenuto B12P2837.IVA:<br/>Quadri A + B + C<br/>+ D/E/F/I condizionali"]:::ae
-
-  %% ===== INAIL =====
-  IL --> IL_op{operazione ?}:::dec
-  IL_op -->|Iscrizione| IL_isc_q1{soggetti<br/>assicurati ?}:::dec
-  IL_op -->|Variazione| IL_va_q{tipo<br/>variazione ?}:::dec
-  IL_op -->|Cessazione| L_il_ce["contenuto B12P2837.INAIL.xml:<br/>DataCessazione<br/>+ CausaleCessazione<br/>+ SedeCorrispondenza opz."]:::il
-  IL_isc_q1 -->|Solo dipendenti| IL_isc_d{rischi silicosi<br/>asbestosi ?}:::dec
-  IL_isc_q1 -->|Solo titolare artigiano| L_il_isc_a["contenuto B12P2837.INAIL.xml:<br/>QuadroA + A1<br/>+ QuadroB con D + D1"]:::il
-  IL_isc_q1 -->|Artigiano + dipendenti| IL_isc_b{rischi silicosi<br/>asbestosi ?}:::dec
-  IL_isc_d -->|No| L_il_isc_d1["contenuto B12P2837.INAIL.xml:<br/>QuadroA + A1<br/>+ QuadroB con C + C1"]:::il
-  IL_isc_d -->|Si| L_il_isc_d2["contenuto B12P2837.INAIL.xml:<br/>QuadroA + A1<br/>+ QuadroB con C + C1 + O"]:::il
-  IL_isc_b -->|No| L_il_isc_b1["contenuto B12P2837.INAIL.xml:<br/>QuadroA + A1<br/>+ QuadroB con C + C1 + D + D1"]:::il
-  IL_isc_b -->|Si| L_il_isc_b2["contenuto B12P2837.INAIL.xml:<br/>QuadroA + A1<br/>+ QuadroB con C + C1 + O + D + D1"]:::il
-  IL_va_q -->|Semplificata Quadro0 - sosp/cess/riatt/var attivita| L_il_va_0["contenuto B12P2837.INAIL.xml:<br/>Quadro0"]:::il
-  IL_va_q -->|Anagrafica o PAT| L_il_va_1["contenuto B12P2837.INAIL.xml:<br/>QuadroV + V2 + V3<br/>+ QuadroB ricorrente"]:::il
-
-  %% ===== INPS DM =====
-  IPDM --> IPDM_op{operazione ?}:::dec
-  IPDM_op -->|Iscrizione DM IAD| L_dm_isc["contenuto B12P2837.INPS.xml:<br/>IAD root<br/>PraticaINPS-DM_IAD.xsd"]:::dm
-  IPDM_op -->|Variazione| IPDM_va_q{cosa varia ?}:::dec
-  IPDM_op -->|Cessazione| L_dm_ce["contenuto B12P2837.INPS.xml:<br/>VSA con stato CESSAZIONE"]:::dm
-  IPDM_va_q -->|Attivita esercitata| L_dm_vae["contenuto B12P2837.INPS.xml:<br/>VAE"]:::dm
-  IPDM_va_q -->|Denominazione o forma giuridica| L_dm_vda["contenuto B12P2837.INPS.xml:<br/>VDA"]:::dm
-  IPDM_va_q -->|Sospensione o riattivazione| L_dm_vsa["contenuto B12P2837.INPS.xml:<br/>VSA con stato SOSPENSIONE o RIATTIVAZIONE"]:::dm
-  IPDM_va_q -->|Sede legale| L_dm_vsl["contenuto B12P2837.INPS.xml:<br/>VSL"]:::dm
-  IPDM_va_q -->|Sede operativa| L_dm_vso["contenuto B12P2837.INPS.xml:<br/>VSO"]:::dm
-
-  %% ===== SUAP — SCIA Contestuale via SSU =====
-  SP --> SP_q{Comune attivato SSU ?}:::dec
-  SP_q -->|HTTP 503| L_sp_pec["Fallback PEC manuale<br/>SCIA fuori ComUnica"]:::sp
-  SP_q -->|OK| SP_flow["Flusso SSU automatizzato (5 step):<br/>1) Fiscozen → InfoCamere: richiesta URL<br/>2) Consulente apre URL portale Comune<br/>3) Compilazione SCIA sul portale<br/>4) Cliente paga via PagoPA<br/>5) Portale → callback suap_send_instance<br/>(cui uuid + general_index)"]:::sp
-  SP_flow --> L_sp_cui["B12P2837.CUI.SUAP.xml:<br/>• CUI uuid (Codice Univoco di Istanza)<br/>• estremi SUAP destinatario<br/>• codice pratica ComUnica<br/>(NO ZIP — SCIA resta sul portale)"]:::sp
-  SP -.->|generato dal RI dopo P.IVA| L_sp_ri["B12P2837.SUAP-RI.XML<br/>REA + protocollo RI + P.IVA + PEC"]:::file
+  %% ===================== CESSAZIONE =====================
+  OP -->|Cessazione| CE_base["• B12P2837.CUI.xml — Modello Comunicazione<br/>• B12P2837.U3T — RI: I2 riq. 15 cancellazione + causale + RP<br/>• B12P2837.IVA — AdE: AA9/12 Quadri A + C"]:::leaf
+  CE_base --> CE_inail{era artigiana o aveva dipendenti ?}:::dec
+  CE_inail -->|Si| ADD_ce_inail["AGGIUNGI:<br/>• B12P2837.INAIL.xml — DataCessazione + CausaleCessazione"]:::leaf
+  CE_inail -->|No| CE_inps{aveva dipendenti INPS DM ?}:::dec
+  ADD_ce_inail --> CE_inps
+  CE_inps -->|Si| ADD_ce_inps["AGGIUNGI:<br/>• B12P2837.INPS.xml — VSA stato CESSAZIONE"]:::leaf
 </div>
 
 <!-- ============= MODELLO COMUNICAZIONE ============= -->
-<h2 id="modello">4. Modello Comunicazione (root)</h2>
+<h2 id="modello">2. Modello Comunicazione (root)</h2>
 <p>Sempre presente in ogni ComUnica. È il file <em>indice</em>: descrive il soggetto, l'oggetto della pratica, l'elenco degli enti destinatari e gli allegati con la loro impronta digitale.</p>
 
-<h3>File costituenti</h3>
-<ul class="compact">
-  <li><code>&lt;cod-pratica&gt;.CUI.xml</code> — modello-unico-di-comunicazione, XML conforme allo schema <code>comunicazione-unica-RI</code> (namespace <code>http://sitoregistroimprese.it/PraticheTelematiche/ComunicazioneUnicaRI/v1</code>).</li>
-  <li><code>&lt;cod-pratica&gt;.CUI.PDF.P7M</code> — file-distinta-della-comunicazione, PDF firmato digitalmente CAdES.</li>
-</ul>
-
-<h3>Struttura XML del ModelloBase</h3>
-<table>
-  <tr><th>Sezione</th><th>Contenuto</th></tr>
-  <tr><td><code>anagrafica-impresa</code></td><td><code>denominazione</code> (max 80), <code>cod-fisc</code> (16, opzionale se ancora da assegnare), <code>provincia-sede</code></td></tr>
-  <tr><td><code>oggetto</code> <span class="tag">@cod-pratica</span> <span class="tag">@adempimento</span></td><td>Codice pratica (8 car., es. <code>B12P2837</code>) + tipo adempimento ∈ {01 nuova impresa con inizio, 02 costituzione senza inizio, 03 inizio attività su iscritta, 04 variazione, 05 cessazione, 06 cancellazione RI}</td></tr>
-  <tr><td><code>enti-destinatari</code></td><td>Lista di <code>ente @cod</code> ∈ {AE=Ag.Entrate, IL=INAIL, IP=INPS, RI=Reg.Imprese, AA=Albo Artigiani, ML=Min.Lavoro, SP=SUAP}</td></tr>
-  <tr><td><code>dichiarante</code></td><td>Nome, cognome, CF, <code>qualifica</code> (TITOLARE, LEGALE RAPPRESENTANTE, NOTAIO, DELEGATO...), PEC obbligatoria, telefono</td></tr>
-  <tr><td><code>domicilio-pec-impresa</code></td><td><code>richiesta-indirizzo-pec</code> (per imprese non societarie) oppure <code>indirizzo-pec</code> già disponibile</td></tr>
-  <tr><td><code>allegati</code></td><td>1+ <code>allegato @nome-file @cod-ente</code> con <strong>impronta digitale</strong> di ciascun file allegato</td></tr>
-</table>
-
-<div class="note">
-La biforcazione apertura/variazione/cessazione vive <strong>qui</strong>, nel valore di <code>@adempimento</code>. I moduli degli enti contengono ciascuno la propria operazione interna (allineata al codice di pratica), ma il tracciato XML del Modello rimane unico.
-</div>
-
-<p class="source">Fonte: <a href="specs/Specifiche_tecniche_comunicazione_unicapdf.pdf"><code>Specifiche_tecniche_comunicazione_unicapdf.pdf</code></a> (v3.1, pp. 6-20).</p>
-
-<h3 id="modulo-mc-xml">4.1 Modulo modello-unico-di-comunicazione (CUI.xml)</h3>
+<h3 id="modulo-mc-xml">2.1 Modulo modello-unico-di-comunicazione (CUI.xml)</h3>
 <p>Il modulo rappresenta il file dati principale della comunicazione unica per la nascita d'impresa, contenente informazioni strutturate su soggetto, oggetto della comunicazione e allegati con relative impronte digitali. Vive come file XML denominato <code>&lt;cod-pratica&gt;.CUI.xml</code> nel tracciato della pratica informatica.</p>
 
 <table class="ri-input">
   <tr><th>Campo</th><th>Significato</th><th>Quando compilare</th><th>Origine</th><th>Come compilare</th></tr>
   <tr><td colspan="5" class="row-section">Root: comunicazione-unica-RI (namespace http://sitoregistroimprese.it/PraticheTelematiche/ComunicazioneUnicaRI/v1)</td></tr>
-  <tr><td><code>@ufficio-ri</code></td><td>Sigla provincia (2 caratteri) dell'ufficio Registro Imprese destinatario.</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td><strong>Fonte:</strong> <code>UserAddress.province</code> — Provincia CCIAA competente = provincia della sede attività (UserAddress kind=Attività).</td></tr>
+  <tr><td><code>@ufficio-ri</code></td><td>Sigla provincia (2 caratteri) dell'ufficio RI destinatario.</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td><strong>Fonte:</strong> <code>UserAddress.province</code> — Provincia CCIAA competente = provincia della sede attività (UserAddress kind=Attività).</td></tr>
   <tr><td><code>@sw-producer</code></td><td>Nome del software utilizzato per creare la pratica (max 80 caratteri).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Costante fissa del software di produzione pratica (es. "Fiscozen").</td></tr>
   <tr><td><code>@sw-version</code></td><td>Versione del software (max 10 caratteri).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Costante: versione del software di generazione pratica.</td></tr>
   <tr><td colspan="5" class="row-section">Sezione: anagrafica-impresa</td></tr>
@@ -617,7 +435,7 @@ La biforcazione apertura/variazione/cessazione vive <strong>qui</strong>, nel va
   <tr><td><code>@cod-pratica</code></td><td>Codice della pratica, stringa di lunghezza fissa 8 caratteri (tipo CodicePratica), es. <code>B12P2837</code>.</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>CORREZIONE: lo spec definisce CodicePratica come stringa di lunghezza fissa 8 (non il formato "MMGGHHmmss" indicato prima). Codice generato dal sistema di invio pratica.</td></tr>
   <tr><td><code>@adempimento</code></td><td>Tipo adempimento 2 caratteri: 01=Nuova impresa con inizio; 02=Costituzione senza inizio; 03=Inizio attività su iscritta; 04=Variazione; 05=Cessazione; 06=Cancellazione.</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Per l'apertura ditta individuale via ExtraService APERTURA_IMPRESA_INDIVIDUALE è fisso "01" (nuova impresa con immediato inizio attività).</td></tr>
   <tr><td colspan="5" class="row-section">Sezione: enti-destinatari</td></tr>
-  <tr><td><code>ente/@cod</code></td><td>Codice ente 2 car.: AE (Agenzia Entrate), IL (INAIL), IP (INPS), RI (Registro Imprese), AA (Albo Artigiani), ML (Min. Lavoro), SP (SUAP). Elemento ripetibile.</td><td>Sempre obbligatorio (almeno una voce)</td><td><span class="org org-auto">Auto</span></td><td>Determinato dalla composizione della pratica: per ditta individuale tipicamente RI + AE (+ AA se artigiana, IP per gestione previdenziale).</td></tr>
+  <tr><td><code>ente/@cod</code></td><td>Codice ente 2 car.: AE (AdE), IL (INAIL), IP (INPS), RI (RI), AA (Albo Artigiani), ML (Min. Lavoro), SP (SUAP). Elemento ripetibile.</td><td>Sempre obbligatorio (almeno una voce)</td><td><span class="org org-auto">Auto</span></td><td>Determinato dalla composizione della pratica: per ditta individuale tipicamente RI + AE (+ AA se artigiana, IP per gestione previdenziale).</td></tr>
   <tr><td colspan="5" class="row-section">Sezione: dichiarante</td></tr>
   <tr><td><code>nome</code></td><td>Nome del dichiarante (max 50 caratteri).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Per pratiche inviate da Fiscozen il dichiarante è l'intermediario incaricato (dato dello studio), non il titolare.</td></tr>
   <tr><td><code>cognome</code></td><td>Cognome del dichiarante (max 50 caratteri).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Cognome/denominazione dell'intermediario Fiscozen.</td></tr>
@@ -635,194 +453,26 @@ La biforcazione apertura/variazione/cessazione vive <strong>qui</strong>, nel va
   <tr><td><code>allegato/@nome-file</code></td><td>Nome completo del file con estensione (max 80 car.).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Nome file generato dal sistema di invio pratica.</td></tr>
   <tr><td><code>allegato/@cod-ente</code></td><td>Codice ente destinatario dell'allegato (AE/IL/IP/RI/AA/ML/SP).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Derivato dall'ente destinatario di ciascun allegato (coerente con enti-destinatari).</td></tr>
   <tr><td colspan="5" class="row-section">Sezione: protocollazione (uso interno ufficio RI)</td></tr>
-  <tr><td><code>protocollazione/@anno</code></td><td>Anno protocollazione (gYear).</td><td>Compilato dall'ufficio Registro Imprese (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Compilato dall'ufficio Registro Imprese in ricezione, non da Fiscozen.</td></tr>
-  <tr><td><code>protocollazione/@numero-protocollo-ri</code></td><td>Numero protocollo RI (0–999999999).</td><td>Compilato dall'ufficio Registro Imprese (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Assegnato dall'ufficio RI.</td></tr>
-  <tr><td><code>protocollazione/@sotto-numero-protocollo-ri</code></td><td>Sotto-numero protocollo (0–9999).</td><td>Compilato dall'ufficio Registro Imprese (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Assegnato dall'ufficio RI.</td></tr>
-  <tr><td><code>protocollazione/@data-protocollo-ri</code></td><td>Data protocollazione (YYYY-MM-DD).</td><td>Compilato dall'ufficio Registro Imprese (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Assegnata dall'ufficio RI.</td></tr>
-  <tr><td><code>protocollazione/@data-arrivo-comunicazione</code></td><td>Data arrivo comunicazione.</td><td>Compilato dall'ufficio Registro Imprese (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Registrata dall'ufficio RI in ricezione.</td></tr>
-  <tr><td><code>protocollazione/@data-inoltro-ente</code></td><td>Data inoltro all'ente.</td><td>Compilato dall'ufficio Registro Imprese (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Registrata dall'ufficio RI.</td></tr>
-  <tr><td><code>protocollazione/@numero-rea</code></td><td>Numero REA attribuito (1–9999999).</td><td>Compilato dall'ufficio Registro Imprese (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Numero REA attribuito dal Registro Imprese all'esito dell'iscrizione.</td></tr>
+  <tr><td><code>protocollazione/@anno</code></td><td>Anno protocollazione (gYear).</td><td>Compilato dall'ufficio RI (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Compilato dall'ufficio RI in ricezione, non da Fiscozen.</td></tr>
+  <tr><td><code>protocollazione/@numero-protocollo-ri</code></td><td>Numero protocollo RI (0–999999999).</td><td>Compilato dall'ufficio RI (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Assegnato dall'ufficio RI.</td></tr>
+  <tr><td><code>protocollazione/@sotto-numero-protocollo-ri</code></td><td>Sotto-numero protocollo (0–9999).</td><td>Compilato dall'ufficio RI (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Assegnato dall'ufficio RI.</td></tr>
+  <tr><td><code>protocollazione/@data-protocollo-ri</code></td><td>Data protocollazione (YYYY-MM-DD).</td><td>Compilato dall'ufficio RI (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Assegnata dall'ufficio RI.</td></tr>
+  <tr><td><code>protocollazione/@data-arrivo-comunicazione</code></td><td>Data arrivo comunicazione.</td><td>Compilato dall'ufficio RI (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Registrata dall'ufficio RI in ricezione.</td></tr>
+  <tr><td><code>protocollazione/@data-inoltro-ente</code></td><td>Data inoltro all'ente.</td><td>Compilato dall'ufficio RI (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Registrata dall'ufficio RI.</td></tr>
+  <tr><td><code>protocollazione/@numero-rea</code></td><td>Numero REA attribuito (1–9999999).</td><td>Compilato dall'ufficio RI (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Numero REA attribuito dal RI all'esito dell'iscrizione.</td></tr>
 </table>
 
 <p class="source">Fonte: <a href="specs/Specifiche_tecniche_comunicazione_unicapdf.pdf"><code>Specifiche_tecniche_comunicazione_unicapdf.pdf</code></a></p>
 
+<h3 id="mc-pdf">2.2 File-distinta (PDF firmato)</h3>
+<p>Oltre al file dati XML, la ComUnica trasporta il <strong>file-distinta-della-comunicazione</strong> <code>B12P2837.CUI.PDF.P7M</code>: la rappresentazione di stampa PDF del Modello Comunicazione, firmata digitalmente in formato <strong>CAdES</strong> (<code>.P7M</code>) dal dichiarante/intermediario. È il documento legale di sottoscrizione.</p>
+
 <!-- ============= REGISTRO IMPRESE ============= -->
-<h2 id="ri">5. Modulistica Registro Imprese — solo Ditta Individuale</h2>
-<p>Tracciato FEDRA <em>record-based</em> (b95_fd70). Regolamentata dal Decreto MIMIT 12/04/2023 (Allegato A v7.0+). Qui mostriamo solo i moduli applicabili a una ditta individuale; per la struttura del file fisico vedi §4.</p>
+<h2 id="ri">3. Modulistica RI — solo Ditta Individuale</h2>
+<p>Tracciato FEDRA <em>record-based</em> (b95_fd70). Regolamentata dal Decreto MIMIT 12/04/2023 (Allegato A v7.0+). Qui mostriamo solo i moduli applicabili a una ditta individuale; per la struttura del file fisico vedi l'<a href="#fedra">Appendice A</a>.</p>
 
-<h3>File costituenti (sempre)</h3>
-<ul class="compact">
-  <li><code>file-pratica-registro-imprese</code> — tracciato FEDRA testuale con record a coordinate (vedi §4).</li>
-  <li><code>file-distinta</code> — PDF firmato CAdES.</li>
-  <li><code>file-riepilogo</code> (modulo <strong>RP</strong>) — riepilogo sintetico, <strong>obbligatorio</strong> in ogni pratica RI.</li>
-  <li>Eventuali allegati: certificato di residenza/cittadinanza per cittadini stranieri, procure, licenze.</li>
-</ul>
-
-<h3>Inventario moduli RI applicabili alla Ditta Individuale</h3>
-<table>
-  <tr><th>Codice</th><th>Funzione</th><th>Operazioni</th></tr>
-  <tr><td><code>I1</code></td><td>Iscrizione imprenditore individuale</td><td>Apertura</td></tr>
-  <tr><td><code>I2</code></td><td>Modifica / cancellazione imprenditore</td><td>Variazione, Cessazione</td></tr>
-  <tr><td><code>UL</code></td><td>Unità locale (succursale/filiale)</td><td>Apertura / Var. / Cess.</td></tr>
-  <tr><td><code>IntercalareP</code></td><td>Atti/fatti su persona — una occorrenza per ogni familiare collaboratore</td><td>Nomina / Modifica / Cessazione</td></tr>
-  <tr><td><code>IntercalareAA</code></td><td>Albo Artigiani — se attività artigianale</td><td>Iscrizione / Var. / Cess. Albo</td></tr>
-  <tr><td><code>TA</code></td><td>Trasferimento azienda (L. 310/1993)</td><td>Variazione</td></tr>
-  <tr><td><code>RP</code></td><td>Riepilogo pratica (obbligatorio)</td><td>Tutte</td></tr>
-  <tr><td><code>XX</code></td><td>Note libere</td><td>Tutte</td></tr>
-</table>
-
-<h3>Sezioni trasversali rilevanti per la Ditta Individuale</h3>
-<ul class="compact">
-  <li><strong>AA</strong> (in I1) — Dati Albo Artigiani: familiari collaboratori, partecipazione, date</li>
-  <li><strong>AB</strong> (in I2) — Variazione dati artigiani</li>
-  <li><strong>AC</strong> (in I1/I2) — Previdenza INPS Commercianti / Artigiani (dichiarazioni iscrizione)</li>
-  <li><strong>Riquadro 17</strong> — SCIA</li>
-  <li><strong>Riquadri 18/19</strong> — Commercio al dettaglio (D.Lgs. 114/1998)</li>
-  <li><strong>Riquadro 41</strong> — Iscrizioni ad Albi/Licenze (autoriparatori, pulizia, facchinaggio)</li>
-  <li><strong>Riquadro 15</strong> (in I2) — Motivi di cancellazione: cessazione attività, cessione azienda, altro</li>
-</ul>
-
-<details>
-<summary>Composizione della pratica per operazione</summary>
-
-<h4>Apertura / Iscrizione</h4>
-<p>I1 + IntercalareP × familiare collaboratore + IntercalareAA (se artigiana) + UL (se unità locali) + allegati.</p>
-
-<h4>Variazione</h4>
-<p>I2 (con sezione AB/AC se variazione previdenziale) + IntercalareP (modifiche familiari) + IntercalareAA (variazioni Albo) + TA (se cessione azienda) + UL (se modifica unità locale).</p>
-
-<h4>Cessazione / Cancellazione</h4>
-<p>I2 con riquadro 15 valorizzato (data cessazione + causale). Eventuali allegati: dichiarazione di cessazione.</p>
-</details>
-
-<p class="source">Fonti: <a href="specs/Allegato_A_Specifiche_tecniche_vers.7.0.pdf">Allegato_A_Specifiche_tecniche_vers.7.0.pdf</a>; <a href="specs/MODULO_I1-dd18-02-26.txt">MODULO_I1</a>; <a href="specs/MODULO_I2dd18-02-26.txt">MODULO_I2</a>; <a href="specs/MODULO_INTPdd18-02-26.txt">MODULO_INTP</a>; <a href="specs/RI-DM-modulistica.txt">RI-DM-modulistica</a>; <a href="specs/TABELLA_DOC.txt">TABELLA_DOC</a> / <a href="specs/TABELLA_PARdd18-02-26.txt">PAR</a> / <a href="specs/TABELLA_STAdd18-02-26.txt">STA</a> / <a href="specs/TABELLA_TPCdd18-02-26.txt">TPC</a>.</p>
-
-<!-- ============= FEDRA (sotto-capitolo di §3) ============= -->
-<h3 id="fedra">5.1 Tracciato FEDRA — come si compila la pratica RI</h3>
-<p>I "moduli" RI elencati sopra (I1, I2, S5, UL, IntercalareP, R, ...) <strong>non sono file XML autonomi</strong>: sono <em>insiemi logici di campi</em> che vengono serializzati in un unico file di testo binario record-based — il <strong>file-pratica FEDRA</strong>. Il tracciato è standardizzato dal DM MIMIT 12/04/2023 (Allegato A v7.0+) e generato esclusivamente da software autorizzati (StarWeb, FEDRA, ComUnica, software dei commercialisti): non si scrive a mano.</p>
-
-<h4>I tre artefatti che la ComUnica trasporta per il RI</h4>
-<table>
-  <tr><th>File</th><th>Estensione</th><th>Contenuto</th><th>Generato da</th></tr>
-  <tr>
-    <td><strong>file-pratica</strong></td>
-    <td><code>.U3T</code></td>
-    <td>Dati strutturati FEDRA (record a coordinate X Y Z) — il "contenitore dati" che il RI legge con parser automatico</td>
-    <td>Software compilatore</td>
-  </tr>
-  <tr>
-    <td><strong>file-distinta</strong></td>
-    <td><code>.PDF.P7M</code></td>
-    <td>Visura a quadri leggibile, firmata digitalmente CAdES — documento legale di sottoscrizione</td>
-    <td>Software compilatore + firma dichiarante/intermediario</td>
-  </tr>
-  <tr>
-    <td><strong>file-riepilogo</strong></td>
-    <td><code>.U3R</code></td>
-    <td>Record fissi a 320 byte: catalogo metadati di ogni documento allegato (nome, tipo da TABELLA_DOC, pagine, data, codice atto)</td>
-    <td>Software compilatore</td>
-  </tr>
-</table>
-<p>Il file-distinta firmato è il documento "legale"; il file-pratica e il file-riepilogo sono i dati machine-readable che il sistema RI elabora.</p>
-
-<h4>Coordinate dei record: (X, Y, Z)</h4>
-<p>Ogni campo valorizzato della modulistica produce <strong>un record</strong> identificato da una tripla:</p>
-<table>
-  <tr><th>Coord.</th><th>Byte</th><th>Significato</th><th>Esempi</th></tr>
-  <tr>
-    <td><strong>X</strong></td>
-    <td>1 char</td>
-    <td>Identificativo modulo</td>
-    <td><code>1</code>=I1, <code>3</code>=I2, <code>5</code>=UL, <code>P</code>=IntercalareP, <code>O</code>=RP (riepilogo) — moduli applicabili alla Ditta Individuale</td>
-  </tr>
-  <tr>
-    <td><strong>Y</strong></td>
-    <td>1 char</td>
-    <td>Identificativo riquadro/sezione dentro il modulo</td>
-    <td><code>1</code>=Dati anagrafici, <code>2</code>=Residenza, <code>85</code>=Tipo domanda, ...</td>
-  </tr>
-  <tr>
-    <td><strong>Z</strong></td>
-    <td>2 byte (unsigned short)</td>
-    <td>Identificativo campo all'interno della sezione</td>
-    <td><code>10</code>=CF, <code>20</code>=P.IVA, <code>40</code>=cognome, <code>50</code>=nome, ...</td>
-  </tr>
-</table>
-<div class="note">
-Il primo record di ogni modulo ha sempre <code>Y=0, Z=1</code> con contenuto fisso di 6 byte ASCII <code>'0'</code> (<code>0x30</code>) — fa da <em>marcatore di inizio modulo</em>. I moduli ripetibili (IntercalareP per ogni socio/familiare, UL per ogni unità locale) ricominciano da capo questa sequenza per ogni occorrenza.
-</div>
-
-<h4>Tipi di record nel file-pratica</h4>
-<ol class="compact">
-  <li><strong>Record di testa (HEADER)</strong> — 8 byte fissi: offset al record di coda + filler <code>0x68 0x01 0x00 0x00</code>. Una sola volta a inizio file.</li>
-  <li><strong>Record dati (DATI MODULISTICI)</strong> — uno per ogni campo: <code>X (1) | Y (1) | Z (2 bytes) | filler 0x00 0x00 | contenuto (n byte) | 0x7C (pipe)</code>. Si ripete per N campi della pratica.</li>
-  <li><strong>Record di coda (FOOTER)</strong> — 360 byte fissi: filler <code>0x05</code> + CF impresa (16) + Identificativo source software (12) + versione (3) + REA + ModuloBase + denominazione pratica (84) + sequenza enti destinatari + sequenza moduli (60) + userid utente. Definisce il routing della pratica verso AdE/INPS/INAIL.</li>
-  <li><strong>Header di file</strong> (80 byte, aggiunto dopo formattazione finale e "targatura") — numero totale record + sigla provincia destinataria. È il metadato di trasmissione telematica.</li>
-</ol>
-<p>Dopo la generazione, il file viene <strong>formattato in blocchi di 80 byte</strong> (operazione 6.1 dell'Allegato A) e poi "targato" con l'header di file (operazione 6.2).</p>
-
-<h4>Esempio di iscrizione I1 (Mario Rossi)</h4>
-<p>Sequenza di record logici prima della formattazione 80-byte. Le coordinate (X Y Z) sono separative; <code>|</code> = delimiter di chiusura record.</p>
-<pre style="background: #f3f4f6; padding: 1em; border-radius: 4px; overflow-x: auto; font-size: 0.85em;">
-1  0  1   000000|                  INIZIO Modulo I1
-1 85 110  X|                       Tipo Domanda: Impresa Commerciale (X = selezionato)
-1  1  10  RSSMRA70E12H501A|        CF
-1  1  30  M|                       Sesso
-1  1  40  ROSSI|                   Cognome
-1  1  50  MARIO|                   Nome
-1  1  60  12051970|                Data nascita (ggmmaaaa)
-1  1  70  I|                       Cittadinanza (tabella STA "I" = Italia)
-1  1  80  I|                       Stato nascita
-1  1  90  PD|                      Provincia nascita
-1  1 100  PADOVA|                  Comune nascita
-1  2  10  I|                       Residenza: stato
-1  2  20  PD|                      Residenza: provincia
-1  2  30  35100|                   CAP
-1  2  40  PADOVA|                  Residenza: comune
-...
-O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
-...
-</pre>
-
-<h4>Vincoli sintattici dei campi</h4>
-<ul class="compact">
-  <li><strong>Lunghezze</strong>: fisse per ogni campo (es. CF=16, cognome=25, CAP=5).</li>
-  <li><strong>Tipi</strong>: <code>char[ ]</code> alfanumerico (spazi trimmed); <code>num</code> numerico (zero-pad sinistra/destra per decimali); <code>data</code> formato <code>GGMMAAAA</code> (8 char); <code>scelta</code> singolo <code>X</code> (0x58) se selezionato; <code>testo</code> righe da 80 char fino a 300 righe per campo (stessa coordinata X Y Z ripetuta).</li>
-  <li><strong>Caratteri ammessi</strong>: ASCII <code>0x20</code>–<code>0x5A</code> (spazio fino a "Z"). ISO 8859-1 solo per campo EUID di S1/S2.</li>
-  <li><strong>Controlli logici</strong>: <code>obbligatorio</code>, <code>vietato</code>, <code>consentito se</code>, <code>in alternativa con</code>, <code>esistenza in tabella XYZ</code>.</li>
-</ul>
-
-<h4>Tabelle di lookup</h4>
-<p>Le tabelle ausiliarie sono file di decodifica che validano i valori inseriti in campi enumerati. Le principali:</p>
-<table>
-  <tr><th>Tabella</th><th>Contenuto</th><th>Dove si usa</th></tr>
-  <tr><td><code>TABELLA_DOC</code></td><td>100+ codici tipo documento (DIS=Distinta, U3T=File Dati, B00=Bilancio PDF/A, C01=Atto Costitutivo, V01=Verbale, ...)</td><td>Modulo RP — riepilogo allegati</td></tr>
-  <tr><td><code>TABELLA_PAR</code></td><td>Gradi di parentela (AG=Genitore, FG=Figlio, CG=Coniuge, FR=Fratello, ...)</td><td>Riquadro AA di I1 — familiari collaboratori</td></tr>
-  <tr><td><code>TABELLA_STA</code></td><td>Codici stati/paesi (I=Italia, D=Germania, F=Francia, USA, AAA=Apolide, ...)</td><td>Cittadinanza, stato di nascita, stato di residenza</td></tr>
-  <tr><td><code>TABELLA_TPC</code></td><td>7 codici INPS gestione commercianti (1=Svolge attività dipendente, 2=Partecipazione tramite capitale, 3=Iscritto ad altra cassa, ...)</td><td>Sezione AC di I1/I2 — previdenza commercio</td></tr>
-</table>
-<p class="source" style="margin-top:0.3rem;">Le tabelle CTE/RTE (modulo TE — titolare effettivo) non sono incluse perché TE non si applica alla ditta individuale.</p>
-
-<h4>Flusso end-to-end di compilazione</h4>
-<ol class="compact">
-  <li>L'utente compila i campi sui <strong>moduli logici</strong> (I1, I2, IntercalareP, RP, ...) tramite l'interfaccia del software (StarWeb, FEDRA, ComUnica, software di studio).</li>
-  <li>Il software <strong>serializza</strong> ogni campo nel relativo record <code>X Y Z + contenuto + 0x7C</code>.</li>
-  <li>Aggiunge i metadati nel <strong>FOOTER</strong>: <code>identificativo source</code>, versione (<code>"700"</code> per v7.0), sequenza enti destinatari (AE/IL/IP/RI/AA/ML/SP), sequenza moduli compilati, userid.</li>
-  <li><strong>Formatta</strong> il file in blocchi da 80 byte e <strong>targa</strong> con l'header di routing (numero record + sigla provincia).</li>
-  <li>Genera in parallelo il <strong>file-distinta</strong> (PDF stampabile della pratica) e il <strong>file-riepilogo</strong> (U3R).</li>
-  <li>La distinta viene <strong>firmata digitalmente</strong> dal dichiarante o dall'intermediario (CAdES).</li>
-  <li>Il software impacchetta tutto nella ComUnica: il <code>ModelloBase</code> referenzia file-pratica, file-distinta e file-riepilogo come <code>allegati</code> con la rispettiva <strong>impronta digitale</strong> (vedi §2). Il <code>ModelloBase</code> aggiunge poi gli analoghi file-pratica/file-distinta degli altri enti destinatari (AdE, INAIL, INPS, SUAP).</li>
-  <li>Trasmissione telematica via Telemaco/portale ComUnica.</li>
-</ol>
-
-<div class="note">
-<strong>Implicazione progettuale</strong>: i nomi "logici" usati nella documentazione interna ("modulo I1", "riquadro AC", "campo cognome") sono <em>diversi</em> dai nomi reali del wire-format. Chi implementa un generatore di pratiche RI deve scrivere uno <strong>strato di serializzazione FEDRA</strong> che traduce dal modello logico (es. <code>Persona.cognome</code>) alle coordinate fisiche (<code>1 1 40 ROSSI|</code>). Gli enti non RI (AdE, INAIL, INPS, SUAP) hanno invece tracciati XML/posizionali distinti — vedi §4–§7.
-</div>
-
-<p class="source">Fonti: <a href="specs/Allegato_A_Specifiche_tecniche_vers.7.0.pdf"><code>Allegato_A_Specifiche_tecniche_vers.7.0.pdf</code></a> (sezioni 3-6, righe 505-922 dell'estrazione); <a href="specs/MODULO_I1-dd18-02-26.txt"><code>MODULO_I1-dd18-02-26.txt</code></a> (righe 1-190); <code>TABELLA_DOC/PAR/STA/TPC.txt</code>; <code>Decreto_v7.0.pdf</code>.</p>
-
-<h3 id="modulo-i1">5.2 Modulo I1 — iscrizione imprenditore individuale</h3>
-<p>Modulo per l'iscrizione di imprenditori individuali nel Registro delle Imprese. Contiene i dati anagrafici del titolare, la sede dell'impresa, le attività esercitate, e informazioni specifiche per artigiani, commercianti e persone che prestano lavoro nell'impresa.</p>
+<h3 id="modulo-i1">3.1 Modulo I1 — iscrizione imprenditore individuale</h3>
+<p>Modulo per l'iscrizione di imprenditori individuali nel RI. Contiene i dati anagrafici del titolare, la sede dell'impresa, le attività esercitate, e informazioni specifiche per artigiani, commercianti e persone che prestano lavoro nell'impresa.</p>
 
 <table class="ri-input">
   <tr><th>Campo</th><th>Significato</th><th>Quando compilare</th><th>Origine</th><th>Come compilare</th></tr>
@@ -956,8 +606,8 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
 
 <p class="source">Fonte: <a href="specs/MODULO_I1-dd18-02-26.txt"><code>MODULO_I1-dd18-02-26.txt</code></a></p>
 
-<h3 id="modulo-i2">5.3 Modulo I2 — modifica/cancellazione imprenditore individuale</h3>
-<p>Il Modulo I2 è utilizzato per la denuncia di modifiche ai dati anagrafici, di sede, di attività o per la cancellazione dell'imprenditore individuale dal Registro delle Imprese. È lo strumento principale per aggiornare le informazioni dell'attività imprenditoriale.</p>
+<h3 id="modulo-i2">3.2 Modulo I2 — modifica/cancellazione imprenditore individuale</h3>
+<p>Il Modulo I2 è utilizzato per la denuncia di modifiche ai dati anagrafici, di sede, di attività o per la cancellazione dell'imprenditore individuale dal RI. È lo strumento principale per aggiornare le informazioni dell'attività imprenditoriale.</p>
 
 <table class="ri-input">
   <tr><th>Campo</th><th>Significato</th><th>Quando compilare</th><th>Origine</th><th>Come compilare</th></tr>
@@ -1042,8 +692,8 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
 
 <p class="source">Fonte: <a href="specs/MODULO_I2dd18-02-26.txt"><code>MODULO_I2dd18-02-26.txt</code></a></p>
 
-<h3 id="modulo-ul">5.4 Modulo UL — Unità Locale</h3>
-<p>Modulo per la denuncia di apertura, modifica o cessazione di una localizzazione (succursale, filiale, sede secondaria) di un'impresa già iscritta nel Registro Imprese.</p>
+<h3 id="modulo-ul">3.3 Modulo UL — Unità Locale</h3>
+<p>Modulo per la denuncia di apertura, modifica o cessazione di una localizzazione (succursale, filiale, sede secondaria) di un'impresa già iscritta nel RI.</p>
 
 <table class="ri-input">
   <tr><th>Campo</th><th>Significato</th><th>Quando compilare</th><th>Origine</th><th>Come compilare</th></tr>
@@ -1094,7 +744,7 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
 
 <p class="source">Fonte: <a href="specs/RI-DM-modulistica.txt"><code>RI-DM-modulistica.txt</code></a> (tracciato b95_fd64)</p>
 
-<h3 id="modulo-intercalarep">5.5 Modulo IntercalareP — atti/fatti su persona</h3>
+<h3 id="modulo-intercalarep">3.4 Modulo IntercalareP — atti/fatti su persona</h3>
 <p>L'IntercalareP registra atti e fatti relativi a una persona (familiari collaboratori in ditta individuale). Tre sezioni operative: nomina, modifica, cessazione.</p>
 
 <table class="ri-input">
@@ -1159,7 +809,7 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
 
 <p class="source">Fonte: <a href="specs/MODULO_INTPdd18-02-26.txt"><code>MODULO_INTPdd18-02-26.txt</code></a></p>
 
-<h3 id="modulo-intercalareaa">5.6 Modulo IntercalareAA — Albo Artigiani</h3>
+<h3 id="modulo-intercalareaa">3.5 Modulo IntercalareAA — Albo Artigiani</h3>
 <p>L'IntercalareAA si compila nei moduli I1/I2 (riquadri AA o AB) per notificare iscrizione, modifica o cessazione di un soggetto all'Albo Artigiani. È allegato all'iscrizione dell'imprenditore individuale artigiano e si raccorda con i dati di partecipazione al lavoro e qualifiche artigiane.</p>
 
 <table class="ri-input">
@@ -1194,7 +844,7 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
 
 <p class="source">Fonte: <a href="specs/MODULO_INTPdd18-02-26.txt"><code>MODULO_INTPdd18-02-26.txt</code></a> (sez. AA) + <code>MODULO_I2dd18-02-26.txt</code> (sez. AB)</p>
 
-<h3 id="modulo-ta">5.7 Modulo TA — Trasferimento Azienda</h3>
+<h3 id="modulo-ta">3.6 Modulo TA — Trasferimento Azienda</h3>
 <p>Modulo per la comunicazione di atti di trasferimento della proprietà o godimento di azienda (Legge n. 310/1993). Comprende informazioni su parti, estremi atto, oggetto trasferito e diritti associati.</p>
 
 <table class="ri-input">
@@ -1231,7 +881,7 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
 
 <p class="source">Fonte: <a href="specs/RI-DM-modulistica.txt"><code>RI-DM-modulistica.txt</code></a></p>
 
-<h3 id="modulo-rp">5.8 Modulo RP — Riepilogo Pratica</h3>
+<h3 id="modulo-rp">3.7 Modulo RP — Riepilogo Pratica</h3>
 <p>Il modulo RP è obbligatorio in ogni pratica RI e funge da riepilogo di tutti gli elementi costituenti la pratica (file-pratica U3T e allegati). Corrisponde al "file-Riepilogo" (.U3R) che gestisce in modo integrale la pratica dalla preparazione alla protocollazione senza perdita di documenti allegati.</p>
 
 <table class="ri-input">
@@ -1252,28 +902,14 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
 
 <p class="source">Fonti: <a href="specs/allegatoA.txt"><code>allegatoA.txt</code></a> (sez. 8 File-Riepilogo, v7.0); <a href="specs/TABELLA_DOC.txt"><code>TABELLA_DOC.txt</code></a></p>
 
+<h3 id="ri-pdf">3.8 File-distinta (PDF firmato)</h3>
+<p>Il <strong>file-distinta</strong> <code>B12P2837.PDF.P7M</code> è la visura a quadri leggibile della pratica RI, firmata digitalmente <strong>CAdES</strong> dal dichiarante/intermediario; è il documento legale di sottoscrizione (i dati machine-readable stanno nel file-pratica FEDRA, vedi <a href="#fedra">Appendice A</a>).</p>
+
 <!-- ============= AGENZIA ENTRATE ============= -->
-<h2 id="ade">6. Modulistica Agenzia delle Entrate — solo AA9/12</h2>
+<h2 id="ade">4. Modulistica AdE — solo AA9/12</h2>
 <p>AdE riceve la dichiarazione di inizio/variazione/cessazione attività ai fini IVA. Per la ditta individuale si usa il modello <code>AA9/12</code>; il modello <code>AA7/10</code> (società ed enti) è fuori scope.</p>
 
-<h3>File costituenti</h3>
-<ul class="compact">
-  <li><code>file-pratica-AA9</code> — file informatico in tracciato fisso (record a campi a lunghezza fissa) — versione corrente v1.x.</li>
-  <li><code>file-distinta-della-dichiarazione</code> — PDF/P7M firmato dal dichiarante/intermediario autorizzato.</li>
-</ul>
-
-<h3>Modello AA9/12 — operazioni</h3>
-<table>
-  <tr><th>Operazione</th><th>Quadri obbligatori</th><th>Quadri condizionali</th></tr>
-  <tr><td>Inizio attività</td><td>A (tipo+data), B (attività, ATECO, sede, regime), C (anagrafica)</td><td>D-I (e-commerce, rappresentanti fiscali, soci, regimi particolari)</td></tr>
-  <tr><td>Variazione dati</td><td>A, B, C</td><td>D-I</td></tr>
-  <tr><td>Cessazione attività</td><td>A, C</td><td>—</td></tr>
-</table>
-<p>Destinatari: persone fisiche con P.IVA, lavoratori autonomi, ditte individuali. Versione attuale: 12 (giugno 2015).</p>
-
-<p class="source">Fonti: spec ComUnica v3.1 §"Modulistica Agenzia delle Entrate" + pagina ufficiale <code>agenziaentrate.gov.it/portale/web/guest/schede/istanze/aa9_11-apertura-variazione-chiusura-pf</code>.</p>
-
-<h3 id="modulo-aa9-12">6.1 Modello AA9/12 — dichiarazione IVA persone fisiche</h3>
+<h3 id="modulo-aa9-12">4.1 Modello AA9/12 — dichiarazione IVA persone fisiche</h3>
 <p>Il modello AA9/12 è utilizzato da imprese individuali e lavoratori autonomi per le dichiarazioni previste dall'art. 35 del DPR 633/1972. Supporta inizio attività, variazione dati, cessazione attività e richiesta di duplicato del certificato P.IVA, da presentare entro 30 giorni dall'evento.</p>
 
 <table class="ri-input">
@@ -1345,62 +981,16 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
   <tr><td><code>codice_fiscale_intermediario + numero_iscrizione_albo_CAF + data_impegno + dichiarazione_predisposta_da + firma_intermediario</code></td><td>Impegno alla presentazione telematica</td><td>Obbligatori se trasmissione via intermediario</td><td><span class="org org-auto">Auto</span></td><td>Dati dell'intermediario accreditato Fiscozen (costante di sistema), non dell'utente</td></tr>
 </table>
 
-<p class="source">Fonte: <a href="https://www.agenziaentrate.gov.it/portale/web/guest/schede/istanze/aa9_11-apertura-variazione-chiusura-pf/modello-e-istr-pi-pf">Modello e istruzioni AA9/12</a>; <a href="https://www.agenziaentrate.gov.it/portale/web/guest/schede/istanze/aa9_11-apertura-variazione-chiusura-pf/specifiche-tecniche-iva-modello-aa9_12">Specifiche tecniche AA9/12</a> — Agenzia delle Entrate</p>
+<p class="source">Fonte: <a href="https://www.agenziaentrate.gov.it/portale/web/guest/schede/istanze/aa9_11-apertura-variazione-chiusura-pf/modello-e-istr-pi-pf">Modello e istruzioni AA9/12</a>; <a href="https://www.agenziaentrate.gov.it/portale/web/guest/schede/istanze/aa9_11-apertura-variazione-chiusura-pf/specifiche-tecniche-iva-modello-aa9_12">Specifiche tecniche AA9/12</a> — AdE</p>
+
+<h3 id="ade-pdf">4.2 File-distinta (PDF firmato)</h3>
+<p>Il <strong>file-distinta-della-dichiarazione</strong> <code>B12P2837.IVA.PDF.P7M</code> è la stampa PDF del modello AA9/12, firmata digitalmente <strong>CAdES</strong> dal dichiarante/intermediario.</p>
 
 <!-- ============= INAIL ============= -->
-<h2 id="inail">7. Modulistica INAIL — escluso QuadroP categorie speciali</h2>
+<h2 id="inail">5. Modulistica INAIL — escluso QuadroP categorie speciali</h2>
 <p>Tutti i moduli INAIL sono incapsulati nell'XSD <code>InvioDenunce.xsd</code> (namespace <code>http://inail.it/denunce/online/InvioDenunce.xsd</code>), root <code>Invio_Denunce</code>. Le tre operazioni sono elementi ricorrenti.</p>
 
-<h3>File costituenti</h3>
-<ul class="compact">
-  <li><code>file-pratica-INAIL</code> — XML conforme a <code>InvioDenunce.xsd</code>.</li>
-  <li><code>file-distinta-della-dichiarazione</code> — PDF firmato.</li>
-</ul>
-
-<h3>Operazioni e quadri</h3>
-<table>
-  <tr><th>Operazione</th><th>Container</th><th>Quadri</th></tr>
-  <tr>
-    <td><code>Iscrizione</code></td>
-    <td><code>Iscrizione_Ditta</code> (1+)</td>
-    <td>
-      <code>QuadroA</code> (anagrafica ditta, sede, rappresentante)<br>
-      <code>QuadroA1</code> (soggetti delegati)<br>
-      <code>QuadroB</code> (1+ PAT: sede lavori, settore attività) →
-      <code>QuadroC</code> (dipendenti) + <code>QuadroC1</code> (retribuzioni) + <code>QuadroO</code> (rischi silicosi/asbestosi);
-      <code>QuadroD</code> (artigiani) + <code>QuadroD1</code> (dati retributivi).<br>
-      <em>QuadroP (categorie speciali, es. coltivatori diretti) — fuori scope, agricolo.</em>
-    </td>
-  </tr>
-  <tr>
-    <td><code>Variazione</code></td>
-    <td><code>Variazione_Ditta</code></td>
-    <td>
-      <code>Quadro0</code> (operazioni semplificate: SOSPENSIONE / CESSAZIONE / RIATTIVAZIONE / VAR. ATTIVITÀ)<br>
-      <code>QuadroV</code> (anagrafica variata)<br>
-      <code>QuadroV2</code> (delegati)<br>
-      <code>QuadroV3</code> (PAT con cessazione possibile)<br>
-      <code>QuadroB</code> (ricorrente)
-    </td>
-  </tr>
-  <tr>
-    <td><code>Cessazione</code></td>
-    <td><code>Cessazione_Ditta</code> (1+)</td>
-    <td>
-      <code>DataCessazione</code><br>
-      <code>CausaleCessazione</code> ∈ {Fine Attività, Liquidazione, Trasferimento ad altro soggetto, Fallimento, Eredità giacente, Liquidazione coatta, Amministrativa, Irreperibilità}<br>
-      <code>SedeCorrispondenza</code> (opz.)
-    </td>
-  </tr>
-</table>
-
-<div class="note">
-<strong>ProgressivoLavorazione</strong> è il campo numerico che fa da chiave tra <code>QuadroC/D</code> e <code>QuadroD1</code>: descrive la lavorazione in C/D e viene referenziato in <code>IncidenzaLavorazioni</code> di D1.
-</div>
-
-<p class="source">Fonte: <a href="specs/InvioDenunce.xsd"><code>InvioDenunce.xsd</code></a>.</p>
-
-<h3 id="inail-iscrizione">7.1 INAIL — Operazione Iscrizione</h3>
+<h3 id="inail-iscrizione">5.1 INAIL — Operazione Iscrizione</h3>
 <p>Operazione per registrare una nuova ditta presso l'INAIL e dichiarare anagrafica, posizioni assicurative (PAT), dipendenti, artigiani e rischi specifici. Struttura: QuadroA (anagrafica), A1 (delegati), B (PAT) → C/C1 (dipendenti), D/D1 (artigiani), O (silicosi/asbestosi).</p>
 
 <table class="ri-input">
@@ -1426,7 +1016,7 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
   <tr><td><code>DataInizioAttivita</code></td><td>Data inizio attività PAT</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td><strong>Fonte:</strong> <code>User.business_start</code> — Tipicamente coincide con la data inizio attività della ditta.</td></tr>
   <tr><td><code>SettoreAttivita</code></td><td>Industria / Artigianato / Terziario / Altre attività</td><td>Opzionale</td><td><span class="org org-cli">Cliente</span></td><td>Da chiedere al cliente: dato dell'impresa non presente in Fiscozen né derivabile.</td></tr>
   <tr><td><code>Postuma, SedeLavori</code></td><td>Riattivazione + sede lavori (Domicilio completo)</td><td>SedeLavori obbligatoria</td><td><span class="org org-auto">Auto</span></td><td><strong>Fonte:</strong> <code>UserAddress</code> (kind=Attività) — SedeLavori = luogo di svolgimento delle lavorazioni → sede attività. Postuma (riattivazione) non applicabile a nuova iscrizione.</td></tr>
-  <tr><td><code>QuadroC, QuadroD, QuadroD1, QuadroP (in scope §5.1 non incluso)</code></td><td>Assicurazioni dipendenti/artigiani</td><td>Opzionali (almeno uno per avere PAT)</td><td><span class="org org-cli">Cliente</span></td><td>Da chiedere al cliente: presenza ed eventuali dati di dipendenti o collaboratori familiari.</td></tr>
+  <tr><td><code>QuadroC, QuadroD, QuadroD1, QuadroP (fuori scope, non incluso)</code></td><td>Assicurazioni dipendenti/artigiani</td><td>Opzionali (almeno uno per avere PAT)</td><td><span class="org org-cli">Cliente</span></td><td>Da chiedere al cliente: presenza ed eventuali dati di dipendenti o collaboratori familiari.</td></tr>
   <tr><td colspan="5" class="row-section">QuadroC — Dipendenti</td></tr>
   <tr><td><code>DataInizioValidita</code></td><td>Data inizio assicurazione</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Coincide con la data di inizio attività dichiarata (User.business_start); per le variazioni è la data di efficacia dell'operazione impostata dal flusso.</td></tr>
   <tr><td><code>SettoreAttivita, Postuma</code></td><td>Settore + riattivazione</td><td>Opzionali</td><td><span class="org org-auto">Auto</span></td><td>Mappato dal codice ATECO dell'attività tramite la tabella di corrispondenza ATECO→settore merceologico/codici RI.</td></tr>
@@ -1452,7 +1042,7 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
 
 <p class="source">Fonte: <a href="specs/InvioDenunce.xsd"><code>InvioDenunce.xsd</code></a> (operazione Iscrizione_Ditta)</p>
 
-<h3 id="inail-variazione">7.2 INAIL — Operazione Variazione</h3>
+<h3 id="inail-variazione">5.2 INAIL — Operazione Variazione</h3>
 <p>Operazione per modifiche ai dati anagrafici e alla PAT di una ditta già iscritta. Distingue Quadro0 (operazioni semplificate) da QuadroV/V2/V3 (variazioni anagrafiche complete).</p>
 
 <table class="ri-input">
@@ -1475,12 +1065,12 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
   <tr><td><code>SedeLavori</code></td><td>Indirizzo sede lavori + DataVariazione</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td><strong>Fonte:</strong> <code>UserAddress</code> (kind=Attività) — Nuova sede lavori da indirizzo attività; <code>DataVariazione</code> → Cliente.</td></tr>
   <tr><td><code>CessazionePatAssicurazione (DataVariazione, VariazioneCessazione, DataCessazione, CausaleCessazione, TipoCessazione, TipoCessazioneLavoratori)</code></td><td>Cessazione PAT</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Assegnato dall'ente dopo l'invio telematico (matricola da INPS, codice PAT da INAIL) e riportato sulla ricevuta: non si compila a mano.</td></tr>
   <tr><td colspan="5" class="row-section">QuadroB — ricorrente</td></tr>
-  <tr><td><code>DataInizioAttivita, SettoreAttivita, Postuma, SedeLavori</code></td><td>Dati PAT</td><td>Stessa struttura Iscrizione (vedi §5.1)</td><td><span class="org org-auto">Auto</span></td><td><strong>Fonte:</strong> <code>User.business_start</code>, <code>UserAddress</code> (kind=Attività) — Stessa mappatura del QuadroB in Iscrizione: <code>DataInizioAttivita</code> ← <code>User.business_start</code>, <code>SedeLavori</code> ← indirizzo attività; <code>SettoreAttivita</code>/<code>Postuma</code> → Cliente.</td></tr>
+  <tr><td><code>DataInizioAttivita, SettoreAttivita, Postuma, SedeLavori</code></td><td>Dati PAT</td><td>Stessa struttura dell'Iscrizione (vedi §5.1)</td><td><span class="org org-auto">Auto</span></td><td><strong>Fonte:</strong> <code>User.business_start</code>, <code>UserAddress</code> (kind=Attività) — Stessa mappatura del QuadroB in Iscrizione: <code>DataInizioAttivita</code> ← <code>User.business_start</code>, <code>SedeLavori</code> ← indirizzo attività; <code>SettoreAttivita</code>/<code>Postuma</code> → Cliente.</td></tr>
 </table>
 
 <p class="source">Fonte: <a href="specs/InvioDenunce.xsd"><code>InvioDenunce.xsd</code></a> (operazione Variazione_Ditta)</p>
 
-<h3 id="inail-cessazione">7.3 INAIL — Operazione Cessazione</h3>
+<h3 id="inail-cessazione">5.3 INAIL — Operazione Cessazione</h3>
 <p>Comunicazione della cessazione totale dell'attività di una ditta. Struttura minimalista: data + causale + opzionalmente sede di corrispondenza per le comunicazioni post-cessazione.</p>
 
 <table class="ri-input">
@@ -1493,30 +1083,14 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
 
 <p class="source">Fonte: <a href="specs/InvioDenunce.xsd"><code>InvioDenunce.xsd</code></a> (operazione Cessazione_Ditta)</p>
 
+<h3 id="inail-pdf">5.4 File-distinta (PDF firmato)</h3>
+<p>Il <strong>file-distinta-della-dichiarazione</strong> <code>B12P2837.INAIL.PDF.P7M</code> è la stampa PDF della denuncia INAIL, firmata digitalmente <strong>CAdES</strong>.</p>
+
 <!-- ============= INPS DM ============= -->
-<h2 id="inps-dm">8. Modulistica INPS DM — imprese con dipendenti</h2>
+<h2 id="inps-dm">6. Modulistica INPS DM — imprese con dipendenti</h2>
 <p>Il modulo DM identifica un'impresa <em>con dipendenti</em> (no agricoltura). Le operazioni sono <em>una</em> iscrizione e <em>cinque</em> variazioni. La cessazione <strong>non</strong> è un'operazione autonoma — vive dentro VSA con <code>stato=CESSAZIONE</code>.</p>
 
-<h3>File costituenti</h3>
-<ul class="compact">
-  <li><code>file-pratica-INPS-DM</code> — XML.</li>
-  <li><code>file-distinta-della-dichiarazione</code> — PDF/P7M firmato.</li>
-</ul>
-
-<h3>Operazioni</h3>
-<table>
-  <tr><th>Codice</th><th>Operazione</th><th>XSD</th><th>Campo chiave</th></tr>
-  <tr><td><code>IAD</code></td><td>Iscrizione Azienda DM</td><td><code>PraticaINPS-DM_IAD.xsd</code></td><td>impresa + sede-legale + sede-operativa + attività + cuaf</td></tr>
-  <tr><td><code>VAE</code></td><td>Var. Attività Esercitata</td><td><code>XS_IM_Variazione_Adempimenti_VAE.xsd</code></td><td><code>&lt;attivita&gt;</code> (nuova descrizione)</td></tr>
-  <tr><td><code>VDA</code></td><td>Var. Denominazione Azienda</td><td><code>XS_..._VDA.xsd</code></td><td><code>&lt;denominazione&gt;</code>, <code>&lt;forma-giuridica&gt;</code></td></tr>
-  <tr><td><code>VSA</code></td><td>Var. Stato Azienda</td><td><code>XS_..._VSA.xsd</code></td><td><code>&lt;stato&gt;</code> ∈ {CESSAZIONE, RIATTIVAZIONE, SOSPENSIONE}</td></tr>
-  <tr><td><code>VSL</code></td><td>Var. Sede Legale</td><td><code>XS_..._VSL.xsd</code></td><td><code>&lt;sede-legale&gt;</code> (nuovo indirizzo)</td></tr>
-  <tr><td><code>VSO</code></td><td>Var. Sede Operativa</td><td><code>XS_..._VSO.xsd</code></td><td><code>&lt;sede-operativa&gt;</code> (nuovo indirizzo)</td></tr>
-</table>
-
-<p class="source">Fonte: <a href="specs/PraticaINPS-DM_IAD.xsd"><code>PraticaINPS-DM_IAD.xsd</code></a> + <code>20080711_XML XSD Variazioni Adempimenti DM/XS_IM_Variazione_Adempimenti_*.xsd</code>.</p>
-
-<h3 id="inps-dm-iad">8.1 INPS DM — Iscrizione (IAD)</h3>
+<h3 id="inps-dm-iad">6.1 INPS DM — Iscrizione (IAD)</h3>
 <p>Compilato da Infocamere (Camere di Commercio) per l'iscrizione presso INPS di aziende con dipendenti. Struttura: operazione, chiamante, impresa, sede legale, referente, sede operativa, attività, CUAF, intermediario (opzionale).</p>
 
 <table class="ri-input">
@@ -1566,7 +1140,7 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
 
 <p class="source">Fonte: <a href="specs/PraticaINPS-DM_IAD.xsd"><code>PraticaINPS-DM_IAD.xsd</code></a></p>
 
-<h3 id="inps-dm-vae">8.2 INPS DM — VAE (Variazione Attività Esercitata)</h3>
+<h3 id="inps-dm-vae">6.2 INPS DM — VAE (Variazione Attività Esercitata)</h3>
 <p>Modifica della descrizione dell'attività economica esercitata. Stessa struttura comune di IAD (operazione, chiamante, richiedente, impresa); contiene solo <code>adempimento/attivita</code> + <code>data-decorrenza</code> come campi specifici.</p>
 
 <table class="ri-input">
@@ -1582,7 +1156,7 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
 
 <p class="source">Fonte: <a href="specs/XS_IM_Variazione_Adempimenti_VAE.xsd"><code>XS_IM_Variazione_Adempimenti_VAE.xsd</code></a></p>
 
-<h3 id="inps-dm-vda">8.3 INPS DM — VDA (Variazione Denominazione Azienda)</h3>
+<h3 id="inps-dm-vda">6.3 INPS DM — VDA (Variazione Denominazione Azienda)</h3>
 <p>Cambio di denominazione e/o forma giuridica dell'impresa. Stessa struttura comune VAE; campi specifici: nuova denominazione + forma giuridica.</p>
 
 <table class="ri-input">
@@ -1597,7 +1171,7 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
 
 <p class="source">Fonte: <a href="specs/XS_IM_Variazione_Adempimenti_VDA.xsd"><code>XS_IM_Variazione_Adempimenti_VDA.xsd</code></a></p>
 
-<h3 id="inps-dm-vsa">8.4 INPS DM — VSA (Variazione Stato Azienda)</h3>
+<h3 id="inps-dm-vsa">6.4 INPS DM — VSA (Variazione Stato Azienda)</h3>
 <p>Variazione dello stato dell'azienda. <strong>L'unica modalità di cessazione</strong> nel DM è VSA con <code>stato=CESSAZIONE</code>. Stessa struttura comune VAE.</p>
 
 <table class="ri-input">
@@ -1611,7 +1185,7 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
 
 <p class="source">Fonte: <a href="specs/XS_IM_Variazione_Adempimenti_VSA.xsd"><code>XS_IM_Variazione_Adempimenti_VSA.xsd</code></a></p>
 
-<h3 id="inps-dm-vsl">8.5 INPS DM — VSL (Variazione Sede Legale)</h3>
+<h3 id="inps-dm-vsl">6.5 INPS DM — VSL (Variazione Sede Legale)</h3>
 <p>Trasferimento della sede legale dell'impresa. Stessa struttura comune VAE; campi specifici: nuovo indirizzo + telefoni.</p>
 
 <table class="ri-input">
@@ -1626,7 +1200,7 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
 
 <p class="source">Fonte: <a href="specs/XS_IM_Variazione_Adempimenti_VSL.xsd"><code>XS_IM_Variazione_Adempimenti_VSL.xsd</code></a></p>
 
-<h3 id="inps-dm-vso">8.6 INPS DM — VSO (Variazione Sede Operativa)</h3>
+<h3 id="inps-dm-vso">6.6 INPS DM — VSO (Variazione Sede Operativa)</h3>
 <p>Cambio del luogo dove si svolge l'attività operativa (distinto dalla sede legale). Stessa struttura comune VAE; campi specifici: nuovo indirizzo sede operativa.</p>
 
 <table class="ri-input">
@@ -1641,28 +1215,31 @@ O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
 
 <p class="source">Fonte: <a href="specs/XS_IM_Variazione_Adempimenti_VSO.xsd"><code>XS_IM_Variazione_Adempimenti_VSO.xsd</code></a></p>
 
+<h3 id="inps-pdf">6.7 File-distinta (PDF firmato)</h3>
+<p>Il <strong>file-distinta-della-dichiarazione</strong> <code>B12P2837.INPS.PDF.P7M</code> è la stampa PDF della pratica INPS DM, firmata digitalmente <strong>CAdES</strong>.</p>
+
 <!-- ============= SUAP ============= -->
-<h2 id="suap">9. Modulistica SUAP — SCIA Contestuale via SSU</h2>
+<h2 id="suap">7. Modulistica SUAP — SCIA Contestuale via SSU</h2>
 <p>Dal nuovo flusso normato dal D.P.R. 160/2010 e dal <strong>Sistema SSU</strong> (Sistema informativo degli Sportelli Unici, art. 3 dell'Allegato tecnico al D.P.R. 160/2010), Fiscozen <strong>non assembla più</strong> lo ZIP della pratica SUAP. La SCIA è compilata sul portale del Comune; Fiscozen riceve solo un <strong>CUI uuid</strong> (Codice Univoco di Istanza) da agganciare al file <code>B12P2837.CUI.SUAP.xml</code> della ComUnica.</p>
 
 <div class="note">
 Riferimento normativo e tecnico: <a href="specs/Manuale_Operativo_Servizio_integrazione_applicativa_Comunicazione_Unica_con_SCIA_contestuale.pdf">Manuale Operativo — Servizio integrazione applicativa Comunicazione Unica con SCIA contestuale</a> (32 pag., InfoCamere). I riferimenti puntuali a §X / pag. Y sono indicati accanto a ciascun passo.
 </div>
 
-<h3 id="suap-flow">9.1 Flusso end-to-end</h3>
+<h3 id="suap-flow">7.1 Flusso end-to-end</h3>
 <ol class="compact">
   <li><strong>Fiscozen genera il codice pratica ComUnica</strong> (es. <code>B12P2837</code>) secondo Spec ComUnica v3.1. <span class="ref">Manuale Op. §4.1.1 (pag. 9)</span></li>
   <li><strong>Fiscozen richiede a InfoCamere l'URL del portale SUAP del Comune competente</strong>, passando: codice pratica ComUnica, codice ISTAT del Comune, indirizzo del servizio di notifica. <span class="ref">§4.1.1, §4.1.2 (pag. 9-11)</span></li>
-  <li><strong>InfoCamere risponde con l'URL del portale SUAP</strong>. Se il Comune non è ancora attivato sulle nuove specifiche SSU → <code>HTTP 503 "municipality not active"</code> → fallback PEC manuale (vedi §9.5). <span class="ref">§4.1.2 (pag. 11)</span></li>
+  <li><strong>InfoCamere risponde con l'URL del portale SUAP</strong>. Se il Comune non è ancora attivato sulle nuove specifiche SSU → <code>HTTP 503 "municipality not active"</code> → fallback PEC manuale (vedi §7.5). <span class="ref">§4.1.2 (pag. 11)</span></li>
   <li><strong>Fiscozen invia il consulente al portale</strong>. L'utente che compila la SCIA può essere diverso da quello che usa Fiscozen; <em>il primo che apre l'URL diventa "proprietario" della SCIA</em> sul portale del Comune.</li>
   <li><strong>Il consulente compila la SCIA</strong> direttamente sul portale del Comune. Fiscozen <strong>non vede i campi della SCIA</strong> — il portale è del Comune, non nostro.</li>
   <li><strong>Il cliente paga i diritti SUAP via PagoPA</strong> contestualmente alla compilazione. La ricevuta finisce automaticamente nel <code>general_index</code> come <code>RICEVUTA_PDF</code>. <span class="ref">§5.1 (pag. 23-24)</span></li>
   <li><strong>Il portale SUAP notifica Fiscozen via <code>suap_send_instance</code></strong> con il <strong>CUI uuid</strong> + l'indice file <code>general_index</code> (struttura JSON che cataloga tutti gli allegati assemblati dal Comune). <span class="ref">§5, §5.2 (pag. 21, 30)</span></li>
   <li><strong>Fiscozen aggancia il CUI</strong> dentro il file <code>B12P2837.CUI.SUAP.xml</code> della ComUnica. <span class="ref">§4.1, §4.2.1 (pag. 9, 12)</span></li>
-  <li><strong>Fiscozen invia la ComUnica al Registro Imprese</strong> via Telemaco. Il RI inoltra al SUAP comunale che chiude la pratica.</li>
+  <li><strong>Fiscozen invia la ComUnica al RI</strong> via Telemaco. Il RI inoltra al SUAP comunale che chiude la pratica.</li>
 </ol>
 
-<h3 id="suap-prereqs">9.2 Prerequisiti tecnici lato Fiscozen</h3>
+<h3 id="suap-prereqs">7.2 Prerequisiti tecnici lato Fiscozen</h3>
 <table>
   <tr><th>Requisito</th><th>Dettagli</th><th>Riferimento</th></tr>
   <tr><td><strong>Certificato qualificato QWAC</strong></td><td>Certificato eIDAS 2.0 che identifica Fiscozen come software house presso InfoCamere e ne garantisce il riconoscimento da terza parte qualificata.</td><td>§6 (pag. 31)</td></tr>
@@ -1670,17 +1247,17 @@ Riferimento normativo e tecnico: <a href="specs/Manuale_Operativo_Servizio_integ
   <tr><td><strong>Endpoint HTTPS pubblico</strong></td><td>Fiscozen espone l'interfaccia <code>suap_send_instance</code> per ricevere la callback di notifica a fine compilazione SCIA.</td><td>§5.2 (pag. 30)</td></tr>
 </table>
 
-<h3 id="suap-cui-xml">9.3 File CUI.SUAP.xml — cosa contiene</h3>
+<h3 id="suap-cui-xml">7.3 File CUI.SUAP.xml — cosa contiene</h3>
 <p>L'unico file SUAP che Fiscozen produce e aggancia alla ComUnica è <code>B12P2837.CUI.SUAP.xml</code>, contenente:</p>
 <ul class="compact">
   <li>Il <strong>CUI uuid</strong> ricevuto dal portale comunale via callback <code>suap_send_instance</code></li>
   <li>I metadati del SUAP destinatario (codice amministrazione, codice AOO, identificativo SUAP, codice catastale)</li>
   <li>Il codice pratica ComUnica di riferimento</li>
 </ul>
-<p>Il file <strong>non contiene più</strong> lo ZIP della pratica SUAP — quello rimane sul portale comunale, accessibile via CUI. Il Registro Imprese e il SUAP usano il CUI come chiave di correlazione.</p>
+<p>Il file <strong>non contiene più</strong> lo ZIP della pratica SUAP — quello rimane sul portale comunale, accessibile via CUI. Il RI e il SUAP usano il CUI come chiave di correlazione.</p>
 <p class="source">Riferimento: <a href="specs/Manuale_Operativo_Servizio_integrazione_applicativa_Comunicazione_Unica_con_SCIA_contestuale.pdf">Manuale Op. SCIA contestuale</a> §4.2.1 (pag. 12); schema XML di riferimento: <a href="specs/pratica_suap-2.0.0.xsd"><code>pratica_suap-2.0.0.xsd</code></a> (struttura wrapper).</p>
 
-<h3 id="suap-callback">9.4 Callback <code>suap_send_instance</code> e general_index</h3>
+<h3 id="suap-callback">7.4 Callback <code>suap_send_instance</code> e general_index</h3>
 <p>A fine compilazione, il portale del Comune invia una <code>POST HTTPS</code> all'endpoint <code>suap_send_instance</code> esposto da Fiscozen. Il payload include:</p>
 <ul class="compact">
   <li><code>codice_pratica</code> — codice pratica ComUnica originaria</li>
@@ -1690,7 +1267,7 @@ Riferimento normativo e tecnico: <a href="specs/Manuale_Operativo_Servizio_integ
 <p>Da quel momento Fiscozen può comporre il file <code>B12P2837.CUI.SUAP.xml</code> e completare l'invio della ComUnica.</p>
 <p class="source">Riferimenti: <a href="specs/Manuale_Operativo_Servizio_integrazione_applicativa_Comunicazione_Unica_con_SCIA_contestuale.pdf">Manuale Op. SCIA contestuale</a> §5.1 (pag. 23-24, schema GeneralIndex), §5.2 (pag. 30, interfaccia callback).</p>
 
-<h3 id="suap-fallback">9.5 Fallback: Comune non attivato SSU</h3>
+<h3 id="suap-fallback">7.5 Fallback: Comune non attivato SSU</h3>
 <p>Se il Comune di competenza non è ancora migrato sulle nuove specifiche SSU, la chiamata di richiesta URL risponde:</p>
 <pre><code>HTTP 503 Service Unavailable
 {
@@ -1701,8 +1278,8 @@ Riferimento normativo e tecnico: <a href="specs/Manuale_Operativo_Servizio_integ
 <p>In questo caso la SCIA deve essere gestita col <strong>vecchio flusso PEC manuale</strong>: il consulente prepara la pratica SUAP a parte, il cliente firma, e si invia via PEC al SUAP comunale (la SCIA resta <em>fuori</em> dalla ComUnica).</p>
 <p class="source">Riferimento: <a href="specs/Manuale_Operativo_Servizio_integrazione_applicativa_Comunicazione_Unica_con_SCIA_contestuale.pdf">Manuale Op. SCIA contestuale</a> §4.1.2 (pag. 11).</p>
 
-<h3 id="suap-ri-xml">9.6 File generato dal RI a valle: SUAP-RI.XML</h3>
-<p>Dopo l'invio della ComUnica con CUI agganciato, il Registro Imprese — completata l'attribuzione di P.IVA da AdE — genera autonomamente <code>&lt;cod-pratica&gt;.SUAP-RI.XML</code> contenente codice pratica, Numero REA, protocollo RI, CF e P.IVA confermati, PEC. Questo file viene restituito al SUAP comunale per chiusura della pratica.</p>
+<h3 id="suap-ri-xml">7.6 File generato dal RI a valle: SUAP-RI.XML</h3>
+<p>Dopo l'invio della ComUnica con CUI agganciato, il RI — completata l'attribuzione di P.IVA da AdE — genera autonomamente <code>&lt;cod-pratica&gt;.SUAP-RI.XML</code> contenente codice pratica, Numero REA, protocollo RI, CF e P.IVA confermati, PEC. Questo file viene restituito al SUAP comunale per chiusura della pratica.</p>
 <table class="ri-input">
   <tr><th>Campo</th><th>Significato</th><th>Quando compilare</th><th>Origine</th><th>Come compilare</th></tr>
   <tr><td><code>suap (@codice-amministrazione, @codice-aoo, @identificativo-suap, @codice-catastale)</code></td><td>Estremi SUAP destinatario</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Estremi dello sportello SUAP destinatario, propagati dalla pratica SCIA contestuale tramite SSU; non immessi dal cliente.</td></tr>
@@ -1710,17 +1287,197 @@ Riferimento normativo e tecnico: <a href="specs/Manuale_Operativo_Servizio_integ
   <tr><td><code>impresa/ragione-sociale</code></td><td>Denominazione</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td><strong>Fonte:</strong> <code>User.business_name</code> — Denominazione impresa già nota a Fiscozen; riproposta dal RI nel file di riepilogo.</td></tr>
   <tr><td><code>impresa/codice-fiscale</code></td><td>CF impresa (11 cifre P.IVA / 16 CF persona fisica)</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td><strong>Fonte:</strong> <code>User.ssn</code> — Per ditta individuale il CF impresa coincide con il CF del titolare (<code>User.ssn</code>).</td></tr>
   <tr><td><code>impresa/partita-iva</code></td><td>P.IVA attribuita da AdE</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>P.IVA attribuita da AdE in esito alla ComUnica e restituita dal RI; non disponibile in <code>User.vat</code> prima della pratica. XSD: <code>minOccurs="0"</code>.</td></tr>
-  <tr><td><code>impresa/codice-REA</code></td><td>Numero REA rilasciato dal RI + provincia + data-iscrizione</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Numero REA rilasciato dal Registro Imprese all'atto dell'iscrizione (tipo <code>pi:CodiceREA</code>); generato a valle.</td></tr>
+  <tr><td><code>impresa/codice-REA</code></td><td>Numero REA rilasciato dal RI + provincia + data-iscrizione</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Numero REA rilasciato dal RI all'atto dell'iscrizione (tipo <code>pi:CodiceREA</code>); generato a valle.</td></tr>
   <tr><td><code>impresa/domicilio-elettronico</code></td><td>PEC certificata se richiesta</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td><strong>Fonte:</strong> <code>User.pec</code> — XSD: restituito dal RI solo se nella ComUnica si è chiesta l'attribuzione della PEC. Se già presente, traccia a <code>User.pec</code>; altrimenti valorizzato dal RI.</td></tr>
-  <tr><td><code>protocollo-ri (ufficio-ri, anno, numero-protocollo-ri, sotto-numero, data)</code></td><td>Metadati protocollazione RI</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Estremi di protocollazione assegnati dal Registro Imprese (tipo <code>ps:ProtocolloRI</code>); metadato di sistema.</td></tr>
+  <tr><td><code>protocollo-ri (ufficio-ri, anno, numero-protocollo-ri, sotto-numero, data)</code></td><td>Metadati protocollazione RI</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Estremi di protocollazione assegnati dal RI (tipo <code>ps:ProtocolloRI</code>); metadato di sistema.</td></tr>
 </table>
 <p class="source">Schema: <a href="specs/Definizione_XSD_SUAP-RI.XML.xsd"><code>Definizione_XSD_SUAP-RI.XML.xsd</code></a>. Riferimento: <a href="specs/Manuale_Operativo_Servizio_integrazione_applicativa_Comunicazione_Unica_con_SCIA_contestuale.pdf">Manuale Op. SCIA contestuale</a> §7 (pag. 32).</p>
 
 
 
+<h3 id="suap-pdf">7.7 File-distinta (PDF)</h3>
+<p>La SCIA via SSU <strong>non</strong> produce un file-distinta firmato dentro la ComUnica: la SCIA è compilata e conservata sul portale SSU del Comune. La ComUnica trasporta solo il wrapper <code>B12P2837.CUI.SUAP.xml</code> con il CUI uuid; la ricevuta di pagamento (PagoPA) resta nel <code>general_index</code> sul portale.</p>
+
+<!-- ============= APPENDICE FEDRA ============= -->
+<h2 id="fedra">Appendice A — Tracciato FEDRA (come si compila la pratica RI)</h2>
+<p>I "moduli" RI elencati sopra (I1, I2, S5, UL, IntercalareP, R, ...) <strong>non sono file XML autonomi</strong>: sono <em>insiemi logici di campi</em> che vengono serializzati in un unico file di testo binario record-based — il <strong>file-pratica FEDRA</strong>. Il tracciato è standardizzato dal DM MIMIT 12/04/2023 (Allegato A v7.0+) e generato esclusivamente da software autorizzati (StarWeb, FEDRA, ComUnica, software dei commercialisti): non si scrive a mano.</p>
+
+<h4>I tre artefatti che la ComUnica trasporta per il RI</h4>
+<table>
+  <tr><th>File</th><th>Estensione</th><th>Contenuto</th><th>Generato da</th></tr>
+  <tr>
+    <td><strong>file-pratica</strong></td>
+    <td><code>.U3T</code></td>
+    <td>Dati strutturati FEDRA (record a coordinate X Y Z) — il "contenitore dati" che il RI legge con parser automatico</td>
+    <td>Software compilatore</td>
+  </tr>
+  <tr>
+    <td><strong>file-distinta</strong></td>
+    <td><code>.PDF.P7M</code></td>
+    <td>Visura a quadri leggibile, firmata digitalmente CAdES — documento legale di sottoscrizione</td>
+    <td>Software compilatore + firma dichiarante/intermediario</td>
+  </tr>
+  <tr>
+    <td><strong>file-riepilogo</strong></td>
+    <td><code>.U3R</code></td>
+    <td>Record fissi a 320 byte: catalogo metadati di ogni documento allegato (nome, tipo da TABELLA_DOC, pagine, data, codice atto)</td>
+    <td>Software compilatore</td>
+  </tr>
+</table>
+<p>Il file-distinta firmato è il documento "legale"; il file-pratica e il file-riepilogo sono i dati machine-readable che il sistema RI elabora.</p>
+
+<h4>Coordinate dei record: (X, Y, Z)</h4>
+<p>Ogni campo valorizzato della modulistica produce <strong>un record</strong> identificato da una tripla:</p>
+<table>
+  <tr><th>Coord.</th><th>Byte</th><th>Significato</th><th>Esempi</th></tr>
+  <tr>
+    <td><strong>X</strong></td>
+    <td>1 char</td>
+    <td>Identificativo modulo</td>
+    <td><code>1</code>=I1, <code>3</code>=I2, <code>5</code>=UL, <code>P</code>=IntercalareP, <code>O</code>=RP (riepilogo) — moduli applicabili alla Ditta Individuale</td>
+  </tr>
+  <tr>
+    <td><strong>Y</strong></td>
+    <td>1 char</td>
+    <td>Identificativo riquadro/sezione dentro il modulo</td>
+    <td><code>1</code>=Dati anagrafici, <code>2</code>=Residenza, <code>85</code>=Tipo domanda, ...</td>
+  </tr>
+  <tr>
+    <td><strong>Z</strong></td>
+    <td>2 byte (unsigned short)</td>
+    <td>Identificativo campo all'interno della sezione</td>
+    <td><code>10</code>=CF, <code>20</code>=P.IVA, <code>40</code>=cognome, <code>50</code>=nome, ...</td>
+  </tr>
+</table>
+<div class="note">
+Il primo record di ogni modulo ha sempre <code>Y=0, Z=1</code> con contenuto fisso di 6 byte ASCII <code>'0'</code> (<code>0x30</code>) — fa da <em>marcatore di inizio modulo</em>. I moduli ripetibili (IntercalareP per ogni socio/familiare, UL per ogni unità locale) ricominciano da capo questa sequenza per ogni occorrenza.
+</div>
+
+<h4>Tipi di record nel file-pratica</h4>
+<ol class="compact">
+  <li><strong>Record di testa (HEADER)</strong> — 8 byte fissi: offset al record di coda + filler <code>0x68 0x01 0x00 0x00</code>. Una sola volta a inizio file.</li>
+  <li><strong>Record dati (DATI MODULISTICI)</strong> — uno per ogni campo: <code>X (1) | Y (1) | Z (2 bytes) | filler 0x00 0x00 | contenuto (n byte) | 0x7C (pipe)</code>. Si ripete per N campi della pratica.</li>
+  <li><strong>Record di coda (FOOTER)</strong> — 360 byte fissi: filler <code>0x05</code> + CF impresa (16) + Identificativo source software (12) + versione (3) + REA + ModuloBase + denominazione pratica (84) + sequenza enti destinatari + sequenza moduli (60) + userid utente. Definisce il routing della pratica verso AdE/INPS/INAIL.</li>
+  <li><strong>Header di file</strong> (80 byte, aggiunto dopo formattazione finale e "targatura") — numero totale record + sigla provincia destinataria. È il metadato di trasmissione telematica.</li>
+</ol>
+<p>Dopo la generazione, il file viene <strong>formattato in blocchi di 80 byte</strong> (operazione 6.1 dell'Allegato A) e poi "targato" con l'header di file (operazione 6.2).</p>
+
+<h4>Esempio di iscrizione I1 (Mario Rossi)</h4>
+<p>Sequenza di record logici prima della formattazione 80-byte. Le coordinate (X Y Z) sono separative; <code>|</code> = delimiter di chiusura record.</p>
+<pre style="background: #f3f4f6; padding: 1em; border-radius: 4px; overflow-x: auto; font-size: 0.85em;">
+1  0  1   000000|                  INIZIO Modulo I1
+1 85 110  X|                       Tipo Domanda: Impresa Commerciale (X = selezionato)
+1  1  10  RSSMRA70E12H501A|        CF
+1  1  30  M|                       Sesso
+1  1  40  ROSSI|                   Cognome
+1  1  50  MARIO|                   Nome
+1  1  60  12051970|                Data nascita (ggmmaaaa)
+1  1  70  I|                       Cittadinanza (tabella STA "I" = Italia)
+1  1  80  I|                       Stato nascita
+1  1  90  PD|                      Provincia nascita
+1  1 100  PADOVA|                  Comune nascita
+1  2  10  I|                       Residenza: stato
+1  2  20  PD|                      Residenza: provincia
+1  2  30  35100|                   CAP
+1  2  40  PADOVA|                  Residenza: comune
+...
+O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
+...
+</pre>
+
+<h4>Vincoli sintattici dei campi</h4>
+<ul class="compact">
+  <li><strong>Lunghezze</strong>: fisse per ogni campo (es. CF=16, cognome=25, CAP=5).</li>
+  <li><strong>Tipi</strong>: <code>char[ ]</code> alfanumerico (spazi trimmed); <code>num</code> numerico (zero-pad sinistra/destra per decimali); <code>data</code> formato <code>GGMMAAAA</code> (8 char); <code>scelta</code> singolo <code>X</code> (0x58) se selezionato; <code>testo</code> righe da 80 char fino a 300 righe per campo (stessa coordinata X Y Z ripetuta).</li>
+  <li><strong>Caratteri ammessi</strong>: ASCII <code>0x20</code>–<code>0x5A</code> (spazio fino a "Z"). ISO 8859-1 solo per campo EUID di S1/S2.</li>
+  <li><strong>Controlli logici</strong>: <code>obbligatorio</code>, <code>vietato</code>, <code>consentito se</code>, <code>in alternativa con</code>, <code>esistenza in tabella XYZ</code>.</li>
+</ul>
+
+<h4>Tabelle di lookup</h4>
+<p>Le tabelle ausiliarie sono file di decodifica che validano i valori inseriti in campi enumerati. Le principali:</p>
+<table>
+  <tr><th>Tabella</th><th>Contenuto</th><th>Dove si usa</th></tr>
+  <tr><td><code>TABELLA_DOC</code></td><td>100+ codici tipo documento (DIS=Distinta, U3T=File Dati, B00=Bilancio PDF/A, C01=Atto Costitutivo, V01=Verbale, ...)</td><td>Modulo RP — riepilogo allegati</td></tr>
+  <tr><td><code>TABELLA_PAR</code></td><td>Gradi di parentela (AG=Genitore, FG=Figlio, CG=Coniuge, FR=Fratello, ...)</td><td>Riquadro AA di I1 — familiari collaboratori</td></tr>
+  <tr><td><code>TABELLA_STA</code></td><td>Codici stati/paesi (I=Italia, D=Germania, F=Francia, USA, AAA=Apolide, ...)</td><td>Cittadinanza, stato di nascita, stato di residenza</td></tr>
+  <tr><td><code>TABELLA_TPC</code></td><td>7 codici INPS gestione commercianti (1=Svolge attività dipendente, 2=Partecipazione tramite capitale, 3=Iscritto ad altra cassa, ...)</td><td>Sezione AC di I1/I2 — previdenza commercio</td></tr>
+</table>
+<p class="source" style="margin-top:0.3rem;">Le tabelle CTE/RTE (modulo TE — titolare effettivo) non sono incluse perché TE non si applica alla ditta individuale.</p>
+
+<h4>Flusso end-to-end di compilazione</h4>
+<ol class="compact">
+  <li>L'utente compila i campi sui <strong>moduli logici</strong> (I1, I2, IntercalareP, RP, ...) tramite l'interfaccia del software (StarWeb, FEDRA, ComUnica, software di studio).</li>
+  <li>Il software <strong>serializza</strong> ogni campo nel relativo record <code>X Y Z + contenuto + 0x7C</code>.</li>
+  <li>Aggiunge i metadati nel <strong>FOOTER</strong>: <code>identificativo source</code>, versione (<code>"700"</code> per v7.0), sequenza enti destinatari (AE/IL/IP/RI/AA/ML/SP), sequenza moduli compilati, userid.</li>
+  <li><strong>Formatta</strong> il file in blocchi da 80 byte e <strong>targa</strong> con l'header di routing (numero record + sigla provincia).</li>
+  <li>Genera in parallelo il <strong>file-distinta</strong> (PDF stampabile della pratica) e il <strong>file-riepilogo</strong> (U3R).</li>
+  <li>La distinta viene <strong>firmata digitalmente</strong> dal dichiarante o dall'intermediario (CAdES).</li>
+  <li>Il software impacchetta tutto nella ComUnica: il <code>ModelloBase</code> referenzia file-pratica, file-distinta e file-riepilogo come <code>allegati</code> con la rispettiva <strong>impronta digitale</strong> (vedi §1). Il <code>ModelloBase</code> aggiunge poi gli analoghi file-pratica/file-distinta degli altri enti destinatari (AdE, INAIL, INPS, SUAP).</li>
+  <li>Trasmissione telematica via Telemaco/portale ComUnica.</li>
+</ol>
+
+<div class="note">
+<strong>Implicazione progettuale</strong>: i nomi "logici" usati nella documentazione interna ("modulo I1", "riquadro AC", "campo cognome") sono <em>diversi</em> dai nomi reali del wire-format. Chi implementa un generatore di pratiche RI deve scrivere uno <strong>strato di serializzazione FEDRA</strong> che traduce dal modello logico (es. <code>Persona.cognome</code>) alle coordinate fisiche (<code>1 1 40 ROSSI|</code>). Gli enti non RI (AdE, INAIL, INPS, SUAP) hanno invece tracciati XML/posizionali distinti — vedi §4–§7.
+</div>
+
+<p class="source">Fonti: <a href="specs/Allegato_A_Specifiche_tecniche_vers.7.0.pdf"><code>Allegato_A_Specifiche_tecniche_vers.7.0.pdf</code></a> (sezioni 3-6, righe 505-922 dell'estrazione); <a href="specs/MODULO_I1-dd18-02-26.txt"><code>MODULO_I1-dd18-02-26.txt</code></a> (righe 1-190); <code>TABELLA_DOC/PAR/STA/TPC.txt</code>; <code>Decreto_v7.0.pdf</code>.</p>
+
+<!-- ============= APPENDICE B — ExtraService.data ============= -->
+<h2 id="appendice-data">Appendice B — <code>ExtraService.data</code> (dati del servizio di registrazione impresa)</h2>
+<p>Set <strong>minimo</strong> di dati che il consulente fornisce per una registrazione d'impresa. È il contenuto del campo JSON <code>ExtraService.data</code> del servizio <code>REGISTRAZIONE_IMPRESA</code>. Da queste chiavi il sistema deriva <strong>l'operazione</strong>, <strong>quali file</strong> compongono la ComUnica e <strong>cosa scrivere</strong> nei rispettivi moduli.</p>
+
+<h3 id="data-apertura">B.1 Set Apertura — <code>ExtraService.data</code></h3>
+<table class="cu-data">
+  <tr><th>Chiave</th><th>Valori / tipo</th><th>Campi-modulo serviti (rif. §)</th><th>Prepopolamento (DB Fiscozen)</th></tr>
+  <tr><td><code>ssn</code></td><td>CF titolare (16)</td><td>I1 riq.1 (§3.1); AA9/12 quadro C (§4.1); INAIL QuadroA (§5.1); CUI cod-fisc (§2.1)</td><td><code>User.ssn</code> (deriva nome/cognome/sesso/nascita)</td></tr>
+  <tr><td><code>residenza_titolare</code></td><td>indirizzo</td><td>I1 riq.2; AA9/12 quadro C</td><td><code>UserAddress</code> (kind=Residenza)</td></tr>
+  <tr><td><code>ateco</code></td><td>codice/i ATECO</td><td>I1 riq.8/10; AA9/12 quadro B; INAIL settore; INPS attività</td><td><code>UserAteco.atecos</code></td></tr>
+  <tr><td><code>data_inizio_attivita</code></td><td>data</td><td>I1 [1 85 180]/[1 49 120]; AA9/12 quadro A; INAIL DataInizio</td><td><code>User.business_start</code></td></tr>
+  <tr><td><code>regime_fiscale</code></td><td>forfettario / ordinario</td><td>AA9/12 quadro B (regime/volume)</td><td><code>FiscalRegime</code></td></tr>
+  <tr><td><code>sede_attivita</code></td><td>indirizzo + tipo (legale/operativa)</td><td>I1 riq.5; AA9/12 quadro B; CUI provincia-sede/@ufficio-ri</td><td><code>UserAddress</code> (kind=Attività)</td></tr>
+  <tr><td><code>denominazione</code></td><td>testo</td><td>CUI anagrafica-impresa; I1 riq.4</td><td><code>User.business_name</code></td></tr>
+  <tr><td><code>pec</code></td><td>PEC posseduta / "richiedi nuova"</td><td>I1 [1 5 230/240]; CUI domicilio-pec</td><td><code>User.pec</code></td></tr>
+  <tr><td><code>email</code>, <code>telefono</code></td><td>contatti</td><td>I1 riq.5</td><td><code>User.email</code>, <code>User.phone</code></td></tr>
+  <tr><td><code>dipendenti</code></td><td>sì/no + numero</td><td>INPS IAD (§6.1); INAIL QuadroC/C1 (§5.1); I1 riq.13</td><td>— (da chiedere)</td></tr>
+  <tr><td><code>familiari_collaboratori[]</code></td><td>lista persone</td><td>I1 riq.20; IntercalareP (§3.4); INAIL/INPS collaboratori</td><td>— (da chiedere)</td></tr>
+  <tr><td><code>unita_locali[]</code></td><td>lista indirizzi</td><td>UL (§3.3)</td><td><code>UserAddress</code> (kind=Unità Locale)</td></tr>
+  <tr><td><code>regimi_speciali_ade</code></td><td>e-commerce / estero-VIES / rappr. fiscale</td><td>AA9/12 quadri D/E/F/I (§4.1)</td><td>— (da chiedere)</td></tr>
+  <tr><td><code>insegna</code> · <code>capitale_investito</code></td><td>testo / importo (opz.)</td><td>I1 riq.14 · riq.12</td><td>— (da chiedere)</td></tr>
+  <tr><td><code>forma_giuridica</code></td><td>= ditta individuale (costante, scope)</td><td>CUI; I1 [1 85 200]=DI</td><td>Auto (costante)</td></tr>
+</table>
+
+<h3 id="data-variazione">B.2 Set Variazione — <code>ExtraService.data</code></h3>
+<table class="cu-data">
+  <tr><th>Chiave</th><th>Valori / tipo</th><th>Campi-modulo serviti (rif. §)</th><th>Prepopolamento (DB Fiscozen)</th></tr>
+  <tr><td><code>residenza_titolare</code></td><td>indirizzo / anagrafica</td><td>I2 riq.2/5 (§3.2)</td><td><code>UserAddress</code> (Residenza)</td></tr>
+  <tr><td><code>ateco</code></td><td>codice ATECO</td><td>I2 riq.7 (§3.2); AA9/12 var. (§4.1); INPS VAE (§6.2); INAIL var. (§5.2)</td><td><code>UserAteco.atecos</code></td></tr>
+  <tr><td><code>regime_fiscale</code></td><td>forfettario / ordinario</td><td>AA9/12 var. quadro B (§4.1)</td><td><code>FiscalRegime</code></td></tr>
+  <tr><td><code>sede_attivita</code> (legale)</td><td>indirizzo</td><td>I2 riq.5 (§3.2); INPS VSL (§6.5)</td><td><code>UserAddress</code> (Attività)</td></tr>
+  <tr><td><code>sede_attivita</code> (operativa)</td><td>indirizzo</td><td>I2 riq.5; INPS VSO (§6.6)</td><td><code>UserAddress</code> (Attività)</td></tr>
+  <tr><td><code>denominazione</code></td><td>testo</td><td>I2 (§3.2); INPS VDA (§6.3)</td><td><code>User.business_name</code></td></tr>
+  <tr><td><code>pec</code></td><td>PEC</td><td>I2 domicilio (§3.2); AA9/12 var. (§4.1)</td><td><code>User.pec</code></td></tr>
+  <tr><td><code>email</code>, <code>telefono</code></td><td>contatti</td><td>I2 riq.5 (§3.2)</td><td><code>User.email</code>, <code>User.phone</code></td></tr>
+  <tr><td><code>dipendenti</code></td><td>numero / variazione addetti</td><td>I2 riq.30 (§3.2); INPS/INAIL var. (§5.2/§6)</td><td>— (da chiedere)</td></tr>
+  <tr><td><code>familiari_collaboratori[]</code></td><td>lista persone</td><td>I2 + IntercalareP × N (§3.4)</td><td>— (da chiedere)</td></tr>
+  <tr><td><code>unita_locali[]</code></td><td>lista indirizzi</td><td>UL apertura/modifica/cessazione (§3.3)</td><td><code>UserAddress</code> (Unità Locale)</td></tr>
+  <tr><td><code>regimi_speciali_ade</code></td><td>e-commerce / estero-VIES / rappr. fiscale</td><td>AA9/12 var. quadri D/E/F/I (§4.1)</td><td>— (da chiedere)</td></tr>
+  <tr><td><code>insegna</code> · <code>capitale_investito</code></td><td>testo / importo</td><td>I2 (§3.2)</td><td>— (da chiedere)</td></tr>
+  <tr><td><code>cessione_affitto_azienda</code> <em>(solo var.)</em></td><td>estremi atto</td><td>I2 + TA (§3.6)</td><td>— (da chiedere)</td></tr>
+  <tr><td><code>stato_attivita</code> <em>(solo var.)</em></td><td>sospensione / riattivazione</td><td>INPS VSA (§6.4)</td><td>— (da chiedere)</td></tr>
+  <tr><td><code>data_variazione</code></td><td>data</td><td>data decorrenza/effetto dei moduli</td><td>— (da chiedere)</td></tr>
+</table>
+
+<h3 id="data-cessazione">B.3 Set Cessazione — <code>ExtraService.data</code></h3>
+<table class="cu-data">
+  <tr><th>Chiave</th><th>Valori / tipo</th><th>Campi-modulo serviti (rif. §)</th><th>Prepopolamento (DB Fiscozen)</th></tr>
+  <tr><td><code>data_cessazione</code></td><td>data</td><td>I2 riq.15 (§3.2); AA9/12 quadro A+C (§4.1); INAIL DataCessazione (§5.3); INPS VSA=CESSAZIONE (§6.4)</td><td>— (da chiedere)</td></tr>
+  <tr><td><code>causale</code></td><td>codice causale</td><td>I2 riq.15 causale; INAIL CausaleCessazione</td><td>— (da chiedere)</td></tr>
+</table>
+
+
 <hr>
 <p class="source">
-Documento generato il 2026-06-02. Sorgenti consultate: cartella <a href="specs/"><code>specs/</code></a> (file locali raggiungibili) + pagine ufficiali Agenzia delle Entrate per AA7/10 e AA9/12 + Manuale Operativo InfoCamere SCIA Contestuale. Versioni: ComUnica spec v3.1, Allegato A RI v7.0+, INAIL <code>InvioDenunce.xsd</code>, INPS DM/DA/CD-IAP, SCIA Contestuale via SSU.
+Documento generato il 2026-06-02. Sorgenti consultate: cartella <a href="specs/"><code>specs/</code></a> (file locali raggiungibili) + pagine ufficiali AdE per AA7/10 e AA9/12 + Manuale Operativo InfoCamere SCIA Contestuale. Versioni: ComUnica spec v3.1, Allegato A RI v7.0+, INAIL <code>InvioDenunce.xsd</code>, INPS DM/DA/CD-IAP, SCIA Contestuale via SSU.
 </p>
 
 <script>
