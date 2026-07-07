@@ -405,6 +405,19 @@ flowchart TB
   CE_inps -->|Si| ADD_ce_inps["AGGIUNGI:<br/>• B12P2837.INPS.xml — VSA stato CESSAZIONE"]:::leaf
 </div>
 
+<h3 id="ruoli-firma">Ruoli: chi firma e chi invia la pratica</h3>
+<p>Vanno distinti due ruoli, con la <strong>qualifica</strong> del dichiarante scelta tra quelle tassative del <strong>DM 2 novembre 2007</strong>.</p>
+
+<p><strong>Chi firma la distinta</strong> (il <strong>dichiarante</strong>, sottoscrizione CAdES <code>.P7M</code>): l'<strong>obbligato</strong> (titolare/legale rappresentante/amministratore/liquidatore, art. 9 <strong>DL 7/2007</strong> conv. <strong>L. 40/2007</strong>); il <strong>professionista incaricato</strong>, che può essere <em>solo</em> un dottore commercialista o esperto contabile iscritto sez. A/B (<strong>art. 31, co. 2-quater/2-quinquies, L. 340/2000</strong>) — serve l'iscrizione all'albo, non basta un mandato; il <strong>notaio</strong> per i propri atti; il <strong>procuratore speciale</strong> (procura ex <strong>circ. MISE 3616/C del 15/02/2008</strong>, ma dal <strong>1° gennaio 2024</strong> non più ammessa per le iscrizioni di impresa individuale, salvo cancellazioni).</p>
+
+<p><strong>Chi invia la pratica:</strong> <strong>chiunque</strong>, senza titoli né iscrizione ad albi (l'<strong>intermediario</strong> che solo trasmette non è il dichiarante — la pratica dev'essere già firmata da uno dei soggetti sopra). Per INPS/INAIL vale la <strong>L. 12/1979</strong>.</p>
+
+<div class="ref">
+<p style="margin:0"><strong>Impatto sullo scope Fiscozen.</strong> Nel Modello Comunicazione (<a href="#modulo-mc-xml">§2.1</a>) la qualifica del dichiarante è impostata a <code>PROFESSIONISTA INCARICATO</code> con CF del Consulente BS. Questa impostazione è legittima <strong>solo se chi firma è effettivamente un dottore commercialista/esperto contabile iscritto sez. A o B</strong>. In caso contrario le uniche alternative sono la firma diretta del titolare o la procura speciale (non più praticabile per le aperture di ditta individuale dal 2024).</p>
+</div>
+
+<p class="source">Fonti: <a href="https://www.cs.camcom.gov.it/sites/default/files/uploaded/Registro%20Imprese/comunica/dm20071102.pdf"><code>DM 02/11/2007</code></a>; art. 31 co. 2-quater/2-quinquies L. 340/2000; art. 9 DL 7/2007 conv. L. 40/2007; circ. MISE 3616/C del 15/02/2008; L. 12/1979; <a href="https://registroimprese.infocamere.it/documents/20195/0/Guida+introduttiva+a+DIRE/af1fbb64-2bbb-4db9-93dd-88a1433b2569">Guida introduttiva a DIRE</a>.</p>
+
 <!-- ============= MODELLO COMUNICAZIONE ============= -->
 <h2 id="modello">2. Modello Comunicazione (root)</h2>
 <p>Sempre presente in ogni ComUnica. È il file <em>indice</em>: descrive il soggetto, l'oggetto della pratica, l'elenco degli enti destinatari e gli allegati con la loro impronta digitale.</p>
@@ -438,7 +451,7 @@ flowchart TB
   <tr><td><code>@adempimento</code></td><td>Tipo adempimento 2 caratteri: 01=Nuova impresa con inizio; 02=Costituzione senza inizio; 03=Inizio attività su iscritta; 04=Variazione; 05=Cessazione; 06=Cancellazione.</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>In base al tipo di operazione: - Apertura: 01 - Variazione: 04 - Cessazione: 05</td></tr>
   <tr><td colspan="5" class="row-section">Sezione: enti-destinatari</td></tr>
   <tr><td><code>ente/@cod</code></td><td>Codice ente 2 car.: AE (AdE), IL (INAIL), IP (INPS), RI (RI), AA (Albo Artigiani), ML (Min. Lavoro), SP (SUAP). Elemento ripetibile.</td><td>Sempre obbligatorio (almeno una voce)</td><td><span class="org org-auto">Auto</span></td><td>Determinato dalla composizione della pratica (vedi diagramma al capitolo 1). Per apertura ad esempio avremo sempre questo campo ripetuto 4 volte con RI, AE, IP, IL.</td></tr>
-  <tr><td colspan="5" class="row-section">Sezione: dichiarante</td></tr>
+  <tr><td colspan="5" class="row-section">Sezione: dichiarante — i dati del <strong>dichiarante</strong>, ossia la persona che <strong>firmerà la distinta di Comunicazione Unica</strong> (fonte: <a href="https://registroimprese.infocamere.it/documents/20195/0/Guida+introduttiva+a+DIRE/af1fbb64-2bbb-4db9-93dd-88a1433b2569">Guida introduttiva a DIRE</a>).</td></tr>
   <tr><td><code>nome</code></td><td>Nome del dichiarante (max 50 caratteri).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>[da verificare con InfoCamere] Per pratiche inviate da Fiscozen il dichiarante è l'intermediario incaricato, non il titolare. Inseriamo: Nome Consulente BS.</td></tr>
   <tr><td><code>cognome</code></td><td>Cognome del dichiarante (max 50 caratteri).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>[da verificare con InfoCamere] Inseriamo: Cognome Consulente BS.</td></tr>
   <tr><td><code>qualifica</code></td><td>Da tabella: Titolare, Legale rappresentante, Amministratore, Socio, Liquidatore, Curatore fallimentare, Commissario giudiziario, Notaio, Delegato, Professionista incaricato, Associazione di categoria, Consulente, Studio associato, Centro elaborazione dati, Agenzia per le imprese, Altro previsto dalla vigente normativa.</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>[da verificare con InfoCamere] Inseriamo costante: <code>PROFESSIONISTA INCARICATO</code> (l'XSD definisce i valori ammessi in maiuscolo)</td></tr>
