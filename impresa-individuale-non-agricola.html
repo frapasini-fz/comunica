@@ -195,10 +195,21 @@
   table.cu-data th:nth-child(2), table.cu-data td:nth-child(2) { width: 20%; }
   table.cu-data th:nth-child(3), table.cu-data td:nth-child(3) { width: 42%; }
   table.cu-data th:nth-child(4), table.cu-data td:nth-child(4) { width: 20%; }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-size: var(--fs-small);
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 0.75rem;
+  }
+  .back-link:hover { color: var(--accent); }
 </style>
 </head>
 <body>
 
+<a class="back-link" href="index.html">&larr; Torna all'indice</a>
 <h1>ComUnica</h1>
 <p class="lede">Mappa dei moduli che compongono una Comunicazione Unica di Impresa — <strong>filtrata allo scope "impresa individuale non agricola"</strong>. Sono escluse tutte le forme societarie (SP/SC/Consorzio/GEIE/EPE/REA/Trust) e tutte le modulistiche agricole (INPS DA, CD, IAP, INAIL QuadroP, AdE AA7/10).</p>
 <div class="toc">
