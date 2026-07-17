@@ -297,14 +297,11 @@ flowchart TB
 
   %% ===================== APERTURA =====================
   OP -->|Apertura| AP_art{attivita artigiana ?}:::dec
-  AP_art -->|No commerciale| BASE_C["• B12P2837.CUI.xml — Modello Comunicazione<br/>• B12P2837.CUI.PDF.P7M — distinta firmata<br/>• B12P2837.U3T — RI: I1 + sez. AC commercianti + RP<br/>• B12P2837.PDF.P7M — distinta firmata<br/>• B12P2837.U3R — riepilogo<br/>• B12P2837.IVA — AdE: AA9/12 Quadri A+B+C<br/>• B12P2837.IVA.PDF.P7M — distinta firmata"]:::leaf
-  AP_art -->|Si artigiana| BASE_A["• B12P2837.CUI.xml — Modello Comunicazione<br/>• B12P2837.CUI.PDF.P7M — distinta firmata<br/>• B12P2837.U3T — RI: I1 + sez. AA + IntercalareAA + RP<br/>• B12P2837.PDF.P7M — distinta firmata<br/>• B12P2837.U3R — riepilogo<br/>• B12P2837.IVA — AdE: AA9/12 Quadri A+B+C<br/>• B12P2837.IVA.PDF.P7M — distinta firmata<br/>• B12P2837.INAIL.xml — QuadroA + A1 + QuadroB con D + D1<br/>• B12P2837.INAIL.PDF.P7M — distinta firmata"]:::leaf
+  AP_art -->|No commerciale| BASE_C["• B12P2837.CUI.xml — Modello Comunicazione<br/>• B12P2837.CUI.PDF.P7M — distinta firmata<br/>• B12P2837.U3T — RI: I1 + sez. AC commercianti + RP<br/>• B12P2837.PDF.P7M — distinta firmata<br/>• B12P2837.U3R — riepilogo<br/>• B12P2837.IVA — AdE: AA9/12 Quadri A+B+C+I (Quadro I sempre; VIES con importi intra-UE presunti costanti)<br/>• B12P2837.IVA.PDF.P7M — distinta firmata"]:::leaf
+  AP_art -->|Si artigiana| BASE_A["• B12P2837.CUI.xml — Modello Comunicazione<br/>• B12P2837.CUI.PDF.P7M — distinta firmata<br/>• B12P2837.U3T — RI: I1 + sez. AA + IntercalareAA + RP<br/>• B12P2837.PDF.P7M — distinta firmata<br/>• B12P2837.U3R — riepilogo<br/>• B12P2837.IVA — AdE: AA9/12 Quadri A+B+C+I (Quadro I sempre; VIES con importi intra-UE presunti costanti)<br/>• B12P2837.IVA.PDF.P7M — distinta firmata<br/>• B12P2837.INAIL.xml — QuadroA + A1 + QuadroB con D + D1<br/>• B12P2837.INAIL.PDF.P7M — distinta firmata"]:::leaf
   BASE_C --> AP_sil{rischio silicosi o asbestosi ?}:::dec
   BASE_A --> AP_sil
   AP_sil -->|Si| ADD_SIL["AGGIUNGI:<br/>• B12P2837.INAIL.xml — + QuadroO"]:::leaf
-  AP_sil -->|No| AP_reg{"Operazioni con l estero (UE/VIES)<br/>o rappresentante fiscale<br/>(non residente) ?"}:::dec
-  ADD_SIL --> AP_reg
-  AP_reg -->|Si| ADD_REG["AGGIUNGI:<br/>• B12P2837.IVA — + Quadro I (VIES) + Quadro D (rappresentante fiscale)"]:::leaf
 
   %% ===================== VARIAZIONE (add-on cumulabili) =====================
   OP -->|Variazione| VAR_base["• B12P2837.CUI.xml — Modello Comunicazione (sempre presente)<br/>• B12P2837.CUI.PDF.P7M — distinta firmata<br/>• B12P2837.U3T — file-pratica RI (quando la variazione tocca il RI)<br/>• B12P2837.PDF.P7M — distinta firmata<br/>• B12P2837.U3R — riepilogo (RP)"]:::leaf
@@ -328,12 +325,6 @@ flowchart TB
   VA_prev -->|No| VA_pec{varia PEC o contatti ?}:::dec
   ADD_prev --> VA_pec
   VA_pec -->|Si| ADD_pec["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 riq. 5 (PEC/contatti)<br/>• B12P2837.IVA — AdE: AA9/12 variazione"]:::leaf
-  VA_pec -->|No| VA_ins{varia insegna ?}:::dec
-  ADD_pec --> VA_ins
-  VA_ins -->|Si| ADD_ins["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 riq. 6 (insegna)"]:::leaf
-  VA_ins -->|No| VA_regv{"varia regimi speciali AdE<br/>(VIES / rappresentante fiscale) ?"}:::dec
-  ADD_ins --> VA_regv
-  VA_regv -->|Si| ADD_regv["AGGIUNGI:<br/>• B12P2837.IVA — AdE: AA9/12 variazione Quadro I (VIES) + Quadro D"]:::leaf
 
   %% ===================== CESSAZIONE =====================
   OP -->|Cessazione| CE_base["• B12P2837.CUI.xml — Modello Comunicazione<br/>• B12P2837.CUI.PDF.P7M — distinta firmata<br/>• B12P2837.U3T — RI: I2 riq. 15 cancellazione + causale + RP<br/>• B12P2837.PDF.P7M — distinta firmata<br/>• B12P2837.U3R — riepilogo<br/>• B12P2837.IVA — AdE: AA9/12 Quadri A + C<br/>• B12P2837.IVA.PDF.P7M — distinta firmata"]:::leaf
