@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>ComUnica — MVP</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='b' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%2360a5fa'/><stop offset='1' stop-color='%231e3a8a'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='url(%23b)'/><path d='M46 22 Q40 16 32 16 Q18 16 18 32 Q18 48 32 48 Q40 48 46 42' stroke='white' stroke-width='5' stroke-linecap='round' fill='none'/></svg>">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  :root {
+    --text: #1f2937;
+    --text-strong: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --border-strong: #d1d5db;
+    --accent: #2563eb;
+    --bg-soft: #f9fafb;
+    --bg-row: #f3f4f6;
+    --bg-alt: #fafafa;
+    --note-bg: #fefce8;
+    --note-border: #ca8a04;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+    --fs-body: 1rem;
+    --fs-small: 0.9rem;
+    --fs-mini: 0.85rem;
+  }
+  body {
+    font-family: var(--sans);
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 2.5rem;
+    color: var(--text);
+    line-height: 1.6;
+    font-size: var(--fs-body);
+  }
+  h1 {
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+  h2 {
+    margin-top: 3rem;
+    color: var(--text-strong);
+    border-left: 4px solid var(--accent);
+    padding-left: 0.75rem;
+    font-size: 1.4rem;
+  }
+  h3 {
+    margin-top: 1.75rem;
+    color: var(--text-strong);
+    font-size: 1.1rem;
+  }
+  h4 {
+    margin-top: 1.25rem;
+    color: var(--text);
+    font-size: 1rem;
+  }
+  .lede {
+    color: var(--muted);
+    margin: 0.25rem 0 1.5rem 0;
+  }
+  .mermaid {
+    width: 100%;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
+  .mermaid svg {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  code, pre {
+    font-family: var(--mono);
+    background: var(--bg-row);
+    border-radius: 3px;
+    color: var(--text);
+  }
+  code { padding: 0.1em 0.35em; font-size: 0.9em; }
+  pre { padding: 1em; overflow-x: auto; font-size: var(--fs-small); }
+  pre code { background: transparent; padding: 0; }
+  table {
+    border-collapse: collapse;
+    margin: 1rem 0;
+    width: 100%;
+    font-size: var(--fs-small);
+  }
+  th, td {
+    border: 1px solid var(--border-strong);
+    padding: 0.45em 0.75em;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: var(--bg-row); font-weight: 600; }
+  tr:nth-child(even) td { background: var(--bg-alt); }
+  td.row-section { background: var(--bg-row); font-weight: 600; }
+  .source {
+    font-size: var(--fs-mini);
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 0.4rem;
+  }
+  .note {
+    background: var(--note-bg);
+    border-left: 4px solid var(--note-border);
+    padding: 0.75em 1em;
+    margin: 1em 0;
+    border-radius: 4px;
+  }
+  .ref {
+    display: inline-block;
+    font-size: var(--fs-mini);
+    color: var(--muted);
+    font-style: italic;
+  }
+  ul.compact { margin: 0.4em 0; padding-left: 1.5em; }
+  ul.compact li { margin-bottom: 0.2em; }
+  details {
+    margin: 0.6em 0;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.5em 0.8em;
+    background: #fff;
+  }
+  summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-strong);
+  }
+  .toc {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1em 1.4em;
+    margin: 1.5rem 0;
+  }
+  .toc ol { margin: 0.4em 0; padding-left: 1.4em; }
+  .toc li { margin-bottom: 0.2em; }
+  /* --- Mapping app.fiscozen.it: badge Origine dato + pulsanti Copia --- */
+  .org {
+    display: inline-block;
+    padding: 0.1em 0.5em;
+    border-radius: 4px;
+    border: 1px solid;
+    font-size: var(--fs-mini);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .org-auto { background: #dcfce7; border-color: #15803d; color: #14532d; }
+  .org-es   { background: #dcfce7; border-color: #15803d; color: #14532d; }
+  .org-db   { background: #dcfce7; border-color: #15803d; color: #14532d; }
+  .org-cli { background: #fee2e2; border-color: #b91c1c; color: #7f1d1d; }
+  .org-na  { background: #f3f4f6; border-color: #6b7280; color: #374151; }
+  /* Tabelle dei campi: layout fisso e larghezze uniformi, così la tabella sta nello
+     schermo senza scroll orizzontale e tutte le tabelle hanno le stesse colonne */
+  table.ri-input { table-layout: fixed; width: 100%; }
+  table.ri-input th, table.ri-input td { overflow-wrap: anywhere; word-break: break-word; }
+  table.ri-input th:nth-child(1), table.ri-input td:nth-child(1) { width: 13%; }
+  table.ri-input th:nth-child(2), table.ri-input td:nth-child(2) { width: 22%; }
+  table.ri-input th:nth-child(3), table.ri-input td:nth-child(3) { width: 18%; }
+  table.ri-input th:nth-child(4), table.ri-input td:nth-child(4) { width: 9%; }
+  table.ri-input th:nth-child(5), table.ri-input td:nth-child(5) { width: 38%; }
+  table.ri-input td:first-child code { white-space: normal; }
+  .copy-btn {
+    cursor: pointer;
+    font-family: var(--sans);
+    font-size: var(--fs-mini);
+    padding: 0.3em 0.75em;
+    border: 1px solid var(--border-strong);
+    border-radius: 4px;
+    background: #fff;
+    color: var(--accent);
+    margin: 0.5rem 0;
+  }
+  .copy-btn:hover { background: var(--bg-soft); }
+  .copy-btn.ok { background: #dcfce7; border-color: #15803d; color: #14532d; }
+  /* Revisione in-browser: celle modificabili + evidenza modifiche */
+  td[contenteditable="true"] { cursor: text; }
+  td[contenteditable="true"]:focus { outline: 2px solid var(--accent); outline-offset: -2px; }
+  td.edited { background: #fff7cd !important; box-shadow: inset 3px 0 0 #ca8a04; }
+  .origine-sel { font: inherit; font-size: var(--fs-mini); font-weight: 600; padding: 0.15em 0.3em; border-radius: 4px; border: 1px solid; cursor: pointer; }
+  .edit-bar { margin: 1.5rem 0; padding: 0.8em 1em; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 6px; font-size: var(--fs-small); }
+  .edit-bar .copy-btn { margin-left: 0.5rem; }
+  .copy-bar { margin: 1.5rem 0 0.5rem; }
+  /* Diagramma: testo delle foglie/box allineato a sinistra */
+  .mermaid g.node.leaf foreignObject div { text-align: left !important; }
+  .mermaid g.node.leaf .nodeLabel { text-align: left !important; }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-size: var(--fs-small);
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 0.75rem;
+  }
+  .back-link:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<a class="back-link" href="index.html">&larr; Torna all'indice</a>
+<h1>ComUnica — MVP</h1>
+<div class="toc">
+  <strong>Contenuti</strong>
+  <ol>
+    <li><a href="#introduzione">Struttura della pratica e nomi dei file</a></li>
+    <li><a href="#modello">Modello Comunicazione — root della pratica</a></li>
+    <li><a href="#ri">Modulistica RI — solo Ditta Individuale</a></li>
+    <li><a href="#ade">Modulistica AdE — solo AA9/12</a></li>
+    <li><a href="#inail">Modulistica INAIL</a></li>
+  </ol>
+  <p style="margin:0.4em 0 0 1.4em"><a href="#fedra">Appendice A — Tracciato FEDRA</a></p>
+</div>
+
+<h2 id="introduzione">1. Struttura della pratica e nomi dei file</h2>
+
+<p>Ogni comunicazione unica d'impresa è una <strong>collezione di file</strong>, strutturata in sezioni dedicate a ciascun ente destinatario (<a href="specs/Specifiche_tecniche_comunicazione_unicapdf.pdf">spec ComUnica v3.1</a>). Ogni pratica informatica ha un <strong>codice pratica di 8 caratteri</strong> <code>abbcddee</code> che codifica la data-ora di costruzione:</p>
+
+<table>
+  <tr><th>Codice</th><th>Significato</th><th>Valori</th></tr>
+  <tr><td><code>a</code></td><td>Mese</td><td>1=gennaio, 2=febbraio, ..., 9=settembre, A=ottobre, B=novembre, C=dicembre</td></tr>
+  <tr><td><code>bb</code></td><td>Giorno</td><td>01–31</td></tr>
+  <tr><td><code>c</code></td><td>Ora</td><td>A=ore 1, B=ore 2, ..., I=ore 9, J=ore 10, ..., W=ore 23, X=ore 24 o 00</td></tr>
+  <tr><td><code>dd</code></td><td>Minuto</td><td>00–59</td></tr>
+  <tr><td><code>ee</code></td><td>Secondo</td><td>00–59</td></tr>
+</table>
+
+<p><strong>Esempio:</strong> il codice per una pratica preparata il <strong>12 Novembre alle ore 16:28:37</strong> è <code>B12P2837</code> (<code>B</code>=Novembre, <code>12</code>=giorno, <code>P</code>=ora 16, <code>28</code>=minuto, <code>37</code>=secondo). È il codice di esempio usato in tutto il documento e nel diagramma.</p>
+
+<h3>File e moduli per ente destinatario</h3>
+<p>Per ciascun ente: i file prodotti (nome con codice <code>B12P2837</code>), il loro contenuto e le specifiche tecniche di riferimento. Il <strong>file-distinta</strong> è in ogni caso la rappresentazione di stampa PDF del modello, da sottoscrivere digitalmente.</p>
+
+<table>
+  <tr><th>Modulistica / Ente</th><th>File prodotti (codice <code>B12P2837</code>)</th><th>Contenuto</th><th>Specifiche</th></tr>
+  <tr>
+    <td><strong>Modello unico di comunicazione</strong> (sempre obbligatorio)</td>
+    <td>• <code>B12P2837.CUI.xml</code> — file-pratica XML<br>• <code>B12P2837.CUI.PDF.P7M</code> — file-distinta firmata</td>
+    <td>Descrive il soggetto, l'oggetto della comunicazione e il riepilogo degli altri file allegati con l'impronta digitale di ciascuno.</td>
+    <td><a href="specs/Specifiche_tecniche_comunicazione_unicapdf.pdf">Spec ComUnica v3.1</a></td>
+  </tr>
+  <tr>
+    <td><strong>RI / Albo Artigiani / INPS Artigiani-Commercianti</strong></td>
+    <td>• <code>B12P2837.U3T</code> — file-pratica (obbligatorio)<br>• <code>B12P2837.PDF.P7M</code> — file-distinta (obbligatorio)<br>• <code>B12P2837.U3R</code> — file-riepilogo (obbligatorio)<br>• eventuali moduli aggiuntivi / allegati (PDF/TIF/TXT firmati)</td>
+    <td>Modulistica RI nel formato del Decreto MISE, comprensiva dei dati INPS Artigiani e Commercianti (c.8 art.44 DL 269/2003) e dell'Albo Artigiani. Moduli aggiuntivi (es. iscrizione Albo Cooperative) e documenti allegati (es. copia autentica dell'atto) da firmare digitalmente.</td>
+    <td><a href="specs/Allegato_A_Specifiche_tecniche_vers.7.0.pdf">Allegato A v7.0</a> · <a href="specs/Decreto_v7.0.pdf">Decreto v7.0</a> · <a href="specs/Decreto_direttoriale_20_maggio_2026_-_Specifiche_tecniche_Fedra_v_709 (1).pdf">Fedra v7.09 (decreto 20/05/2026, efficacia 04/06/2026)</a></td>
+  </tr>
+  <tr>
+    <td><strong>AdE</strong> (AA7/AA9)</td>
+    <td>• <code>B12P2837.IVA</code> — file-pratica<br>• <code>B12P2837.IVA.PDF.P7M</code> — file-distinta firmata</td>
+    <td>Dichiarazione AA7/AA9 di inizio/variazione/cessazione attività ai fini IVA, come da provvedimenti dell'AdE.</td>
+    <td><a href="https://www.agenziaentrate.gov.it/portale/web/guest/schede/istanze/aa9_11-apertura-variazione-chiusura-pf">sito AdE — AA9</a></td>
+  </tr>
+  <tr>
+    <td><strong>INAIL</strong></td>
+    <td>• <code>B12P2837.INAIL.xml</code> — file-pratica<br>• <code>B12P2837.INAIL.PDF.P7M</code> — file-distinta firmata</td>
+    <td>File-pratica conforme allo schema <code>InvioDenunce.xsd</code> (denuncia di iscrizione/variazione/cessazione assicurativa).</td>
+    <td><a href="specs/InvioDenunce.xsd"><code>InvioDenunce.xsd</code></a> · <a href="https://www.inail.it">sito INAIL</a></td>
+  </tr>
+</table>
+
+<p class="source">Sui siti istituzionali, come stabilito dal DPCM previsto all'art. 9 del D.L. n. 7/2007 (conv. legge n. 40/2007), sono pubblicati tutti i riferimenti alle specifiche di tracciato. Vedi anche: <a href="specs/Manuale_Operativo_Servizio_per_il_controllo_e_la_trasmissione_delle_pratiche_di_Comunicazione_Unica_e_Bilancio.pdf">Manuale Operativo per il controllo e trasmissione ComUnica e Bilancio</a>.</p>
+
+
+<h3 id="ruoli-firma">Ruoli: chi firma e chi invia la pratica</h3>
+
+<p><strong>Chi firma la distinta</strong> (il dichiarante) può essere il <strong>titolare</strong> dell'impresa oppure il <strong>commercialista incaricato</strong> — <strong>scegliamo il commercialista</strong> (qualifica: professionista incaricato).</p>
+
+<p><strong>Chi invia la pratica e ne monitora l'avanzamento su Telemaco</strong> può essere un consulente qualsiasi, senza titoli o iscrizioni richieste — <strong>scegliamo un consulente BS Fiscozen</strong>.</p>
+
+<p class="source">Fonti: <a href="https://www.cs.camcom.gov.it/sites/default/files/uploaded/Registro%20Imprese/comunica/dm20071102.pdf"><code>DM 02/11/2007</code></a>; art. 31 co. 2-quater/2-quinquies L. 340/2000; art. 9 DL 7/2007 conv. L. 40/2007; circ. MISE 3616/C del 15/02/2008; L. 12/1979; <a href="https://registroimprese.infocamere.it/documents/20195/0/Guida+introduttiva+a+DIRE/af1fbb64-2bbb-4db9-93dd-88a1433b2569">Guida introduttiva a DIRE</a>.</p>
+
+<!-- ============= MODELLO COMUNICAZIONE ============= -->
+<h3 id="diagramma">Diagramma decisionale della pratica</h3>
+<p>Layout verticale (top-down), <strong>albero di decisione a bivi unici</strong>. Scope: impresa individuale non agricola. Esempio: <code>cod-pratica = B12P2837</code> — questo codice è riportato in ogni file nominato. Il <strong>primo bivio filtra i casi fuori scope MVP</strong> (dipendenti, familiari collaboratori, unità locali, attività soggetta a SCIA); segue il bivio sull'<em>operazione</em> (apertura/variazione/cessazione); ogni domanda compare <strong>una sola volta</strong> e <strong>ogni condizione è espressa come decisione</strong> (nessun «se» nascosto nelle foglie). I diamanti arancioni tratteggiati sono <em>decisioni</em>; i riquadri verdi sono le <em>foglie base</em> (composizione minima: file + moduli/quadri + enti-destinatari); ogni «Sì» della cascata aggancia un <em>blocco add-on</em> colorato per ente che si somma. Anche le <strong>variazioni sono add-on cumulabili</strong>: in una stessa ComUnica se ne possono combinare più di una.</p>
+
+<div class="mermaid">
+flowchart TB
+  classDef mc fill:#dbeafe,stroke:#1e40af,color:#1e3a8a;
+  classDef ri fill:#dcfce7,stroke:#15803d,color:#14532d;
+  classDef ae fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d;
+  classDef il fill:#fed7aa,stroke:#c2410c,color:#7c2d12;
+  classDef sp fill:#e5e7eb,stroke:#374151,color:#1f2937;
+  classDef hub fill:#fff,stroke:#111827,color:#111827,stroke-width:2px;
+  classDef dec fill:#fff7ed,stroke:#c2410c,color:#9a3412,stroke-dasharray: 4 3,font-size:14px;
+  classDef leaf fill:#dbeafe,stroke:#1e40af,color:#1e3a8a,stroke-width:2px;
+  classDef file fill:#eff6ff,stroke:#2563eb,color:#1e3a8a;
+  classDef add fill:#fefce8,stroke:#ca8a04,color:#713f12;
+  classDef oos fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-width:2px;
+
+  CU(["ComUnica — cod-pratica = B12P2837<br/>impresa individuale non agricola"]):::hub
+  CU --> SCOPE{"Presenti uno di questi casi ?<br/>• dipendenti<br/>• familiari collaboratori<br/>• unita locali<br/>• attivita soggetta a SCIA<br/>• trasferimento d azienda"}:::dec
+  SCOPE -->|Si| OOS["Out of scope for MVP"]:::oos
+  SCOPE -->|No| OP{operazione ?}:::dec
+
+  %% ===================== APERTURA =====================
+  OP -->|Apertura| AP_art{attivita artigiana ?}:::dec
+  AP_art -->|No commerciale| BASE_C["• B12P2837.CUI.xml — Modello Comunicazione<br/>• B12P2837.CUI.PDF.P7M — distinta firmata<br/>• B12P2837.U3T — RI: I1 + sez. AC commercianti + RP<br/>• B12P2837.PDF.P7M — distinta firmata<br/>• B12P2837.U3R — riepilogo<br/>• B12P2837.IVA — AdE: AA9/12 Quadri A+B+C<br/>• B12P2837.IVA.PDF.P7M — distinta firmata"]:::leaf
+  AP_art -->|Si artigiana| BASE_A["• B12P2837.CUI.xml — Modello Comunicazione<br/>• B12P2837.CUI.PDF.P7M — distinta firmata<br/>• B12P2837.U3T — RI: I1 + sez. AA + IntercalareAA + RP<br/>• B12P2837.PDF.P7M — distinta firmata<br/>• B12P2837.U3R — riepilogo<br/>• B12P2837.IVA — AdE: AA9/12 Quadri A+B+C<br/>• B12P2837.IVA.PDF.P7M — distinta firmata<br/>• B12P2837.INAIL.xml — QuadroA + A1 + QuadroB con D + D1<br/>• B12P2837.INAIL.PDF.P7M — distinta firmata"]:::leaf
+  BASE_C --> AP_sil{rischio silicosi o asbestosi ?}:::dec
+  BASE_A --> AP_sil
+  AP_sil -->|Si| ADD_SIL["AGGIUNGI:<br/>• B12P2837.INAIL.xml — + QuadroO"]:::leaf
+  AP_sil -->|No| AP_reg{"Operazioni con l estero (UE/VIES)<br/>o rappresentante fiscale<br/>(non residente) ?"}:::dec
+  ADD_SIL --> AP_reg
+  AP_reg -->|Si| ADD_REG["AGGIUNGI:<br/>• B12P2837.IVA — + Quadro I (VIES) + Quadro D (rappresentante fiscale)"]:::leaf
+
+  %% ===================== VARIAZIONE (add-on cumulabili) =====================
+  OP -->|Variazione| VAR_base["• B12P2837.CUI.xml — Modello Comunicazione (sempre presente)<br/>• B12P2837.CUI.PDF.P7M — distinta firmata<br/>• B12P2837.U3T — file-pratica RI (quando la variazione tocca il RI)<br/>• B12P2837.PDF.P7M — distinta firmata<br/>• B12P2837.U3R — riepilogo (RP)"]:::leaf
+  VAR_base --> VA_anag{varia anagrafica titolare ?}:::dec
+  VA_anag -->|Si| ADD_anag["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 riq. 2/5"]:::leaf
+  VA_anag -->|No| VA_sede{trasferimento sede ?}:::dec
+  ADD_anag --> VA_sede
+  VA_sede -->|Si| ADD_sede["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 riq. 5"]:::leaf
+  VA_sede -->|No| VA_att{varia attivita ?}:::dec
+  ADD_sede --> VA_att
+  VA_att -->|Si| ADD_att["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 riq. 7<br/>• B12P2837.IVA — AdE: AA9/12 variazione (A+B+C)"]:::leaf
+  VA_att -->|No| VA_albo{iscrizione o modifica Albo Artigiani ?}:::dec
+  ADD_att --> VA_risk{"La nuova attivita ricade<br/>in una voce di tariffa INAIL<br/>diversa da quella assicurata ?"}:::dec
+  VA_risk -->|Si| ADD_risk["AGGIUNGI:<br/>• B12P2837.INAIL.xml — variazione attivita/rischio"]:::leaf
+  VA_risk -->|No| VA_albo
+  ADD_risk --> VA_albo
+  VA_albo -->|Si| ADD_albo["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 + sez. AB + IntercalareAA"]:::leaf
+  VA_albo -->|No| VA_prev{varia previdenza ?}:::dec
+  ADD_albo --> VA_prev
+  VA_prev -->|Si| ADD_prev["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 + sez. AC"]:::leaf
+  VA_prev -->|No| VA_pec{varia PEC o contatti ?}:::dec
+  ADD_prev --> VA_pec
+  VA_pec -->|Si| ADD_pec["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 riq. 5 (PEC/contatti)<br/>• B12P2837.IVA — AdE: AA9/12 variazione"]:::leaf
+  VA_pec -->|No| VA_ins{varia insegna ?}:::dec
+  ADD_pec --> VA_ins
+  VA_ins -->|Si| ADD_ins["AGGIUNGI:<br/>• B12P2837.U3T — RI: I2 riq. 6 (insegna)"]:::leaf
+  VA_ins -->|No| VA_regv{"varia regimi speciali AdE<br/>(VIES / rappresentante fiscale) ?"}:::dec
+  ADD_ins --> VA_regv
+  VA_regv -->|Si| ADD_regv["AGGIUNGI:<br/>• B12P2837.IVA — AdE: AA9/12 variazione Quadro I (VIES) + Quadro D"]:::leaf
+
+  %% ===================== CESSAZIONE =====================
+  OP -->|Cessazione| CE_base["• B12P2837.CUI.xml — Modello Comunicazione<br/>• B12P2837.CUI.PDF.P7M — distinta firmata<br/>• B12P2837.U3T — RI: I2 riq. 15 cancellazione + causale + RP<br/>• B12P2837.PDF.P7M — distinta firmata<br/>• B12P2837.U3R — riepilogo<br/>• B12P2837.IVA — AdE: AA9/12 Quadri A + C<br/>• B12P2837.IVA.PDF.P7M — distinta firmata"]:::leaf
+  CE_base --> CE_inail{era artigiana ?}:::dec
+  CE_inail -->|Si| ADD_ce_inail["AGGIUNGI:<br/>• B12P2837.INAIL.xml — DataCessazione + CausaleCessazione"]:::leaf
+</div>
+<h2 id="modello">2. Modello Comunicazione (root)</h2>
+<p>Sempre presente in ogni ComUnica. È il file <em>indice</em>: descrive il soggetto, l'oggetto della pratica, l'elenco degli enti destinatari e gli allegati con la loro impronta digitale.</p>
+<div class="ref">
+<p style="margin-bottom:0.3em"><strong>Colonna Origine — priorità di riempimento.</strong> Ogni campo dei moduli viene riempito attingendo alla <strong>prima fonte disponibile</strong>, in quest'ordine di priorità (dalla più automatica alla più onerosa; verde = automatico, rosso = da chiedere, grigio = mai necessario):</p>
+<ol style="margin:0.3em 0 0.3em 1.6em; padding:0">
+  <li><span class="org org-auto">Auto</span> — valore <strong>costante</strong> o <strong>derivato da una regola</strong> (es. la sigla provincia ricavata dal comune): non richiede alcuna fonte dati.</li>
+  <li><span class="org org-es">Comm</span> — dato presente in <code>InputCommercialista</code>: fornito dal consulente alla creazione della Registrazione Impresa (eventualmente prepopolato dal DB).</li>
+  <li><span class="org org-db">DB</span> — dato letto da <strong>un'altra tabella del DB Fiscozen</strong>, senza passare da <code>InputCommercialista</code>.</li>
+  <li><span class="org org-cli">Cliente</span> — dato <strong>non disponibile in alcuna fonte interna</strong>: va chiesto esplicitamente al cliente.</li>
+  <li><span class="org org-na">NA</span> — campo <strong>mai necessario</strong> nello scope <em>impresa individuale non agricola</em>: non va compilato.</li>
+</ol>
+<p style="margin-top:0.3em">Vale per le tabelle dei moduli (§2–§7).</p>
+</div>
+
+<h3 id="modulo-mc-xml">2.1 Modulo modello-unico-di-comunicazione (CUI.xml)</h3>
+<p>Il modulo rappresenta il file dati principale della comunicazione unica per la nascita d'impresa, contenente informazioni strutturate su soggetto, oggetto della comunicazione e allegati con relative impronte digitali. Vive come file XML denominato <code>&lt;cod-pratica&gt;.CUI.xml</code> nel tracciato della pratica informatica.</p>
+
+<table class="ri-input">
+  <tr><th>Campo</th><th>Significato</th><th>Quando compilare</th><th>Origine</th><th>Come compilare</th></tr>
+  <tr><td colspan="5" class="row-section">Root: comunicazione-unica-RI (namespace http://sitoregistroimprese.it/PraticheTelematiche/ComunicazioneUnicaRI/v1)</td></tr>
+  <tr><td><code>@ufficio-ri</code></td><td>Sigla provincia (2 caratteri) dell'ufficio RI destinatario.</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Derivato: la sigla provincia si ricava dal comune (in InputCommercialista) via tabella ISTAT/PRV.</td></tr>
+  <tr><td><code>@sw-producer</code></td><td>Nome del software utilizzato per creare la pratica (max 80 caratteri).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Costante fissa del software di produzione pratica (es. "Fiscozen").</td></tr>
+  <tr><td><code>@sw-version</code></td><td>Versione del software (max 10 caratteri).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Costante: versione del software di generazione pratica.</td></tr>
+  <tr><td colspan="5" class="row-section">Sezione: anagrafica-impresa</td></tr>
+  <tr><td><code>denominazione</code></td><td>Denominazione/nome della ditta (max 80 caratteri).</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td>Da InputCommercialista.denominazione (prepop. da User.business_name) — Per ditta individuale la denominazione coincide con il nome impresa; in mancanza è cognome+nome del titolare.</td></tr>
+  <tr><td><code>cod-fisc</code></td><td>Codice fiscale dell'impresa se già posseduto (11–16 caratteri, tipo CodiceFiscale).</td><td>Obbligatorio se l'impresa è già dotata di CF</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ssn</code> (prepop. da <code>User.ssn</code>) — Per la ditta individuale il CF impresa coincide con il CF del titolare.</td></tr>
+  <tr><td><code>provincia-sede</code></td><td>Sigla provincia (2 caratteri) sede impresa.</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Derivato: la sigla provincia si ricava dal comune (in InputCommercialista) via tabella ISTAT/PRV.</td></tr>
+  <tr><td colspan="5" class="row-section">Sezione: oggetto</td></tr>
+  <tr><td><code>@cod-pratica</code></td><td>Codice della pratica, stringa di lunghezza fissa 8 caratteri (tipo CodicePratica), es. <code>B12P2837</code>.</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Codice generato in automatico secondo le istruzioni al capitolo 1.</td></tr>
+  <tr><td><code>@adempimento</code></td><td>Tipo adempimento 2 caratteri: 01=Nuova impresa con inizio; 02=Costituzione senza inizio; 03=Inizio attività su iscritta; 04=Variazione; 05=Cessazione; 06=Cancellazione.</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>In base al tipo di operazione: - Apertura: 01 - Variazione: 04 - Cessazione: 05</td></tr>
+  <tr><td colspan="5" class="row-section">Sezione: enti-destinatari</td></tr>
+  <tr><td><code>ente/@cod</code></td><td>Codice ente 2 car.: AE (AdE), IL (INAIL), IP (INPS), RI (RI), AA (Albo Artigiani), ML (Min. Lavoro), SP (SUAP). Elemento ripetibile.</td><td>Sempre obbligatorio (almeno una voce)</td><td><span class="org org-auto">Auto</span></td><td>Determinato dalla composizione della pratica (vedi diagramma al capitolo 1). Per apertura: RI, AE, IP; più IL se l'attività è artigiana.</td></tr>
+  <tr><td colspan="5" class="row-section">Sezione: dichiarante — i dati del <strong>dichiarante</strong>, ossia la persona che <strong>firmerà la distinta di Comunicazione Unica</strong> (fonte: <a href="https://registroimprese.infocamere.it/documents/20195/0/Guida+introduttiva+a+DIRE/af1fbb64-2bbb-4db9-93dd-88a1433b2569">Guida introduttiva a DIRE</a>). Per capire chi indicare come dichiarante nel flusso Fiscozen, vedi la sezione <a href="#ruoli-firma">Ruoli: chi firma e chi invia la pratica</a> del capitolo 1.</td></tr>
+  <tr><td><code>nome</code></td><td>Nome del dichiarante (max 50 caratteri).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Nome del commercialista Fiscozen associato al cliente.</td></tr>
+  <tr><td><code>cognome</code></td><td>Cognome del dichiarante (max 50 caratteri).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Cognome del commercialista Fiscozen associato al cliente.</td></tr>
+  <tr><td><code>qualifica</code></td><td>Da tabella: Titolare, Legale rappresentante, Amministratore, Socio, Liquidatore, Curatore fallimentare, Commissario giudiziario, Notaio, Delegato, Professionista incaricato, Associazione di categoria, Consulente, Studio associato, Centro elaborazione dati, Agenzia per le imprese, Altro previsto dalla vigente normativa.</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td><code>PROFESSIONISTA INCARICATO</code> — il commercialista Fiscozen che firma.</td></tr>
+  <tr><td><code>cod-fisc</code></td><td>Codice fiscale del dichiarante (11–16 car., tipo CodiceFiscale).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Codice fiscale del commercialista Fiscozen associato al cliente.</td></tr>
+  <tr><td><code>email</code></td><td>PEC del dichiarante (max 80 car.).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>PEC del commercialista Fiscozen.</td></tr>
+  <tr><td><code>tel</code></td><td>Numero di telefono con prefisso (4–15 car., tipo NumeroTelefonico).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Telefono del commercialista Fiscozen.</td></tr>
+  <tr><td><code>sottoscrizione</code></td><td>Dati per la sottoscrizione in caso di intermediario incaricato all'adempimento (tipo <code>typeSottoscrizione</code>, referenziato nell'XSD ma non definito nelle specifiche v3.1). Opzionale (0..1), introdotto con la versione 3.1.</td><td>Opzionale; previsto per le pratiche inviate tramite intermediario incaricato</td><td><span class="org org-auto">Auto</span></td><td>Non valorizzato; campo opzionale il cui tipo non è definito nelle specifiche.</td></tr>
+  <tr><td colspan="5" class="row-section">Sezione: domicilio-pec-impresa</td></tr>
+  <tr><td><code>richiesta-indirizzo-pec</code></td><td>Container per richiesta nuovo indirizzo PEC (solo imprese non societarie).</td><td>Alternativo a indirizzo-pec</td><td><span class="org org-auto">Auto</span></td><td>[da verificare con InfoCamere costo servizio] Container alternativo a indirizzo-pec: presente solo se l'impresa richiede una nuova PEC contestualmente alla pratica. Per ora non prevediamo di offrire questa opzione. Non inseriamo questo campo.</td></tr>
+  <tr><td><code>richiesta-indirizzo-pec/@email-notifica</code></td><td>Email (non PEC) per notifica attivazione PEC richiesta (max 80 car.).</td><td>Obbligatorio se presente richiesta-indirizzo-pec</td><td><span class="org org-auto">Auto</span></td><td>Per ora non prevediamo di offrire questa opzione. Non inseriamo questo campo.</td></tr>
+  <tr><td><code>richiesta-indirizzo-pec/@email-pec-richiesta</code></td><td>PEC richiesta su dominio istituzionale CCIAA (max 80 car.).</td><td>Obbligatorio se presente richiesta-indirizzo-pec</td><td><span class="org org-auto">Auto</span></td><td>Per ora non prevediamo di offrire questa opzione. Non inseriamo questo campo.</td></tr>
+  <tr><td><code>indirizzo-pec</code></td><td>PEC dell'impresa per ricezione ricevute (max 80 car.).</td><td>Obbligatorio se non presente richiesta-indirizzo-pec</td><td><span class="org org-cli">Cliente</span></td><td>Da InputCommercialista.pec (prepop. da User.pec) — PEC dell'impresa/titolare già in possesso; se assente la chiediamo al cliente.</td></tr>
+  <tr><td colspan="5" class="row-section">Sezione: allegati</td></tr>
+  <tr><td><code>allegato</code></td><td>Elemento ripetibile per ciascun file allegato (distinte PDF firmate).</td><td>Sempre obbligatorio (almeno una voce)</td><td><span class="org org-auto">Auto</span></td><td>Si registrano qui i soli file "distinta" PDF firmati digitalmente, generati dal sistema di produzione pratica.</td></tr>
+  <tr><td><code>allegato/@nome-file</code></td><td>Nome completo del file con estensione (max 80 car.).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Nome file generato dal sistema di invio pratica.</td></tr>
+  <tr><td><code>allegato/@cod-ente</code></td><td>Codice ente destinatario dell'allegato (AE/IL/IP/RI/AA/ML/SP).</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Derivato dall'ente destinatario di ciascun allegato (coerente con enti-destinatari).</td></tr>
+  <tr><td colspan="5" class="row-section">Sezione: protocollazione (uso interno ufficio RI)</td></tr>
+  <tr><td><code>protocollazione/@anno</code></td><td>Anno protocollazione (gYear).</td><td>Compilato dall'ufficio RI (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Compilato dall'ufficio RI in ricezione, non da Fiscozen.</td></tr>
+  <tr><td><code>protocollazione/@numero-protocollo-ri</code></td><td>Numero protocollo RI (0–999999999).</td><td>Compilato dall'ufficio RI (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Assegnato dall'ufficio RI.</td></tr>
+  <tr><td><code>protocollazione/@sotto-numero-protocollo-ri</code></td><td>Sotto-numero protocollo (0–9999).</td><td>Compilato dall'ufficio RI (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Assegnato dall'ufficio RI.</td></tr>
+  <tr><td><code>protocollazione/@data-protocollo-ri</code></td><td>Data protocollazione (YYYY-MM-DD).</td><td>Compilato dall'ufficio RI (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Assegnata dall'ufficio RI.</td></tr>
+  <tr><td><code>protocollazione/@data-arrivo-comunicazione</code></td><td>Data arrivo comunicazione.</td><td>Compilato dall'ufficio RI (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Registrata dall'ufficio RI in ricezione.</td></tr>
+  <tr><td><code>protocollazione/@data-inoltro-ente</code></td><td>Data inoltro all'ente.</td><td>Compilato dall'ufficio RI (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Registrata dall'ufficio RI.</td></tr>
+  <tr><td><code>protocollazione/@numero-rea</code></td><td>Numero REA attribuito (1–9999999).</td><td>Compilato dall'ufficio RI (non da chi invia la pratica)</td><td><span class="org org-auto">Auto</span></td><td>Numero REA attribuito dal RI all'esito dell'iscrizione.</td></tr>
+</table>
+
+<p class="source">Fonte: <a href="specs/Specifiche_tecniche_comunicazione_unicapdf.pdf"><code>Specifiche_tecniche_comunicazione_unicapdf.pdf</code></a></p>
+
+<h3 id="mc-pdf">2.2 File-distinta (PDF firmato)</h3>
+<p>Oltre al file dati XML, la ComUnica trasporta il <strong>file-distinta-della-comunicazione</strong> <code>B12P2837.CUI.PDF.P7M</code>: la rappresentazione di stampa PDF del Modello Comunicazione, firmata digitalmente in formato <strong>CAdES</strong> (<code>.P7M</code>) dal dichiarante/intermediario. È il documento legale di sottoscrizione.</p>
+
+<!-- ============= REGISTRO IMPRESE ============= -->
+<h2 id="ri">3. Modulistica RI — solo Ditta Individuale</h2>
+<p>Tracciato FEDRA <em>record-based</em> (b95_fd70). Regolamentata dal Decreto MIMIT 12/04/2023 (Allegato A v7.0) come aggiornato dal <strong>decreto direttoriale 20/05/2026 — Specifiche tecniche Fedra v7.09</strong> (efficacia 04/06/2026, transitorio 60 giorni, allegato B95 v7.09): la v7.09 introduce controlli bloccanti sul riquadro AC/INPS Commercio di I1/I2/IntP (mutua esclusione con AA/AB, vincoli su codice dichiarazione TPC e collaboratori), recepiti nelle tabelle qui sotto. Qui mostriamo solo i moduli applicabili a una ditta individuale; per la struttura del file fisico vedi l'<a href="#fedra">Appendice A</a>.</p>
+
+<h3 id="modulo-i1">3.1 Modulo I1 — iscrizione imprenditore individuale</h3>
+<p>Modulo per l'iscrizione di imprenditori individuali nel RI. Contiene i dati anagrafici del titolare, la sede dell'impresa, le attività esercitate, e informazioni specifiche per artigiani, commercianti e persone che prestano lavoro nell'impresa.</p>
+
+<table class="ri-input">
+  <tr><th>Campo</th><th>Significato</th><th>Quando compilare</th><th>Origine</th><th>Come compilare</th></tr>
+  <tr><td colspan="5" class="row-section">Tipo domanda</td></tr>
+  <tr><td><code>[1 85 130]</code></td><td>In qualità di impresa commerciale</td><td>Alternativo a [1 85 140]; vietato se [1 85 200]=PF</td><td><span class="org org-auto">Auto</span></td><td>X se cassa dell'utente = INPS COM</td></tr>
+  <tr><td><code>[1 85 140]</code></td><td>In qualità di piccolo imprenditore</td><td>Alternativo a [1 85 130]; vietato se [1 85 200]=PF</td><td><span class="org org-auto">Auto</span></td><td>X se cassa dell'utente = INPS ART</td></tr>
+  <tr><td><code>[1 85 180]</code></td><td>Data costituzione impresa</td><td>Sempre obbligatorio</td><td><span class="org org-db">DB</span></td><td>Uguale a data ComUnica</td></tr>
+  <tr><td><code>[1 85 200]</code></td><td>Tipologia: DI (ditta individuale) o PF (persona fisica)</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Costante = DI per le aperture ditta individuale Fiscozen</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 1 — Dati anagrafici titolare</td></tr>
+  <tr><td><code>[1 1 10]</code></td><td>Codice fiscale del titolare</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ssn</code> (prepop. da <code>User.ssn</code>) — </td></tr>
+  <tr><td><code>[1 1 20]</code></td><td>Partita IVA</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Vuoto</td></tr>
+  <tr><td><code>[1 1 30]</code></td><td>Sesso (M o F)</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 1 40]</code></td><td>Cognome</td><td>Sempre obbligatorio</td><td><span class="org org-db">DB</span></td><td>Da DB: User.last_name — cognome del titolare.</td></tr>
+  <tr><td><code>[1 1 50]</code></td><td>Nome</td><td>Sempre obbligatorio</td><td><span class="org org-db">DB</span></td><td>Da DB: User.first_name — nome del titolare.</td></tr>
+  <tr><td><code>[1 1 60]</code></td><td>Data di nascita</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Da dati utente. Se assente, derivato dal codice fiscale (data di nascita codificata nel CF).</td></tr>
+  <tr><td><code>[1 1 70]</code></td><td>Cittadinanza (tabella STA)</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 1 80]</code></td><td>Stato di nascita (tabella STA)</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Da dati utente. Se assente, derivato dal codice fiscale (luogo di nascita codificato nel CF — codice catastale).</td></tr>
+  <tr><td><code>[1 1 90]</code></td><td>Provincia di nascita (tabella PRV)</td><td>Obbligatorio se stato=ITALIA; vietato altrimenti</td><td><span class="org org-auto">Auto</span></td><td>Da dati utente. Se assente, derivato dal codice fiscale (luogo di nascita codificato nel CF — codice catastale).</td></tr>
+  <tr><td><code>[1 1 100]</code></td><td>Comune di nascita</td><td>Sempre obbligatorio (tabella COM se ITALIA)</td><td><span class="org org-auto">Auto</span></td><td>Da dati utente. Se assente, derivato dal codice fiscale (luogo di nascita codificato nel CF — codice catastale).</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 2 — Residenza anagrafica</td></tr>
+  <tr><td><code>[1 2 10]</code></td><td>Stato di residenza (STA)</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Derivato: il codice stato si ricava dal paese (default Italia per i residenti) via tabella STA.</td></tr>
+  <tr><td><code>[1 2 20]</code></td><td>Provincia (PRV)</td><td>Obbligatorio se ITALIA</td><td><span class="org org-auto">Auto</span></td><td>Derivato: la sigla provincia si ricava dal comune (in InputCommercialista) via tabella ISTAT/PRV.</td></tr>
+  <tr><td><code>[1 2 30]</code></td><td>CAP</td><td>Obbligatorio se ITALIA</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress.postcode</code>) — kind=Residenza</td></tr>
+  <tr><td><code>[1 2 40]</code></td><td>Comune</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress.municipality</code>) — kind=Residenza</td></tr>
+  <tr><td><code>[1 2 50]</code></td><td>Frazione/località</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 2 60]</code></td><td>Via, viale, piazza</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress.address</code>) — kind=Residenza</td></tr>
+  <tr><td><code>[1 2 70]</code></td><td>Numero civico</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress.address_number</code>) — kind=Residenza</td></tr>
+  <tr><td><code>[1 2 80]</code></td><td>Presso/altre indicazioni</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 3 — Limitazione capacità di agire</td></tr>
+  <tr><td><code>[1 14 10]</code></td><td>Limitazione (tabella CAG)</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 4 — Ditta</td></tr>
+  <tr><td><code>[1 3 10]</code></td><td>Denominazione ditta - 1° riga</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.denominazione</code> (prepop. da <code>User.business_name</code>) — Per la DI di norma = "Cognome Nome"; troncare a 1ª riga</td></tr>
+  <tr><td><code>[1 3 20]</code></td><td>Denominazione 2° riga</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 3 30]</code></td><td>Denominazione 3° riga</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 3 40]</code></td><td>Denominazione 4° riga</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 3 60]</code></td><td>Sigla denominazione</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 5 — Sede impresa</td></tr>
+  <tr><td><code>[1 5 10]</code></td><td>Stato sede (STA)</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Derivato: il codice stato si ricava dal paese (default Italia per i residenti) via tabella STA.</td></tr>
+  <tr><td><code>[1 5 20]</code></td><td>Provincia (PRV)</td><td>Obbligatorio se ITALIA</td><td><span class="org org-auto">Auto</span></td><td>Derivato: la sigla provincia si ricava dal comune (in InputCommercialista) via tabella ISTAT/PRV.</td></tr>
+  <tr><td><code>[1 5 30]</code></td><td>CAP</td><td>Obbligatorio se ITALIA</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress.postcode</code>) — kind=Attività</td></tr>
+  <tr><td><code>[1 5 40]</code></td><td>Comune</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress.municipality</code>) — kind=Attività</td></tr>
+  <tr><td><code>[1 5 50]</code></td><td>Frazione/località</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 5 60]</code></td><td>Via/viale/piazza</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress.address</code>) — kind=Attività</td></tr>
+  <tr><td><code>[1 5 70]</code></td><td>Numero civico</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress.address_number</code>) — kind=Attività</td></tr>
+  <tr><td><code>[1 5 80]</code></td><td>Presso/altre indicazioni</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 5 90]</code></td><td>Prefisso telefono</td><td>Obbligatorio se [1 5 100] valorizzato</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.telefono</code> (prepop. da <code>User.phone</code>) — Da scomporre prefisso/numero</td></tr>
+  <tr><td><code>[1 5 100]</code></td><td>Numero telefono</td><td>Obbligatorio se [1 5 90] valorizzato</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.telefono</code> (prepop. da <code>User.phone</code>) — Da scomporre prefisso/numero</td></tr>
+  <tr><td><code>[1 5 110]</code></td><td>Prefisso telefax</td><td>Obbligatorio se [1 5 120] valorizzato</td><td><span class="org org-auto">Auto</span></td><td>Fax non gestito; vuoto</td></tr>
+  <tr><td><code>[1 5 120]</code></td><td>Numero telefax</td><td>Obbligatorio se [1 5 110] valorizzato</td><td><span class="org org-auto">Auto</span></td><td>Fax non gestito; vuoto</td></tr>
+  <tr><td><code>[1 5 130]</code></td><td>Sito internet</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 5 140]</code></td><td>Email - nome</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 5 150]</code></td><td>Email - dominio</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 5 230]</code></td><td>PEC - nome</td><td>Obbligatorio se [1 85 200]=DI o se [1 5 240] valorizzato</td><td><span class="org org-cli">Cliente</span></td><td>Da InputCommercialista.pec (prepop. da User.pec) — PEC dell'impresa/titolare già in possesso; se assente la chiediamo al cliente - parte locale</td></tr>
+  <tr><td><code>[1 5 240]</code></td><td>PEC - dominio</td><td>Obbligatorio se [1 85 200]=DI o se [1 5 230] valorizzato</td><td><span class="org org-cli">Cliente</span></td><td>Da InputCommercialista.pec (prepop. da User.pec) — PEC dell'impresa/titolare già in possesso; se assente la chiediamo al cliente - parte dominio</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 8 — Attività esercitate nella sede</td></tr>
+  <tr><td><code>[1 55 10]</code></td><td>Descrizione attività primaria</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 55 20]</code></td><td>Descrizione attività secondaria</td><td>Opzionale se [1 55 10] valorizzato</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 55 30]</code></td><td>Data inizio attività nella sede</td><td>Obbligatorio solo se si compila questa sezione</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 10 — Attività prevalente</td></tr>
+  <tr><td><code>[1 53 10]</code></td><td>Descrizione attività prevalente</td><td>Obbligatorio se [1 53 20]=N</td><td><span class="org org-es">Comm</span></td><td>Questa dovrebbe essere la famosa declaratoria. Popoliamo con algoritmo dei Sales Expert che determina la dicitura corretta per l'attività prevalente in base all'ateco.</td></tr>
+  <tr><td><code>[1 53 20]</code></td><td>Coincide con primaria della sede (S/N)</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Costante = S (unica sede, prevalente=primaria)</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 12 — Capitale investito</td></tr>
+  <tr><td><code>[1 10 10]</code></td><td>Capitale investito (parte intera)</td><td>Obbligatorio solo se si compila questa sezione</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 10 20]</code></td><td>Capitale investito (decimali)</td><td>Consentito se [1 10 10] valorizzato</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 13 — Numero addetti</td></tr>
+  <tr><td><code>[1 57 10]</code></td><td>Numero dipendenti</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 57 20]</code></td><td>Numero collaboratori familiari</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 14 — Insegna</td></tr>
+  <tr><td><code>[1 51 10]</code></td><td>Insegna della sede</td><td>Opzionale; valorizzare se l'attività ha un'insegna</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.insegna</code> — input del consulente (non presente in DB).</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 15 — Iscrizioni in albi/ruoli (fino a 8 occorrenze)</td></tr>
+  <tr><td><code>[1 41 10]</code></td><td>Ente/autorità (tabella ALB)</td><td>Obbligatorio per ogni voce inserita (campo ripetibile)</td><td><span class="org org-auto">Auto</span></td><td>Iscrizione determinata da noi sulla base dell'ATECO. Codice tabella ALB</td></tr>
+  <tr><td><code>[1 41 20]</code></td><td>Denominazione albo (tabella RAL)</td><td>Obbligatorio per ogni voce inserita (campo ripetibile)</td><td><span class="org org-auto">Auto</span></td><td>Iscrizione determinata da noi sulla base dell'ATECO. Codice tabella RAL</td></tr>
+  <tr><td><code>[1 41 25]</code></td><td>Lettera (tabella LET)</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 41 30]</code></td><td>Data iscrizione</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 41 40]</code></td><td>Numero iscrizione</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 41 50]</code></td><td>Provincia iscrizione (PRV)</td><td>Obbligatorio per ogni voce inserita (campo ripetibile)</td><td><span class="org org-auto">Auto</span></td><td>Derivato: la sigla provincia si ricava dal comune (in InputCommercialista) via tabella ISTAT/PRV.</td></tr>
+  <tr><td><code>[1 41 55]</code></td><td>Ulteriori informazioni attività (max 320 car.)</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 41 60]</code></td><td>Fascia classificazione imprese di pulizia (CIP)</td><td>Opzionale (una sola voce ammessa)</td><td><span class="org org-cli">Cliente</span></td><td>Se il cliente è un'impresa di pulizia, chiediamo info per ricavare codice CIP. Parametro quantitativo non derivabile dall'ATECO (superficie di vendita / fascia di classificazione / settore merceologico): da acquisire.</td></tr>
+  <tr><td><code>[1 41 70]</code></td><td>Data denuncia pulizia</td><td>Obbligatorio se [1 41 60] valorizzato</td><td><span class="org org-auto">Auto</span></td><td>Uguale a data inizio attività</td></tr>
+  <tr><td><code>[1 41 130]</code></td><td>Fascia classificazione facchinaggio (CIF)</td><td>Opzionale (una sola voce ammessa)</td><td><span class="org org-cli">Cliente</span></td><td>Se il cliente è un'impresa di facchinaggio, chiediamo info per ricavare codice CIF. Parametro quantitativo non derivabile dall'ATECO (fascia di classificazione): da acquisire.</td></tr>
+  <tr><td><code>[1 41 140]</code></td><td>Data denuncia facchinaggio</td><td>Obbligatorio se [1 41 130] valorizzato</td><td><span class="org org-auto">Auto</span></td><td>Uguale a data ComUnica</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 16 — Licenze (fino a 2 occorrenze)</td></tr>
+  <tr><td><code>[1 43 10]</code></td><td>Ente/autorità (LIC)</td><td>Obbligatorio per ogni voce inserita (campo ripetibile)</td><td><span class="org org-auto">Auto</span></td><td>Iscrizione determinata da noi sulla base dell'ATECO. Codice tabella LIC</td></tr>
+  <tr><td><code>[1 43 20]</code></td><td>Denominazione licenza (LDN)</td><td>Obbligatorio per ogni voce inserita (campo ripetibile)</td><td><span class="org org-auto">Auto</span></td><td>Iscrizione determinata da noi sulla base dell'ATECO. Codice tabella LDN</td></tr>
+  <tr><td><code>[1 43 30]</code></td><td>Data concessione</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[1 43 40]</code></td><td>Numero licenza</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 18 — Commercio al dettaglio (D.Lgs. 114/1998)</td></tr>
+  <tr><td><code>[1 63 10]</code></td><td>Data inizio attività</td><td>Obbligatorio solo se si compila questa sezione</td><td><span class="org org-auto">Auto</span></td><td>Uguale a data ComUnica</td></tr>
+  <tr><td><code>[1 63 20]</code></td><td>Superficie vendita (mq)</td><td>Obbligatorio solo se si compila questa sezione</td><td><span class="org org-cli">Cliente</span></td><td>Parametro quantitativo non derivabile dall'ATECO (superficie di vendita / fascia di classificazione / settore merceologico): da acquisire.</td></tr>
+  <tr><td><code>[1 63 30]</code></td><td>Settore merceologico (MER)</td><td>Obbligatorio solo se si compila questa sezione</td><td><span class="org org-cli">Cliente</span></td><td>Parametro quantitativo non derivabile dall'ATECO (superficie di vendita / fascia di classificazione / settore merceologico): da acquisire.</td></tr>
+  <tr><td colspan="5" class="row-section">Data inizio attività impresa</td></tr>
+  <tr><td><code>[1 49 120]</code></td><td>Data inizio attività impresa</td><td>Vietato se [1 85 200]=PF; di fatto obbligatorio nel nostro flusso: se vuoto il riquadro AC è vietato (Fedra v7.09 §D.3)</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> (prepop. da <code>User.business_start</code>) — Valorizzato perché tipologia=DI; deve coincidere con [1 31 40] (controllo bloccante Fedra v7.09)</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 21 — Abilitazioni professionali</td></tr>
+  <tr><td><code>[1 20 10]</code></td><td>Descrizione abilitazioni</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">Sezione AA — Dati artigiani</td></tr>
+  <tr><td><code>[1 6 60]</code></td><td>Informazioni supplementari artigiani</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">Sezione AC — INPS Previdenza Commercio</td></tr>
+  <tr><td><code>[1 31 30]</code></td><td>Dichiarazione iscrizione INPS</td><td>Alternativo obbligatorio a [1 31 50]; intero riquadro AC vietato se compilato il riquadro AA o se [1 49 120] vuoto (Fedra v7.09)</td><td><span class="org org-auto">Auto</span></td><td>X solo se cassa = INPS COM ([1 85 130]); vuoto (intero riquadro AC) se artigiano (si compila AA, [1 85 140]) — mutua esclusione AA/AC.</td></tr>
+  <tr><td><code>[1 31 40]</code></td><td>Data inizio attività</td><td>Obbligatorio se [1 31 30] valorizzato; vietato altrimenti</td><td><span class="org org-auto">Auto</span></td><td>Uguale a [1 49 120] — data inizio attività impresa (controllo bloccante Fedra v7.09: le due date devono coincidere).</td></tr>
+  <tr><td><code>[1 31 50]</code></td><td>Dichiarazione NON iscrizione INPS</td><td>Alternativo obbligatorio a [1 31 30]</td><td><span class="org org-auto">Auto</span></td><td>Vuoto</td></tr>
+  <tr><td><code>[1 31 60]</code></td><td>Codice dichiarazione non iscrizione (TPC)</td><td>Obbligatorio se [1 31 50] valorizzato; altrimenti vietato. Valori 5/6/7 della tabella TPC non ammessi nel modulo I1 (Fedra v7.09)</td><td><span class="org org-auto">Auto</span></td><td>Vuoto</td></tr>
+  <tr><td><code>[1 31 70]</code></td><td>CF impresa/ente</td><td>Obbligatorio se [1 31 60] = 1 o 3; vietato se [1 31 60] = 2, 4, 5, 6, 7 (Fedra v7.09)</td><td><span class="org org-auto">Auto</span></td><td>Vuoto nel nostro flusso ([1 31 30]=X, codice dichiarazione non valorizzato).</td></tr>
+  <tr><td><code>[1 31 90]</code></td><td>Altre informazioni INPS</td><td>Obbligatorio se [1 31 60] = 1, 3 o 4 (Fedra v7.09); altrimenti non richiesto</td><td><span class="org org-auto">Auto</span></td><td>Vuoto nel nostro flusso ([1 31 30]=X, codice dichiarazione non valorizzato).</td></tr>
+</table>
+
+<p class="source">Fonte: <a href="specs/MODULO_I1-dd18-02-26.txt"><code>MODULO_I1-dd18-02-26.txt</code></a></p>
+
+<h3 id="modulo-i2">3.2 Modulo I2 — modifica/cancellazione imprenditore individuale</h3>
+<p>Il Modulo I2 è utilizzato per la denuncia di modifiche ai dati anagrafici, di sede, di attività o per la cancellazione dell'imprenditore individuale dal RI. È lo strumento principale per aggiornare le informazioni dell'attività imprenditoriale.</p>
+
+<table class="ri-input">
+  <tr><th>Campo</th><th>Significato</th><th>Quando compilare</th><th>Origine</th><th>Come compilare</th></tr>
+  <tr><td colspan="5" class="row-section">A — Estremi iscrizione</td></tr>
+  <tr><td><code>[3 65 30]</code> Posizione (sigla pv.)</td><td>Sigla provincia</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Derivato: la sigla provincia si ricava dal comune (in InputCommercialista) via tabella ISTAT/PRV.</td></tr>
+  <tr><td><code>[3 65 40]</code> Nr. R.E.A.</td><td>Numero REA</td><td>Opzionale</td><td><span class="org org-db">DB</span></td><td>Dovremmo avere questo campo a DB</td></tr>
+  <tr><td colspan="5" class="row-section">B — Estremi dell'atto</td></tr>
+  <tr><td><code>[3 66 20]</code> Codice forma atto</td><td>Forma giuridica dell'atto (P, A, ...)</td><td>Obbligatorio solo se si compila questa sezione</td><td><span class="org org-auto">Auto</span></td><td>Per la DI di norma nessun atto; vuoto salvo casi specifici</td></tr>
+  <tr><td><code>[3 66 40]</code> Codice atto</td><td>Identificativo atto</td><td>Obbligatorio per atti pubblici o autenticati</td><td><span class="org org-auto">Auto</span></td><td>Vuoto salvo atto formale</td></tr>
+  <tr><td><code>[3 66 140]</code> Data atto</td><td>Data redazione atto</td><td>Obbligatorio se è indicato un atto</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td><code>[3 66 150]</code> Nr. repertorio</td><td>Numero repertorio</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[3 66 190]</code> Data registrazione atto</td><td>Data registrazione presso ufficio</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[3 66 220]</code> Nr. registrazione</td><td>Numero progressivo</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[3 66 230]</code> Codice ufficio registrazione</td><td>Codice ufficio</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[3 66 240]</code> Allegato statuto/patto integrale</td><td>S/N</td><td>Obbligatorio (S o N)</td><td><span class="org org-auto">Auto</span></td><td>Costante = N per la DI</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 16 — Variazione sezioni/qualifiche RI</td></tr>
+  <tr><td><code>[3 17 10]</code> Dal</td><td>Data effetto variazione</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Da InputCommercialista.data_variazione</td></tr>
+  <tr><td><code>[3 17 20]</code></td><td>Iscrizione in piccoli imprenditori</td><td>Scelta obbligatoria tra le opzioni della sezione</td><td><span class="org org-auto">Auto</span></td><td>Derivato dal tipo di operazione + cassa previdenziale dell'utente</td></tr>
+  <tr><td><code>[3 17 30]</code></td><td>Iscrizione in imprenditori commerciali</td><td>Scelta obbligatoria tra le opzioni della sezione</td><td><span class="org org-auto">Auto</span></td><td>Derivato dal tipo di operazione + cassa previdenziale dell'utente</td></tr>
+  <tr><td><code>[3 17 60]</code></td><td>Cancellazione da piccoli imprenditori</td><td>Scelta obbligatoria tra le opzioni della sezione</td><td><span class="org org-auto">Auto</span></td><td>Derivato dal tipo di operazione + cassa previdenziale dell'utente</td></tr>
+  <tr><td><code>[3 17 70]</code></td><td>Cancellazione da imprenditori commerciali</td><td>Scelta obbligatoria tra le opzioni della sezione</td><td><span class="org org-auto">Auto</span></td><td>Derivato dal tipo di operazione + cassa previdenziale dell'utente</td></tr>
+  <tr><td><code>[3 17 200]</code> Tipologia (codice)</td><td>DI o PF</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Costante = DI</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 1 — Nuovo CF / Dati anagrafici</td></tr>
+  <tr><td><code>[3 1 10]</code> Dal</td><td>Data effetto</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Da InputCommercialista.data_variazione</td></tr>
+  <tr><td><code>[3 1 20]</code></td><td>Modifica del Codice Fiscale</td><td>Una e una sola scelta tra CF e P.IVA</td><td><span class="org org-auto">Auto</span></td><td>Derivato da InputCommercialista.ssn (prepop. da User.ssn) / User.vat — Valore aggiornato in DB</td></tr>
+  <tr><td><code>[3 1 30]</code></td><td>Modifica della Partita IVA</td><td>Una e una sola scelta tra CF e P.IVA</td><td><span class="org org-auto">Auto</span></td><td>Derivato da InputCommercialista.ssn (prepop. da User.ssn) / User.vat — Valore aggiornato in DB</td></tr>
+  <tr><td><code>[3 1 40]</code> Nuovo CF/P.IVA</td><td>Nuovo codice fiscale o partita IVA</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ssn</code> (prepop. da <code>User.ssn</code>) / <code>User.vat</code> — Valore aggiornato in DB</td></tr>
+  <tr><td><code>[3 1 110]</code></td><td>Sesso</td><td>Impostare con M o F</td><td><span class="org org-es">Comm</span></td><td>Esplicitare tutti i campi. Da InputCommercialista.ssn (prepop. da User.gender/last_name/first_name/birth_date/nationality/birth_country/birth_province/birth_municipality) — Stessi campi del riq.1 di I1</td></tr>
+  <tr><td><code>[3 1 120]</code></td><td>Cognome</td><td>Obbligatorio</td><td><span class="org org-es">Comm</span></td><td>Esplicitare tutti i campi. Da InputCommercialista.ssn (prepop. da User.gender/last_name/first_name/birth_date/nationality/birth_country/birth_province/birth_municipality) — Stessi campi del riq.1 di I1</td></tr>
+  <tr><td><code>[3 1 130]</code></td><td>Nome</td><td>Obbligatorio</td><td><span class="org org-es">Comm</span></td><td>Esplicitare tutti i campi. Da InputCommercialista.ssn (prepop. da User.gender/last_name/first_name/birth_date/nationality/birth_country/birth_province/birth_municipality) — Stessi campi del riq.1 di I1</td></tr>
+  <tr><td><code>[3 1 140]</code></td><td>Data di nascita</td><td>Obbligatorio</td><td><span class="org org-es">Comm</span></td><td>Esplicitare tutti i campi. Da InputCommercialista.ssn (prepop. da User.gender/last_name/first_name/birth_date/nationality/birth_country/birth_province/birth_municipality) — Stessi campi del riq.1 di I1</td></tr>
+  <tr><td><code>[3 1 150]</code></td><td>Cittadinanza (codice)</td><td>Esistenza in tabella STA</td><td><span class="org org-es">Comm</span></td><td>Esplicitare tutti i campi. Da InputCommercialista.ssn (prepop. da User.gender/last_name/first_name/birth_date/nationality/birth_country/birth_province/birth_municipality) — Stessi campi del riq.1 di I1</td></tr>
+  <tr><td><code>[3 1 160]</code></td><td>Stato nascita (codice)</td><td>Obbligatorio; esistenza in tabella STA</td><td><span class="org org-es">Comm</span></td><td>Esplicitare tutti i campi. Da InputCommercialista.ssn (prepop. da User.gender/last_name/first_name/birth_date/nationality/birth_country/birth_province/birth_municipality) — Stessi campi del riq.1 di I1</td></tr>
+  <tr><td><code>[3 1 170]</code></td><td>Provincia nascita (codice)</td><td>Obbligatorio se stato = ITALIA, altrimenti vietato</td><td><span class="org org-es">Comm</span></td><td>Esplicitare tutti i campi. Da InputCommercialista.ssn (prepop. da User.gender/last_name/first_name/birth_date/nationality/birth_country/birth_province/birth_municipality) — Stessi campi del riq.1 di I1</td></tr>
+  <tr><td><code>[3 1 180]</code></td><td>Comune nascita</td><td>Obbligatorio; esistenza in tabella COM se ITALIA</td><td><span class="org org-es">Comm</span></td><td>Esplicitare tutti i campi. Da InputCommercialista.ssn (prepop. da User.gender/last_name/first_name/birth_date/nationality/birth_country/birth_province/birth_municipality) — Stessi campi del riq.1 di I1</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 2 — Residenza</td></tr>
+  <tr><td><code>[3 2 10]</code></td><td>Dal</td><td>Obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress</code>) (kind=Residenza), <code>change_date</code> per "Dal" — Frazione = gap</td></tr>
+  <tr><td><code>[3 2 20]</code></td><td>Stato (codice)</td><td>Obbligatorio; esistenza in tabella STA</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress</code>) (kind=Residenza), <code>change_date</code> per "Dal" — Frazione = gap</td></tr>
+  <tr><td><code>[3 2 30]</code></td><td>Provincia (codice)</td><td>Obbligatorio se stato = ITALIA, altrimenti vietato</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress</code>) (kind=Residenza), <code>change_date</code> per "Dal" — Frazione = gap</td></tr>
+  <tr><td><code>[3 2 40]</code></td><td>CAP</td><td>Obbligatorio se stato = ITALIA</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress</code>) (kind=Residenza), <code>change_date</code> per "Dal" — Frazione = gap</td></tr>
+  <tr><td><code>[3 2 50]</code></td><td>Comune</td><td>Obbligatorio; esistenza in tabella COM se ITALIA</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress</code>) (kind=Residenza), <code>change_date</code> per "Dal" — Frazione = gap</td></tr>
+  <tr><td><code>[3 2 60]</code></td><td>Frazione o località</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress</code>) (kind=Residenza), <code>change_date</code> per "Dal" — Frazione = gap</td></tr>
+  <tr><td><code>[3 2 70]</code></td><td>Via, viale, piazza, ...</td><td>Obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress</code>) (kind=Residenza), <code>change_date</code> per "Dal" — Frazione = gap</td></tr>
+  <tr><td><code>[3 2 80]</code></td><td>Nr. civico</td><td>Obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress</code>) (kind=Residenza), <code>change_date</code> per "Dal" — Frazione = gap</td></tr>
+  <tr><td><code>[3 2 90]</code></td><td>Presso od altre indicazioni</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress</code>) (kind=Residenza), <code>change_date</code> per "Dal" — Frazione = gap</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 3 — Limitazione capacità</td></tr>
+  <tr><td><code>[3 28 10–40]</code> Dal, È attribuito/È cessato lo stato di, Limitazione (codice)</td><td>Stato di incapacità</td><td>Obbligatorio scelta + codice</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 4 — Nuova ditta</td></tr>
+  <tr><td><code>[3 23 10]</code></td><td>Dal</td><td>Obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.denominazione</code> (prepop. da <code>User.business_name</code>) — Valore aggiornato; "Dal" da pratica</td></tr>
+  <tr><td><code>[3 23 20]</code></td><td>Nuova denominazione 1ª riga</td><td>Obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.denominazione</code> (prepop. da <code>User.business_name</code>) — Valore aggiornato; "Dal" da pratica</td></tr>
+  <tr><td><code>[3 23 30]</code></td><td>Nuova denominazione 2ª riga</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.denominazione</code> (prepop. da <code>User.business_name</code>) — Valore aggiornato; "Dal" da pratica</td></tr>
+  <tr><td><code>[3 23 40]</code></td><td>Nuova denominazione 3ª riga</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.denominazione</code> (prepop. da <code>User.business_name</code>) — Valore aggiornato; "Dal" da pratica</td></tr>
+  <tr><td><code>[3 23 50]</code></td><td>Nuova denominazione 4ª riga</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.denominazione</code> (prepop. da <code>User.business_name</code>) — Valore aggiornato; "Dal" da pratica</td></tr>
+  <tr><td><code>[3 23 60]</code></td><td>Sigla denominazione</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.denominazione</code> (prepop. da <code>User.business_name</code>) — Valore aggiornato; "Dal" da pratica</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 5 — Indirizzo sede</td></tr>
+  <tr><td><code>[3 25 10]</code></td><td>Dal</td><td>Obbligatorio se valorizzato il riquadro</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 20]</code></td><td>Stato (codice)</td><td>Obbligatorio; esistenza in tabella STA</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 30]</code></td><td>Provincia (codice)</td><td>Obbligatorio se stato = ITALIA, altrimenti vietato</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 40]</code></td><td>CAP</td><td>Obbligatorio se stato = ITALIA</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 50]</code></td><td>Comune</td><td>Obbligatorio; esistenza in tabella COM se ITALIA</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 60]</code></td><td>Frazione o località</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 70]</code></td><td>Via, viale, piazza, ...</td><td>Obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 80]</code></td><td>Nr. civico</td><td>Obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 90]</code></td><td>Presso od altre indicazioni</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 100]</code></td><td>Prefisso telefono</td><td>Obbligatorio se valorizzato [3 25 110]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 110]</code></td><td>Nr. telefono</td><td>Obbligatorio se valorizzato [3 25 100]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 120]</code></td><td>Prefisso telefax</td><td>Obbligatorio se valorizzato [3 25 130]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 130]</code></td><td>Telefax</td><td>Obbligatorio se valorizzato [3 25 120]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 150]</code></td><td>Indirizzo e-mail nome</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 160]</code></td><td>Indirizzo e-mail sito</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 230]</code></td><td>Nome e-mail certificata (PEC)</td><td>Obbligatorio se valorizzato [3 25 240]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 240]</code></td><td>Dominio e-mail certificata (PEC)</td><td>Obbligatorio se valorizzato [3 25 230]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività), <code>User.phone/email/pec</code> — Fax/Frazione/Presso = gap</td></tr>
+  <tr><td><code>[3 25 140]</code> Sito internet</td><td>Sito internet dell'impresa</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 6 — Variazione insegna</td></tr>
+  <tr><td><code>[3 52 10]</code></td><td>Dal</td><td>Obbligatorio</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.insegna</code> — input del consulente (non presente in DB).</td></tr>
+  <tr><td><code>[3 52 20]</code></td><td>È stata eliminata ogni insegna</td><td>Una e una sola scelta</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.insegna</code> — input del consulente (non presente in DB).</td></tr>
+  <tr><td><code>[3 52 30]</code></td><td>La nuova insegna è</td><td>Una e una sola scelta</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.insegna</code> — input del consulente (non presente in DB).</td></tr>
+  <tr><td><code>[3 52 40]</code></td><td>Nuova insegna</td><td>Obbligatorio se effettuata la scelta [3 52 30]</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.insegna</code> — input del consulente (non presente in DB).</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 7 — Variazioni attività nella sede</td></tr>
+  <tr><td><code>[3 9 10]</code></td><td>Dal (inizio attività)</td><td>Obbligatorio se valorizzato [3 9 20]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.start_date</code>) — Data variazione ATECO</td></tr>
+  <tr><td><code>[3 9 40]</code></td><td>Dal (sospensione)</td><td>Obbligatorio se valorizzato [3 9 50] o [3 9 60]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.start_date</code>) — Data variazione ATECO</td></tr>
+  <tr><td><code>[3 9 80]</code></td><td>Dal (ripresa)</td><td>Obbligatorio se valorizzato [3 9 90] o [3 9 100]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.start_date</code>) — Data variazione ATECO</td></tr>
+  <tr><td><code>[3 9 120]</code></td><td>Dal (cessazione)</td><td>Obbligatorio se valorizzato [3 9 130] o [3 9 140]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.start_date</code>) — Data variazione ATECO</td></tr>
+  <tr><td><code>[3 9 20]</code></td><td>È INIZIATA l'attività</td><td>Obbligatorio se valorizzato [3 9 10]</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.ateco</code> e date di variazione — dato raccolto dal flow.</td></tr>
+  <tr><td><code>[3 9 50]</code></td><td>È SOSPESA TUTTA l'attività</td><td>Alternativa a [3 9 60]; obbligatoria se valorizzato [3 9 40]</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.ateco</code> e date di variazione — dato raccolto dal flow.</td></tr>
+  <tr><td><code>[3 9 60]</code></td><td>È SOSPESA PARTE dell'attività</td><td>Alternativa a [3 9 50]; obbligatoria se valorizzato [3 9 40]</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.ateco</code> e date di variazione — dato raccolto dal flow.</td></tr>
+  <tr><td><code>[3 9 90]</code></td><td>È RIPRESA TUTTA l'attività</td><td>Alternativa a [3 9 100]; obbligatoria se valorizzato [3 9 80]</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.ateco</code> e date di variazione — dato raccolto dal flow.</td></tr>
+  <tr><td><code>[3 9 100]</code></td><td>È RIPRESA PARTE dell'attività</td><td>Alternativa a [3 9 90]; obbligatoria se valorizzato [3 9 80]</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.ateco</code> e date di variazione — dato raccolto dal flow.</td></tr>
+  <tr><td><code>[3 9 130]</code></td><td>È CESSATA TUTTA l'attività</td><td>Obbligatoria se valorizzato [3 9 120]</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.ateco</code> e date di variazione — dato raccolto dal flow.</td></tr>
+  <tr><td><code>[3 9 140]</code></td><td>È CESSATA PARTE dell'attività</td><td>Alternativa a [3 9 130]; obbligatoria se valorizzato [3 9 120]</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.ateco</code> e date di variazione — dato raccolto dal flow.</td></tr>
+  <tr><td><code>[3 9 30]</code></td><td>Descrizione attività iniziata</td><td>Consentito se valorizzato [3 9 10]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.atecos</code>) → <code>AtecoCode.description</code> — </td></tr>
+  <tr><td><code>[3 9 70]</code></td><td>Descrizione attività sospesa</td><td>Consentito se valorizzato [3 9 40]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.atecos</code>) → <code>AtecoCode.description</code> — </td></tr>
+  <tr><td><code>[3 9 110]</code></td><td>Descrizione attività ripresa</td><td>Consentito se valorizzato [3 9 80]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.atecos</code>) → <code>AtecoCode.description</code> — </td></tr>
+  <tr><td><code>[3 9 150]</code></td><td>Descrizione attività cessata</td><td>Consentito se valorizzato [3 9 120]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.atecos</code>) → <code>AtecoCode.description</code> — </td></tr>
+  <tr><td><code>[3 9 210]</code></td><td>Attività risultante primaria</td><td>Obbligatorio, salvo se valorizzato [3 9 130]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.atecos</code>) → <code>AtecoCode.description</code> — </td></tr>
+  <tr><td><code>[3 9 220]</code></td><td>Attività risultante secondaria</td><td>Consentito se valorizzato [3 9 210]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.atecos</code>) → <code>AtecoCode.description</code> — </td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 9 — Attività prevalente</td></tr>
+  <tr><td><code>[3 54 10]</code></td><td>Dal</td><td>Obbligatorio se valorizzato [3 54 20] o [3 54 30]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.atecos[0]</code>) — Categoria opere = gap</td></tr>
+  <tr><td><code>[3 54 20]</code></td><td>Descrizione integrale nuova attività prevalente</td><td>Obbligatorio se valorizzato [3 54 10]</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.atecos[0]</code>) — Categoria opere = gap</td></tr>
+  <tr><td><code>[3 54 30]</code></td><td>Categoria opere (codice)</td><td>Esistenza in tabella AQL</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.atecos[0]</code>) — Categoria opere = gap</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 11 — Iscrizioni albi/ruoli (incl. pulizia/facchinaggio)</td></tr>
+  <tr><td><code>[3 58 5]</code></td><td>Dal</td><td>Obbligatorio se valorizzato [3 58 10]</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 58 10]</code></td><td>Ente o autorità (codice)</td><td>Obbligatorio per occorrenza; esistenza in tabella ALB</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 58 20]</code></td><td>Denominazione albo (codice)</td><td>Obbligatorio per occorrenza; esistenza in tabella RAL</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 58 25]</code></td><td>Lettera</td><td>Esistenza in tabella LET</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 58 30]</code></td><td>Data</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 58 40]</code></td><td>Numero</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 58 50]</code></td><td>Provincia (codice)</td><td>Obbligatorio per occorrenza; esistenza in tabella PRV</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 58 55]</code></td><td>Ulteriori informazioni attività</td><td>Opzionale (max 320 caratteri)</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 58 80]</code></td><td>Dal (pulizia)</td><td>Obbligatorio se valorizzato [3 58 100]</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 58 90]</code></td><td>Fascia classificazione pulizia (codice)</td><td>Esistenza in tabella CIP</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 58 100]</code></td><td>Data denuncia (pulizia)</td><td>Obbligatorio se valorizzato [3 58 80]</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 58 120]</code></td><td>Dal (facchinaggio)</td><td>Obbligatorio se valorizzato [3 58 140]</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 58 130]</code></td><td>Fascia classificazione facchinaggio (codice)</td><td>Esistenza in tabella CIF</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 58 140]</code></td><td>Data denuncia (facchinaggio)</td><td>Obbligatorio se valorizzato [3 58 120]</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 12 — Licenze/autorizzazioni</td></tr>
+  <tr><td><code>[3 44 5]</code></td><td>Dal</td><td>Obbligatorio se valorizzato il riquadro</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 44 10]</code></td><td>Ente o autorità (codice)</td><td>Obbligatorio per occorrenza; esistenza in tabella LIC</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 44 20]</code></td><td>Denominazione licenza (codice)</td><td>Obbligatorio per occorrenza; esistenza in tabella LDN</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 44 30]</code></td><td>Data</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td><code>[3 44 40]</code></td><td>Numero</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Determinato da noi: necessità e tipo adempimento + ente competente derivati dall'ATECO; per la variazione di attività data = data variazione, numero/protocollo dal sistema.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 19 — Commercio al dettaglio</td></tr>
+  <tr><td><code>[3 64 10]</code></td><td>Dal</td><td>Obbligatorio se valorizzato il riquadro</td><td><span class="org org-cli">Cliente</span></td><td>Parametro quantitativo non derivabile dall'ATECO (superficie di vendita / fascia di classificazione / settore merceologico): da acquisire.</td></tr>
+  <tr><td><code>[3 64 20]</code></td><td>Superficie di vendita mq</td><td>Obbligatorio se valorizzato il riquadro</td><td><span class="org org-cli">Cliente</span></td><td>Parametro quantitativo non derivabile dall'ATECO (superficie di vendita / fascia di classificazione / settore merceologico): da acquisire.</td></tr>
+  <tr><td><code>[3 64 30]</code></td><td>Settore merceologico</td><td>Obbligatorio se valorizzato il riquadro; esistenza in tabella MER</td><td><span class="org org-cli">Cliente</span></td><td>Parametro quantitativo non derivabile dall'ATECO (superficie di vendita / fascia di classificazione / settore merceologico): da acquisire.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 21 — Abilitazioni professionali</td></tr>
+  <tr><td><code>[3 30 10]</code></td><td>Dal</td><td>Obbligatorio se valorizzato il riquadro</td><td><span class="org org-auto">Auto</span></td><td>"Dal" = data di efficacia della variazione impostata dal flusso (InputCommercialista.data_variazione); descrizione opzionale, di norma vuota.</td></tr>
+  <tr><td><code>[3 30 20]</code></td><td>Descrizione abilitazioni</td><td>Obbligatorio se valorizzato il riquadro</td><td><span class="org org-auto">Auto</span></td><td>"Dal" = data di efficacia della variazione impostata dal flusso (InputCommercialista.data_variazione); descrizione opzionale, di norma vuota.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 15 — CANCELLAZIONE</td></tr>
+  <tr><td><code>[3 15 10]</code></td><td>Cessazione di ogni attività</td><td>Una e una sola scelta</td><td><span class="org org-auto">Auto</span></td><td>Derivato dall'operazione di cessazione scelta nel flusso (coerente con la causale): non è un dato fornito dal cliente.</td></tr>
+  <tr><td><code>[3 15 20]</code></td><td>Cessione dell'azienda</td><td>Una e una sola scelta</td><td><span class="org org-auto">Auto</span></td><td>Derivato dall'operazione di cessazione scelta nel flusso (coerente con la causale): non è un dato fornito dal cliente.</td></tr>
+  <tr><td><code>[3 15 80]</code></td><td>Altro motivo</td><td>Una e una sola scelta</td><td><span class="org org-auto">Auto</span></td><td>Derivato dall'operazione di cessazione scelta nel flusso (coerente con la causale): non è un dato fornito dal cliente.</td></tr>
+  <tr><td><code>[3 15 110]</code> Data cessazione</td><td>Data effetto cancellazione</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_cessazione</code> — input del consulente nel flow.</td></tr>
+  <tr><td><code>[3 15 120]</code> Causale cessazione (codice)</td><td>Causale (tabella CRD)</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.causale</code> — input del consulente nel flow.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 17 — Soggetto subentrante</td></tr>
+  <tr><td><code>[3 36 10/30/70]</code> Denominazione, CF, Titolo subentro</td><td>Dati subentrante</td><td>Obbligatori solo se si compila questa sezione</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 29 — Trasferimento da altra provincia</td></tr>
+  <tr><td><code>[3 40 20–50]</code> Posizione provenienza (pv.), Nr. REA, Cessazione totale (S/N), Stessa indirizzo (S/N)</td><td>Trasferimento</td><td>Obbligatori solo se si compila questa sezione (i due S/N obbligatori se il riquadro è valorizzato)</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 31 — Altri atti/fatti soggetti a iscrizione</td></tr>
+  <tr><td><code>[3 19 30/40]</code> Tipo atto, Descrizione</td><td>Atti aggiuntivi</td><td>Obbligatori per ogni atto</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 10 — Comunicazione curatore (art. 29 DL 78/2010)</td></tr>
+  <tr><td><code>[3 10 10–100]</code> Tribunale, Nr. provvedimento, Data, Data udienza, Termine domanda, Luogo, Giudice (nome+cognome)</td><td>Procedura concorsuale</td><td>Sempre obbligatorio (Ulteriori informazioni opzionali)</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 32 — Reti di imprese</td></tr>
+  <tr><td><code>[3 27 10–220]</code> Tipo adempimento (A/B/D), Nome contratto, CF, Nr. repertorio/registrazione precedente, Scadenza, Obiettivi, Programma, Durata, Organo comune, Fondo, Modalità decisioni, Asseverazione, CF/Denominazione impresa, Mandataria (S/N)</td><td>Contratto rete</td><td>Obbligatori secondo tipo adempimento (A o D)</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 35 — Impresa culturale e creativa</td></tr>
+  <tr><td><code>[3 71 10–30]</code> Tipologia richiesta (N/C), Dicitura, Dichiarazione</td><td>Qualifica culturale</td><td>Obbligatori secondo tipologia</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td colspan="5" class="row-section">Sezione AB — Variazione dati artigiani</td></tr>
+  <tr><td><code>[3 18 10]</code></td><td>Dal</td><td>Obbligatorio se valorizzato il riquadro; altrimenti vietato</td><td><span class="org org-auto">Auto</span></td><td>"Dal" = data di efficacia della variazione (InputCommercialista.data_variazione); info supplementari di norma vuote. I campi sui familiari collaboratori del riquadro non si compilano (fuori scope MVP).</td></tr>
+  <tr><td><code>[3 18 60]</code></td><td>Informazioni supplementari</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>"Dal" = data di efficacia della variazione (InputCommercialista.data_variazione); info supplementari di norma vuote. I campi sui familiari collaboratori del riquadro non si compilano (fuori scope MVP).</td></tr>
+  <tr><td colspan="5" class="row-section">Sezione AC — Variazione INPS Commercio</td></tr>
+  <tr><td><code>[3 33 20]</code></td><td>Dal</td><td>Obbligatorio</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>UserWelfareInstitution</code> (<code>welfare_institution_1</code>, <code>welfare_registration_date_1</code>, <code>start_date/end_date</code>), <code>User.ssn</code> — Codice TPC = Cliente</td></tr>
+  <tr><td><code>[3 33 30]</code></td><td>Dichiarazione cancellazione</td><td>Alternativa a [3 33 70] e [3 33 80]</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>UserWelfareInstitution</code> (<code>welfare_institution_1</code>, <code>welfare_registration_date_1</code>, <code>start_date/end_date</code>), <code>User.ssn</code> — Codice TPC = Cliente</td></tr>
+  <tr><td><code>[3 33 40]</code></td><td>Data inizio/fine attività</td><td>Obbligatorio se valorizzato [3 33 30] o [3 33 70]; altrimenti vietato</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>UserWelfareInstitution</code> (<code>welfare_institution_1</code>, <code>welfare_registration_date_1</code>, <code>start_date/end_date</code>), <code>User.ssn</code> — Codice TPC = Cliente</td></tr>
+  <tr><td><code>[3 33 50]</code></td><td>Dichiarazione prosecuzione</td><td>Consentito se valorizzato [3 33 30]</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>UserWelfareInstitution</code> (<code>welfare_institution_1</code>, <code>welfare_registration_date_1</code>, <code>start_date/end_date</code>), <code>User.ssn</code> — Codice TPC = Cliente</td></tr>
+  <tr><td><code>[3 33 60]</code></td><td>Codice fiscale impresa/ente</td><td>Obbligatorio con prosecuzione e codice 1 o 3; altrimenti vietato</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>UserWelfareInstitution</code> (<code>welfare_institution_1</code>, <code>welfare_registration_date_1</code>, <code>start_date/end_date</code>), <code>User.ssn</code> — Codice TPC = Cliente</td></tr>
+  <tr><td><code>[3 33 70]</code></td><td>Dichiarazione iscrizione</td><td>Alternativa a [3 33 30] e [3 33 80]</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>UserWelfareInstitution</code> (<code>welfare_institution_1</code>, <code>welfare_registration_date_1</code>, <code>start_date/end_date</code>), <code>User.ssn</code> — Codice TPC = Cliente</td></tr>
+  <tr><td><code>[3 33 80]</code></td><td>Dichiarazione NON iscrizione</td><td>Alternativa a [3 33 30] e [3 33 70]</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>UserWelfareInstitution</code> (<code>welfare_institution_1</code>, <code>welfare_registration_date_1</code>, <code>start_date/end_date</code>), <code>User.ssn</code> — Codice TPC = Cliente</td></tr>
+  <tr><td><code>[3 33 90]</code></td><td>Codice dichiarazione</td><td>Obbligatorio se valorizzato [3 33 80] o [3 33 30]; esistenza in tabella TPC</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>UserWelfareInstitution</code> (<code>welfare_institution_1</code>, <code>welfare_registration_date_1</code>, <code>start_date/end_date</code>), <code>User.ssn</code> — Codice TPC = Cliente</td></tr>
+  <tr><td><code>[3 33 100]</code> Altre informazioni</td><td>Specificazioni descrittive sulla posizione previdenziale</td><td>Obbligatorio se codice dichiarazione vale 1, 3 o 4 (Fedra v7.09); altrimenti non richiesto</td><td><span class="org org-auto">Auto</span></td><td>Derivato dal codice dichiarazione TPC: testo standard generato dal flusso a corredo della dichiarazione INPS.</td></tr>
+</table>
+
+<p class="source">Fonte: <a href="specs/MODULO_I2dd18-02-26.txt"><code>MODULO_I2dd18-02-26.txt</code></a></p>
+
+<h3 id="modulo-intercalareaa">3.3 Modulo IntercalareAA — Albo Artigiani</h3>
+<p>La parte artigiana della pratica si compone di due livelli: i <strong>riquadri AA/AB</strong> interni ai moduli I1/I2 (dati artigiani) e il <strong>modulo autonomo Intercalare AA</strong> (codice modulo "7", "INT/AA" in v7.09) con generalità artigiane e sede dell'attività. È allegato all'iscrizione dell'imprenditore individuale artigiano e si raccorda con i dati di partecipazione al lavoro e qualifiche artigiane.</p>
+
+<table class="ri-input">
+  <tr><th>Campo</th><th>Significato</th><th>Quando compilare</th><th>Origine</th><th>Come compilare</th></tr>
+  <tr><td colspan="5" class="row-section">Riquadro AA — Dati artigiani (Iscrizione/Modifica - in Modulo I1). NB: dal 2026 il riquadro AA è mutuamente esclusivo con il riquadro AC/INPS Commercio (Fedra v7.09)</td></tr>
+  <tr><td><code>[1 6 60]</code></td><td>Informazioni supplementari (max 80 car.)</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">Riquadro AB — Dati artigiani (Modifica/Cessazione - in Modulo I2)</td></tr>
+  <tr><td><code>[3 18 10]</code></td><td>Data inizio variazione/cessazione Albo</td><td>Obbligatorio se valorizzato il riquadro. Dal 2026 il riquadro AB è mutuamente esclusivo con AC (Fedra v7.09)</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>UserWelfareInstitution.start_date/end_date</code> — Data effetto variazione gestione</td></tr>
+  <tr><td><code>[3 18 60]</code></td><td>Informazioni supplementari variazione</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">Estremi iscrizione della domanda (riquadro A del modulo ospitante)</td></tr>
+  <tr><td><code>[3 65 30]</code></td><td>Posizione: sigla provincia CCIAA (PRV) della posizione REA dell'impresa (riquadro A del modulo ospitante, non "provincia Albo")</td><td>Obbligatorio (I2)</td><td><span class="org org-auto">Auto</span></td><td>Derivato: la sigla provincia si ricava dal comune (in InputCommercialista) via tabella ISTAT/PRV.</td></tr>
+  <tr><td colspan="5" class="row-section">Modulo Intercalare AA (codice modulo "7") — Generalità artigiane</td></tr>
+  <tr><td><code>[7 65 100]</code></td><td>Richiesta iscrizione artigiana (scelta)</td><td>Obbligatorio, in alternativa con [7 65 110]</td><td><span class="org org-auto">Auto</span></td><td>Costante = selezionata in prima iscrizione del titolare artigiano (alternativa al numero Albo per già iscritti).</td></tr>
+  <tr><td><code>[7 65 110]</code></td><td>Numero Albo Artigiano (7 cifre)</td><td>Obbligatorio, in alternativa con [7 65 100]</td><td><span class="org org-auto">Auto</span></td><td>Vuoto in prima iscrizione: il numero è attribuito dalla CCIAA all'esito dell'iscrizione all'Albo.</td></tr>
+  <tr><td><code>[7 65 120]</code></td><td>Dichiarazioni (scelta)</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[7 65 130]</code></td><td>Dichiarazioni di responsabilità (scelta)</td><td>Obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Costante = selezionata (dichiarazione di responsabilità del titolare).</td></tr>
+  <tr><td><code>[7 65 140]</code></td><td>Dichiarazioni per previdenza (scelta)</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.cassa_previdenziale</code> — input del consulente.</td></tr>
+  <tr><td colspan="5" class="row-section">Modulo Intercalare AA — Riquadro 1 / Sede dell'attività artigiana</td></tr>
+  <tr><td><code>[7 2 10]</code></td><td>Dal ... (data)</td><td>Obbligatorio se valorizzato il riquadro</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.data_inizio_attivita</code> — input del consulente.</td></tr>
+  <tr><td><code>[7 2 20]</code></td><td>Presso la sede (scelta)</td><td>In alternativa con [7 2 30]</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.sede_attivita</code> — selezionata se l'attività artigiana si svolge presso la sede dell'impresa.</td></tr>
+  <tr><td><code>[7 2 30]</code></td><td>Provincia (codice)</td><td>In alternativa con [7 2 20]; obbligatorio se presenti [7 2 40/50/60/70]; esistenza in tabella PRV</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.sede_attivita</code> — compilato solo se diverso dalla sede dell'impresa.</td></tr>
+  <tr><td><code>[7 2 35]</code></td><td>CAP</td><td>Obbligatorio se compilato l'indirizzo</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.sede_attivita</code> — compilato solo se diverso dalla sede dell'impresa.</td></tr>
+  <tr><td><code>[7 2 40]</code></td><td>Comune</td><td>Obbligatorio se valorizzato [7 2 30]; esistenza in tabella COM</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.sede_attivita</code> — compilato solo se diverso dalla sede dell'impresa.</td></tr>
+  <tr><td><code>[7 2 50]</code></td><td>Frazione o località</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.sede_attivita</code> — compilato solo se diverso dalla sede dell'impresa.</td></tr>
+  <tr><td><code>[7 2 60]</code></td><td>Via, viale, piazza, ...</td><td>Obbligatorio se presente [7 2 70]</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.sede_attivita</code> — compilato solo se diverso dalla sede dell'impresa.</td></tr>
+  <tr><td><code>[7 2 70]</code></td><td>Nr. civico</td><td>Obbligatorio</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.sede_attivita</code> — compilato solo se diverso dalla sede dell'impresa.</td></tr>
+  <tr><td><code>[7 2 80]</code></td><td>Presso od altre indicazioni</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.sede_attivita</code> — compilato solo se diverso dalla sede dell'impresa.</td></tr>
+  <tr><td><code>[7 2 100]</code></td><td>Informazioni supplementari (80 car.)</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>[7 2 110]</code></td><td>Presso appositi locali dell'abitazione (scelta)</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.sede_attivita</code> — modalità di esercizio dichiarata dal consulente.</td></tr>
+  <tr><td><code>[7 2 120]</code></td><td>Presso il richiedente la prestazione (scelta)</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.sede_attivita</code> — modalità di esercizio dichiarata dal consulente.</td></tr>
+  <tr><td><code>[7 2 130]</code></td><td>Presso altra sede designata (scelta)</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.sede_attivita</code> — modalità di esercizio dichiarata dal consulente.</td></tr>
+  <tr><td><code>[7 2 140]</code></td><td>In forma ambulante o di posteggio (scelta)</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.sede_attivita</code> — modalità di esercizio dichiarata dal consulente.</td></tr>
+</table>
+
+<p class="source">Fonte: <a href="specs/MODULO_I1-dd18-02-26.txt"><code>MODULO_I1-dd18-02-26.txt</code></a> (sez. AA) + <code>MODULO_I2dd18-02-26.txt</code> (sez. AB) + <a href="specs/RI-DM-modulistica.txt"><code>RI-DM-modulistica.txt</code></a> (modulo Intercalare AA "7")</p>
+
+<h3 id="modulo-rp">3.4 Modulo RP — Riepilogo Pratica</h3>
+<p>Il modulo RP è obbligatorio in ogni pratica RI e funge da riepilogo di tutti gli elementi costituenti la pratica (file-pratica U3T e allegati). Corrisponde al "file-Riepilogo" (.U3R) che gestisce in modo integrale la pratica dalla preparazione alla protocollazione senza perdita di documenti allegati.</p>
+
+<table class="ri-input">
+  <tr><th>Campo</th><th>Significato</th><th>Quando compilare</th><th>Origine</th><th>Come compilare</th></tr>
+  <tr><td colspan="5" class="row-section">Riquadro 1 — Riepilogo elementi (occorrenze ripetute per ciascun file)</td></tr>
+  <tr><td><code>[O 1 10] NomeFile</code></td><td>Nome completo del file con estensione (80 car., allineato a sinistra)</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Generato dal software di compilazione pratica</td></tr>
+  <tr><td><code>[O 1 20] TipoDocumento</code></td><td>Tipo documento da tabella DOC (3 car., es. DIS=Distinta FEDRA, U3T=File Dati FEDRA, B00=Bilancio PDF/A, C01=Atto Costitutivo, V01=Verbale, NI=Nota Integrativa, ...)</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Determinato dal sistema in base al documento allegato</td></tr>
+  <tr><td><code>[O 1 30] DescrizioneDoc</code></td><td>Descrizione del documento (77 car.). Per codici 98 e 99 è testo libero; altrimenti decodifica da DOC</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Decodifica da tabella DOC</td></tr>
+  <tr><td><code>[O 1 40] PaginaIniziale</code></td><td>Numero pagina iniziale del TipoDocumento dentro il file (4 cifre con zero-pad). Per U3T sempre 1</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Calcolato dal software</td></tr>
+  <tr><td><code>[O 1 50] PaginaFinale</code></td><td>Numero pagina finale (4 cifre). Per U3T sempre 1</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Calcolato dal software</td></tr>
+  <tr><td><code>[O 1 60] CodiceAtto</code></td><td>Codice atto da tabella ATT (3 car., es. 711/712 bilanci; A99 atto generico con descrizione libera). Blank se non riconducibile ad atto</td><td>Obbligatorio se documento è un atto</td><td><span class="org org-auto">Auto</span></td><td>Per la DI di norma blank (nessun atto)</td></tr>
+  <tr><td><code>[O 1 70] DescrizioneAtto</code></td><td>Descrizione atto (77 car.). Per codice A99 testo libero; altrimenti decodifica da ATT</td><td>Obbligatorio se [O 1 60] presente</td><td><span class="org org-auto">Auto</span></td><td>Decodifica da tabella ATT; blank se nessun atto</td></tr>
+  <tr><td><code>[O 1 80] DataDocumento</code></td><td>Data documento (ggmmaaaa). Per bilanci = data chiusura esercizio</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Data di generazione/firma del documento</td></tr>
+  <tr><td><code>[O 1 100] FlagProspetto</code></td><td>"P" se documento è prospetto in file strutturato (es. Prospetto Contabile o Nota Integrativa dentro un Bilancio); altrimenti blank</td><td>Obbligatorio se prospetto</td><td><span class="org org-na">NA</span></td><td>Non applicabile: prospetti/bilancio sono documenti societari, non depositati dalla ditta individuale.</td></tr>
+  <tr><td><code>[O 1 140] ModoBollo</code></td><td>Modalità assolvimento imposta di bollo (tabella BOL). Obbligatorio solo per TipoDocumento=DIS</td><td>Obbligatorio solo per Distinta FEDRA</td><td><span class="org org-auto">Auto</span></td><td>Impostato dal sistema sulla Distinta</td></tr>
+</table>
+<p style="font-size:0.92em;color:#6b7280;font-style:italic">Nota: per documenti strutturati (es. Bilancio PDF con Prospetto Contabile + Nota Integrativa) si inseriscono occorrenze separate con stesso NomeFile ma TipoDocumento, range pagine e FlagProspetto diversi.</p>
+
+<p class="source">Fonti: <a href="specs/allegatoA.txt"><code>allegatoA.txt</code></a> (sez. 8 File-Riepilogo, v7.0); <a href="specs/TABELLA_DOC.txt"><code>TABELLA_DOC.txt</code></a></p>
+
+<h3 id="ri-pdf">3.5 File-distinta (PDF firmato)</h3>
+<p>Il <strong>file-distinta</strong> <code>B12P2837.PDF.P7M</code> è la visura a quadri leggibile della pratica RI, firmata digitalmente <strong>CAdES</strong> dal dichiarante/intermediario; è il documento legale di sottoscrizione (i dati machine-readable stanno nel file-pratica FEDRA, vedi <a href="#fedra">Appendice A</a>).</p>
+
+<!-- ============= AGENZIA ENTRATE ============= -->
+<h2 id="ade">4. Modulistica AdE — solo AA9/12</h2>
+<p>AdE riceve la dichiarazione di inizio/variazione/cessazione attività ai fini IVA. Per la ditta individuale si usa il modello <code>AA9/12</code>; il modello <code>AA7/10</code> (società ed enti) è fuori scope.</p>
+
+<h3 id="modulo-aa9-12">4.1 Modello AA9/12 — dichiarazione IVA persone fisiche</h3>
+<p>Il modello AA9/12 è utilizzato da imprese individuali e lavoratori autonomi per le dichiarazioni previste dall'art. 35 del DPR 633/1972. Supporta inizio attività, variazione dati, cessazione attività e richiesta di duplicato del certificato P.IVA, da presentare entro 30 giorni dall'evento.</p>
+
+<table class="ri-input">
+  <tr><th>Campo</th><th>Significato</th><th>Quando compilare</th><th>Origine</th><th>Come compilare</th></tr>
+  <tr><td colspan="5" class="row-section">Frontespizio</td></tr>
+  <tr><td><code>codice_fiscale</code></td><td>Codice fiscale del contribuente in alto su tutte le pagine</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ssn</code> (prepop. da <code>User.ssn</code>) — </td></tr>
+  <tr><td><code>numero_pagina</code></td><td>Numero progressivo di pagina</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Generato in fase di compilazione modello</td></tr>
+  <tr><td colspan="5" class="row-section">Quadro A — Tipo dichiarazione</td></tr>
+  <tr><td><code>casella 1</code></td><td>INIZIO ATTIVITÀ (anche donazione/cessione, modificazione società in ditta individuale, successione)</td><td>Obbligatorio se inizio (esclusivo con 2/3/4)</td><td><span class="org org-auto">Auto</span></td><td>Determinato dal tipo di pratica (flusso APERTURA_IMPRESA_INDIVIDUALE → inizio attività)</td></tr>
+  <tr><td><code>casella 2</code></td><td>VARIAZIONE DATI già comunicati; vale anche per nuova attività aggiuntiva o cessazione parziale</td><td>Obbligatorio se variazione (esclusivo con 1/3/4)</td><td><span class="org org-auto">Auto</span></td><td>Determinato dal tipo di pratica</td></tr>
+  <tr><td><code>casella 3</code></td><td>CESSAZIONE ATTIVITÀ</td><td>Obbligatorio se cessazione totale (esclusivo con 1/2/4)</td><td><span class="org org-auto">Auto</span></td><td>Determinato dal tipo di pratica</td></tr>
+  <tr><td><code>casella 4</code></td><td>DUPLICATO CERTIFICATO P.IVA (per smarrimento)</td><td>Obbligatorio se richiesta duplicato</td><td><span class="org org-auto">Auto</span></td><td>Determinato dal tipo di pratica</td></tr>
+  <tr><td><code>casella L</code></td><td>Liquidazione ordinaria azienda (vale come comunicazione art. 182 TUIR)</td><td>Obbligatorio se liquidazione (in aggiunta a casella 2)</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td><code>partita_iva</code></td><td>P.IVA già attribuita</td><td>Obbligatorio se variazione/cessazione/duplicato; non in inizio</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>User.vat</code> — Vuoto in caso di inizio (P.IVA non ancora attribuita)</td></tr>
+  <tr><td><code>data_evento</code></td><td>Data inizio/variazione/cessazione (non successiva alla presentazione)</td><td>Obbligatorio (non richiesta per duplicato)</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> (prepop. da <code>User.business_start</code>) — In inizio attività = data inizio P.IVA</td></tr>
+  <tr><td colspan="5" class="row-section">Quadro B — Soggetto d'imposta</td></tr>
+  <tr><td><code>ditta_o_cognome_nome</code></td><td>Denominazione ditta oppure cognome+nome del contribuente</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.denominazione</code> (prepop. da <code>User.business_name</code>) / <code>User.last_name</code> + <code>User.first_name</code> — Ditta individuale: di norma cognome e nome; business_name se denominazione presente</td></tr>
+  <tr><td><code>indirizzo_sede_estera</code></td><td>Indirizzo sede estera per soggetti non residenti</td><td>Obbligatorio per non residenti</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td><code>numero_identificazione_iva_estero</code></td><td>Numero identificazione IVA UE</td><td>Obbligatorio per soggetti UE</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td><code>codice_attivita</code></td><td>Codice ATECO attività prevalente</td><td>Sempre obbligatorio (in variazione solo se modificato)</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.atecos</code>) (primaria) — Primo ATECO dell'elenco = attività prevalente</td></tr>
+  <tr><td><code>descrizione_attivita</code></td><td>Descrizione attività</td><td>Sempre obbligatorio (in variazione solo se modificata)</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>AtecoCode.description</code>) — Derivata dal codice ATECO prevalente</td></tr>
+  <tr><td><code>volume_affari_presunto</code></td><td>Volume d'affari presunto in unità di euro (per regimi speciali)</td><td>Obbligatorio se inizio in regime speciale; non per forfetario</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td><code>acquisti_intra_art_60bis</code></td><td>Acquisti intracomunitari ex art. 60-bis</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>indirizzo_attivita</code></td><td>Indirizzo sede impresa/studio</td><td>Obbligatorio se inizio o variazione indirizzo</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività) — address, address_number, postcode, municipality, province, country</td></tr>
+  <tr><td><code>scritture_contabili_sede</code></td><td>Scritture conservate nel luogo indicato</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>regime_agevolato</code></td><td>1=Regime di vantaggio imprenditoria giovanile (DL 98/2011); 2=Forfetario (L. 190/2014)</td><td>Obbligatorio se inizio con regime; in variazione se cambio regime</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.regime_fiscale</code> (prepop. da <code>FiscalRegime.fiscal_regime</code>) — Mappa a codice 2 (Forfetario) per i regimi forfettari Fiscozen</td></tr>
+  <tr><td><code>indirizzo_sito_web</code></td><td>Indirizzo del sito web e-commerce</td><td>Obbligatori se e-commerce</td><td><span class="org org-cli">Cliente</span></td><td>Indirizzo del sito web e-commerce: dato specifico da acquisire (non è un'iscrizione ad albo/licenza/SCIA).</td></tr>
+  <tr><td><code>sito_proprio</code></td><td>Sito su server proprio (scelta)</td><td>Obbligatori se e-commerce</td><td><span class="org org-cli">Cliente</span></td><td>Indirizzo del sito web e-commerce: dato specifico da acquisire (non è un'iscrizione ad albo/licenza/SCIA).</td></tr>
+  <tr><td><code>sito_ospitante</code></td><td>Estremi del sito ospitante</td><td>Obbligatori se e-commerce</td><td><span class="org org-cli">Cliente</span></td><td>Indirizzo del sito web e-commerce: dato specifico da acquisire (non è un'iscrizione ad albo/licenza/SCIA).</td></tr>
+  <tr><td><code>internet_service_provider</code></td><td>Dati dell'internet service provider</td><td>Obbligatori se e-commerce</td><td><span class="org org-cli">Cliente</span></td><td>Indirizzo del sito web e-commerce: dato specifico da acquisire (non è un'iscrizione ad albo/licenza/SCIA).</td></tr>
+  <tr><td><code>cessazione_ecommerce</code></td><td>Cessazione del solo commercio elettronico</td><td>Obbligatorio se variazione con cessazione e-commerce</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td colspan="5" class="row-section">Quadro C — Titolare</td></tr>
+  <tr><td><code>codice_fiscale_titolare</code></td><td>CF del titolare</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ssn</code> (prepop. da <code>User.ssn</code>) — </td></tr>
+  <tr><td><code>cognome_nome_titolare</code></td><td>Cognome+nome (donne coniugate: cognome da nubile)</td><td>Obbligatorio se non già riportato come ditta in B</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>User.last_name</code> + <code>User.first_name</code> — cognome e nome del titolare (non derivabili dal CF).</td></tr>
+  <tr><td><code>sesso</code></td><td>Sesso</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ssn</code> (prepop. da <code>User.gender</code>), <code>User.birth_date</code>, <code>User.birth_municipality</code>, <code>User.birth_province</code> — gender derivato dal CF (carattere 9 → M/F); EE se nato all'estero (birth_country)</td></tr>
+  <tr><td><code>data_di_nascita</code></td><td>Data di nascita</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ssn</code> (prepop. da <code>User.gender</code>), <code>User.birth_date</code>, <code>User.birth_municipality</code>, <code>User.birth_province</code> — gender derivato dal CF (carattere 9 → M/F); EE se nato all'estero (birth_country)</td></tr>
+  <tr><td><code>comune_di_nascita</code></td><td>Comune di nascita (EE per estero)</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ssn</code> (prepop. da <code>User.gender</code>), <code>User.birth_date</code>, <code>User.birth_municipality</code>, <code>User.birth_province</code> — gender derivato dal CF (carattere 9 → M/F); EE se nato all'estero (birth_country)</td></tr>
+  <tr><td><code>provincia_di_nascita</code></td><td>Provincia di nascita (EE per estero)</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ssn</code> (prepop. da <code>User.gender</code>), <code>User.birth_date</code>, <code>User.birth_municipality</code>, <code>User.birth_province</code> — gender derivato dal CF (carattere 9 → M/F); EE se nato all'estero (birth_country)</td></tr>
+  <tr><td><code>residenza_anagrafica</code></td><td>Comune, provincia, indirizzo completo residenza (= domicilio fiscale ex art. 58 DPR 600/1973)</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress</code>) (kind=Residenza) — address, address_number, postcode, municipality, province</td></tr>
+  <tr><td><code>scritture_contabili_residenza</code></td><td>Scritture presso residenza</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">Quadro D — Rappresentante</td></tr>
+  <tr><td><code>codice_carica</code></td><td>1=Rappresentante legale; 2=Rappresentante minore/inabilitato; 3=Curatore fallimentare; 5=Custode/amministratore giudiziario; 6=Rappresentante fiscale non residente; 7=Erede; 10=Rappresentante fiscale con limitazioni art. 44 c. 3</td><td>Obbligatorio se rappresentante diverso dal contribuente</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.regimi_speciali_ade</code> — valorizzato (codice 6) solo se è indicato il rappresentante fiscale del non residente; le altre cariche (curatore, erede, ...) sono fuori dal flusso standard.</td></tr>
+  <tr><td><code>codice_fiscale_rappresentante + dati_anagrafici</code></td><td>CF e anagrafica del rappresentante</td><td>Obbligatorio se Quadro D compilato</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.regimi_speciali_ade</code> — CF e anagrafica del rappresentante fiscale forniti dal consulente.</td></tr>
+  <tr><td><code>codice_fiscale_societa_rappresentante_fiscale</code></td><td>CF società rappresentante fiscale</td><td>Obbligatorio se rappresentante è società</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.regimi_speciali_ade</code> — solo se il rappresentante fiscale è una società.</td></tr>
+  <tr><td><code>data_inizio_procedimento</code></td><td>Data provvedimento nomina</td><td>Obbligatorio se codice carica 3 o 5</td><td><span class="org org-auto">Auto</span></td><td>Vuoto: le cariche 3/5 (curatore fallimentare, custode giudiziario) sono fuori dal flusso standard Fiscozen; il Quadro D è prodotto solo per il rappresentante fiscale (codice 6).</td></tr>
+  <tr><td><code>cessazione_rappresentante</code></td><td>Cessazione figura rappresentante</td><td>Obbligatorio in variazione se cessazione</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td colspan="5" class="row-section">Quadro E — Operazioni straordinarie/affitto azienda</td></tr>
+  <tr><td><code>1a Cessione/donazione azienda totale</code></td><td>Estingue P.IVA cedente</td><td>Compilato da cessionario (tipo 1 o 2)</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td><code>1b Modificazione società in ditta</code></td><td>Estingue la società</td><td>Compilato da ditta individuale (tipo 1)</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td><code>1c Successione ereditaria</code></td><td>Prosecuzione attività dell'erede</td><td>Compilato dall'erede (tipo 1 o 2)</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td><code>codici_fiscali_partite_iva_cedenti</code></td><td>P.IVA/CF dei soggetti cedenti</td><td>Obbligatorio se 1a/1b/1c</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td><code>2a Cessione ramo azienda</code></td><td>Cedente mantiene P.IVA</td><td>Compilato da cessionario</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td><code>PL sez1 / PL sez2</code></td><td>Subentro/trasferimento beneficio plafond</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>3 Mantenimento P.IVA</code></td><td>Trasferimento azienda con P.IVA mantenuta per liquidazione</td><td>Compilato da cedente (tipo 2)</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td><code>4 Acquisizione in affitto</code></td><td>Affitto azienda con trasferimento plafond</td><td>Compilato da affittuario</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td><code>5 Affitto unica azienda</code></td><td>Sospensione attività locatore</td><td>Compilato da locatore (tipo 2)</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td><code>6 Revoca affitto</code></td><td>Ripresa attività</td><td>Compilato da locatore (tipo 2)</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td colspan="5" class="row-section">Quadro F — Luoghi conservazione scritture</td></tr>
+  <tr><td><code>tipo_comunicazione (A/C) + codice_fiscale_depositario + luogo_conservazione</code></td><td>Sez. 1: depositari/luoghi (A=apertura, C=cessazione)</td><td>Obbligatorio se depositario esterno</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td><code>tipo_comunicazione_estero + luogo_estero</code></td><td>Sez. 2: conservazione fatture all'estero (art. 39)</td><td>Obbligatorio se conservazione estera</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td colspan="5" class="row-section">Quadro G — Altre attività esercitate</td></tr>
+  <tr><td><code>tipo_comunicazione</code></td><td>Sez. 1 — Tipo comunicazione (A=apertura, C=cessazione)</td><td>Obbligatorio per ogni attività</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.atecos</code>) (secondarie) + <code>AtecoCode.description</code> — ATECO secondari oltre la prevalente; volume affari richiesto al cliente se applicabile</td></tr>
+  <tr><td><code>codice_attivita_secondaria</code></td><td>Sez. 1 — Codice ATECO attività secondaria</td><td>Obbligatorio per ogni attività</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.atecos</code>) (secondarie) + <code>AtecoCode.description</code> — ATECO secondari oltre la prevalente; volume affari richiesto al cliente se applicabile</td></tr>
+  <tr><td><code>descrizione_attivita_secondaria</code></td><td>Sez. 1 — Descrizione attività secondaria</td><td>Obbligatorio per ogni attività</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.atecos</code>) (secondarie) + <code>AtecoCode.description</code> — ATECO secondari oltre la prevalente; volume affari richiesto al cliente se applicabile</td></tr>
+  <tr><td><code>volume_affari_secondaria</code></td><td>Sez. 1 — Volume d'affari attività secondaria</td><td>Se applicabile</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.atecos</code>) (secondarie) + <code>AtecoCode.description</code> — ATECO secondari oltre la prevalente; volume affari richiesto al cliente se applicabile</td></tr>
+  <tr><td><code>contabilita_separata</code></td><td>Sez. 1 — Contabilità separata</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ateco</code> (prepop. da <code>UserAteco.atecos</code>) (secondarie) + <code>AtecoCode.description</code> — ATECO secondari oltre la prevalente; volume affari richiesto al cliente se applicabile</td></tr>
+  <tr><td><code>Sez. 2: tipo_comunicazione + tipo_sede (1=Filiale, 2=Succursale, 3=Magazzino, 4=Stabilimento, 5=Ufficio, 6=Negozio, 7=Deposito, 8=Laboratorio, 9=Cantieri estero, A=Altri) + indirizzo + scritture</code></td><td>Altri luoghi esercizio</td><td>Obbligatorio per ogni sede</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td colspan="5" class="row-section">Quadro H — Presunzione cessione (rappresentanza, art. 1 c. 4 DPR 441/1997)</td></tr>
+  <tr><td><code>partita_iva_rappresentante</code></td><td>P.IVA del rappresentante che riceve depositi</td><td>Obbligatorio se variazione per costituzione rappresentanza</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+  <tr><td colspan="5" class="row-section">Quadro I — Altre info inizio attività</td></tr>
+  <tr><td><code>indirizzo_posta_elettronica</code></td><td>Indirizzo di posta elettronica</td><td>Obbligatorio in inizio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.email</code> (prepop. da <code>User.email</code>) (o <code>User.pec</code>), <code>User.phone</code> — Email e telefono in DB; fax/sito web opzionali e non valorizzati</td></tr>
+  <tr><td><code>numero_telefono</code></td><td>Numero di telefono</td><td>Obbligatorio in inizio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.email</code> (prepop. da <code>User.email</code>) (o <code>User.pec</code>), <code>User.phone</code> — Email e telefono in DB; fax/sito web opzionali e non valorizzati</td></tr>
+  <tr><td><code>numero_fax</code></td><td>Numero di fax</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.email</code> (prepop. da <code>User.email</code>) (o <code>User.pec</code>), <code>User.phone</code> — Email e telefono in DB; fax/sito web opzionali e non valorizzati</td></tr>
+  <tr><td><code>sito_web_aggiuntivo</code></td><td>Sito web</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.email</code> (prepop. da <code>User.email</code>) (o <code>User.pec</code>), <code>User.phone</code> — Email e telefono in DB; fax/sito web opzionali e non valorizzati</td></tr>
+  <tr><td><code>titolarita_immobile</code></td><td>Titolarità immobile (P=Possesso, D=Detenzione)</td><td>Obbligatorio in inizio</td><td><span class="org org-cli">Cliente</span></td><td>Titolarità e dati catastali dell'immobile sede attività: non presenti in alcuna fonte interna, da chiedere al cliente in fase di apertura.</td></tr>
+  <tr><td><code>estremi_registrazione_contratto</code></td><td>Estremi registrazione contratto</td><td>Obbligatorio se Detenzione</td><td><span class="org org-cli">Cliente</span></td><td>Titolarità e dati catastali dell'immobile sede attività: non presenti in alcuna fonte interna, da chiedere al cliente in fase di apertura.</td></tr>
+  <tr><td><code>tipo_catasto</code></td><td>Tipo catasto (F=Fabbricati, T=Terreni)</td><td>Obbligatorio in inizio</td><td><span class="org org-cli">Cliente</span></td><td>Titolarità e dati catastali dell'immobile sede attività: non presenti in alcuna fonte interna, da chiedere al cliente in fase di apertura.</td></tr>
+  <tr><td><code>dati_catastali</code></td><td>Dati catastali dell'immobile</td><td>Obbligatorio in inizio</td><td><span class="org org-cli">Cliente</span></td><td>Titolarità e dati catastali dell'immobile sede attività: non presenti in alcuna fonte interna, da chiedere al cliente in fase di apertura.</td></tr>
+  <tr><td><code>operazioni_intracomunitarie_vies</code></td><td>Manifestazione volontà inclusione VIES (provv. 15/12/2014)</td><td>Obbligatorio se inclusione VIES</td><td><span class="org org-es">Comm</span></td><td>Da <code>InputCommercialista.regimi_speciali_ade</code> — adesione VIES dichiarata dal consulente (vedi diagramma §1, ramo "operazioni con l'estero").</td></tr>
+  <tr><td><code>tipologia_clientela (1=Imprese, 2=Enti pubblici, 3=Consumatori finali, 4=Altra) + luogo_aperto_pubblico + investimenti_iniziali</code></td><td>Dati attività (solo se ricade in provv. 21/12/2006)</td><td>Obbligatori in inizio se applicabile</td><td><span class="org org-auto">Auto</span></td><td>Caso non standard (provv. 21/12/2006): precompilato assumendo che non vi ricada.</td></tr>
+  <tr><td colspan="5" class="row-section">Allegati / firma</td></tr>
+  <tr><td><code>allegati</code></td><td>Elenco allegati</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Generati in fase di compilazione modello (quadri compilati, conteggio pagine, CF firmatario = titolare).</td></tr>
+  <tr><td><code>quadri_compilati</code></td><td>Quadri compilati</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Generati in fase di compilazione modello (quadri compilati, conteggio pagine, CF firmatario = titolare).</td></tr>
+  <tr><td><code>numero_totale_pagine</code></td><td>Numero totale pagine</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Generati in fase di compilazione modello (quadri compilati, conteggio pagine, CF firmatario = titolare).</td></tr>
+  <tr><td><code>codice_fiscale_firmatario</code></td><td>CF firmatario</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Generati in fase di compilazione modello (quadri compilati, conteggio pagine, CF firmatario = titolare).</td></tr>
+  <tr><td><code>firma_dichiarazione</code></td><td>Firma della dichiarazione</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Generati in fase di compilazione modello (quadri compilati, conteggio pagine, CF firmatario = titolare).</td></tr>
+  <tr><td colspan="5" class="row-section">Delega / intermediario</td></tr>
+  <tr><td><code>delegato</code></td><td>Dati persona incaricata della presentazione</td><td>Obbligatorio se presentazione delegata</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>nuovi modelli business_registration</code> — Delega a Fiscozen raccolta nel flusso APERTURA_IMPRESA_INDIVIDUALE</td></tr>
+  <tr><td><code>codice_fiscale_intermediario + numero_iscrizione_albo_CAF + data_impegno + dichiarazione_predisposta_da + firma_intermediario</code></td><td>Impegno alla presentazione telematica</td><td>Obbligatori se trasmissione via intermediario</td><td><span class="org org-auto">Auto</span></td><td>Operazione non standard per impresa individuale: precompilato assumendo che non venga effettuata.</td></tr>
+</table>
+
+<p class="source">Fonte: <a href="https://www.agenziaentrate.gov.it/portale/web/guest/schede/istanze/aa9_11-apertura-variazione-chiusura-pf/modello-e-istr-pi-pf">Modello e istruzioni AA9/12</a>; <a href="https://www.agenziaentrate.gov.it/portale/web/guest/schede/istanze/aa9_11-apertura-variazione-chiusura-pf/specifiche-tecniche-iva-modello-aa9_12">Specifiche tecniche AA9/12</a> — AdE</p>
+
+<h3 id="ade-pdf">4.2 File-distinta (PDF firmato)</h3>
+<p>Il <strong>file-distinta-della-dichiarazione</strong> <code>B12P2837.IVA.PDF.P7M</code> è la stampa PDF del modello AA9/12, firmata digitalmente <strong>CAdES</strong> dal dichiarante/intermediario.</p>
+
+<!-- ============= INAIL ============= -->
+<h2 id="inail">5. Modulistica INAIL</h2>
+<p>Tutti i moduli INAIL sono incapsulati nell'XSD <code>InvioDenunce.xsd</code> (namespace <code>http://inail.it/denunce/online/InvioDenunce.xsd</code>), root <code>Invio_Denunce</code>. Le tre operazioni sono elementi ricorrenti. Il root richiede sempre, prima delle operazioni, l'intestazione <code>InfoDenuncia</code>:</p>
+
+<table class="ri-input">
+  <tr><th>Campo</th><th>Significato</th><th>Quando compilare</th><th>Origine</th><th>Come compilare</th></tr>
+  <tr><td colspan="5" class="row-section">InfoDenuncia — intestazione del file (obbligatoria, una per invio)</td></tr>
+  <tr><td><code>UtenzaInvio</code></td><td>CF dell'utente che effettua l'invio (userid, pattern codice fiscale)</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>CF dell'intermediario abilitato Fiscozen che trasmette.</td></tr>
+  <tr><td><code>Nome</code></td><td>Nome dell'utente che invia</td><td>Sempre obbligatori</td><td><span class="org org-auto">Auto</span></td><td>Dati dell'intermediario Fiscozen, non del cliente.</td></tr>
+  <tr><td><code>Cognome</code></td><td>Cognome dell'utente che invia</td><td>Sempre obbligatori</td><td><span class="org org-auto">Auto</span></td><td>Dati dell'intermediario Fiscozen, non del cliente.</td></tr>
+  <tr><td><code>Ind</code></td><td>Indirizzo dell'utente (DomicilioType)</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>TipoUtente</code></td><td>Enum: ServiziAssociazioneCategoria / Consulente / ProfessionistaAbilitato / Titolare / Tributarista</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Costante: profilo dell'intermediario Fiscozen (TipoUtenteType).</td></tr>
+  <tr><td><code>Referente</code></td><td>Codice (CF), Associazione (11 cifre), Nome, Denominazione, Cognome — tutti opzionali</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>DataComunicazione</code></td><td>Data della comunicazione (yyyy-MM-dd)</td><td>Sempre obbligatori</td><td><span class="org org-auto">Auto</span></td><td>Calcolati al momento della trasmissione.</td></tr>
+  <tr><td><code>OraComunicazione</code></td><td>Ora della comunicazione (hh:mm)</td><td>Sempre obbligatori</td><td><span class="org org-auto">Auto</span></td><td>Calcolati al momento della trasmissione.</td></tr>
+  <tr><td><code>subdelegato</code></td><td>Attributo booleano dell'elemento InfoDenuncia</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+</table>
+
+<h3 id="inail-iscrizione">5.1 INAIL — Operazione Iscrizione</h3>
+<p>Operazione per registrare una nuova ditta presso l'INAIL e dichiarare anagrafica, posizioni assicurative (PAT), artigiani e rischi specifici. Struttura: QuadroA (anagrafica), A1 (delegati), B (PAT) → D/D1 (artigiani), O (silicosi/asbestosi). I quadri C/C1 (dipendenti) sono fuori scope MVP.</p>
+
+<table class="ri-input">
+  <tr><th>Campo</th><th>Significato</th><th>Quando compilare</th><th>Origine</th><th>Come compilare</th></tr>
+  <tr><td colspan="5" class="row-section">Iscrizione_Ditta — attributi elemento (ripetibile)</td></tr>
+  <tr><td><code>dataInvio</code></td><td>Data invio (yyyy-MM-dd)</td><td>Opzionali</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>origine</code></td><td>Origine (valore fisso "X")</td><td>Opzionali</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">QuadroA — Anagrafica ditta</td></tr>
+  <tr><td><code>DataInizioAttivita</code></td><td>Data inizio attività</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> (prepop. da <code>User.business_start</code>) — Data inizio attività della ditta.</td></tr>
+  <tr><td><code>CodiceFiscaleDitta</code></td><td>CF ditta</td><td>Opzionale (può essere omesso)</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ssn</code> (prepop. da <code>User.ssn</code>) / <code>User.vat</code> — Per ditta individuale il CF ditta coincide con il CF del titolare (<code>User.ssn</code>); la P.IVA è in <code>User.vat</code>.</td></tr>
+  <tr><td><code>RagioneSociale</code></td><td>Ragione sociale</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.denominazione</code> (prepop. da <code>User.business_name</code>) — Max 60 char (Stringa60Type).</td></tr>
+  <tr><td><code>TipoNaturaGiuridica</code></td><td>Natura giuridica (Individuale, SNC, SAS, SRL, SPA, SCRI, SCRL, EPT, EPNT, Associazione no profit, ...)</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Target Fiscozen = ditte individuali → costante <code>"Individuale"</code> (enum TipoNaturaGiuridicaType).</td></tr>
+  <tr><td><code>DataCostituzioneDitta</code></td><td>Data costituzione ditta</td><td>Opzionali</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>User.business_start_chamber_of_commerce</code> — Solo <code>DataIscrizioneCCIAA</code> mappa (data iscrizione CCIAA); numero/iscrizione CCIAA non presenti in Fiscozen → Cliente se richiesti. Le ditte individuali non artigiane spesso non sono iscritte alla CCIAA: campi opzionali.</td></tr>
+  <tr><td><code>IscrizioneCCIAA</code></td><td>Flag iscrizione CCIAA</td><td>Opzionali</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>User.business_start_chamber_of_commerce</code> — Solo <code>DataIscrizioneCCIAA</code> mappa (data iscrizione CCIAA); numero/iscrizione CCIAA non presenti in Fiscozen → Cliente se richiesti. Le ditte individuali non artigiane spesso non sono iscritte alla CCIAA: campi opzionali.</td></tr>
+  <tr><td><code>DataIscrizioneCCIAA</code></td><td>Data iscrizione CCIAA</td><td>Opzionali</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>User.business_start_chamber_of_commerce</code> — Solo <code>DataIscrizioneCCIAA</code> mappa (data iscrizione CCIAA); numero/iscrizione CCIAA non presenti in Fiscozen → Cliente se richiesti. Le ditte individuali non artigiane spesso non sono iscritte alla CCIAA: campi opzionali.</td></tr>
+  <tr><td><code>NumeroIscrizioneCCIAA</code></td><td>Numero iscrizione CCIAA</td><td>Opzionali</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>User.business_start_chamber_of_commerce</code> — Solo <code>DataIscrizioneCCIAA</code> mappa (data iscrizione CCIAA); numero/iscrizione CCIAA non presenti in Fiscozen → Cliente se richiesti. Le ditte individuali non artigiane spesso non sono iscritte alla CCIAA: campi opzionali.</td></tr>
+  <tr><td><code>Postuma</code></td><td>Info riattivazione postuma (DataCessazione + CausaleCessazione)</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>NumeroDipendentiDitta</code></td><td>Range: Nessuno / Da 1 a 15 / 16-30 / 31-100 / 101-250 / Oltre 250</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Costante = <code>Nessuno</code> (dipendenti fuori scope MVP).</td></tr>
+  <tr><td><code>RichiestaPagamento</code></td><td>SI/NO</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Impostazione di default della denuncia INAIL.</td></tr>
+  <tr><td><code>SedeLegale</code></td><td>Indirizzo sede legale</td><td>Opzionali</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività / Residenza) — Sede legale = sede attività (<code>UserAddress</code> kind=Attività); corrispondenza = residenza (kind=Residenza). Campi: address, address_number, postcode, municipality, province.</td></tr>
+  <tr><td><code>SedeCorrispondenza</code></td><td>Indirizzo sede corrispondenza</td><td>Opzionali</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività / Residenza) — Sede legale = sede attività (<code>UserAddress</code> kind=Attività); corrispondenza = residenza (kind=Residenza). Campi: address, address_number, postcode, municipality, province.</td></tr>
+  <tr><td><code>LegaleRappresentante</code></td><td>Anagrafica + Domicilio + TipoResponsabilita</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>Art70</code></td><td>Restituzione indennità (modalità, IBAN, BIC, domicilio alternativo)</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">QuadroA1 — Soggetti delegati</td></tr>
+  <tr><td><code>DataInizioDelega</code></td><td>Data inizio delega</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Delega all'intermediario abilitato Fiscozen: compilata con i dati dello studio (CF, iscrizione albo), non del cliente.</td></tr>
+  <tr><td><code>DataFineDelega</code></td><td>Data fine delega</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Delega all'intermediario abilitato Fiscozen: compilata con i dati dello studio (CF, iscrizione albo), non del cliente.</td></tr>
+  <tr><td><code>AmpiezzaDelega</code></td><td>Minima / Media / Massima / Totale</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Costante: ampiezza della delega dell'intermediario Fiscozen.</td></tr>
+  <tr><td><code>Anagrafica</code></td><td>Anagrafica del delegato</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Delega all'intermediario abilitato Fiscozen: compilata con i dati dello studio (CF, iscrizione albo), non del cliente.</td></tr>
+  <tr><td><code>Domicilio</code></td><td>Domicilio del delegato</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Delega all'intermediario abilitato Fiscozen: compilata con i dati dello studio (CF, iscrizione albo), non del cliente.</td></tr>
+  <tr><td><code>TipoAlboProfessionale</code></td><td>Tipo albo professionale</td><td>AlboProfessionale sempre obbligatorio; gli altri se ≠ Nessun Albo</td><td><span class="org org-auto">Auto</span></td><td>Albo professionale dell'intermediario delegato Fiscozen (costante di studio).</td></tr>
+  <tr><td><code>AlboProfessionale</code></td><td>Albo (Commercialisti, Ragionieri, Consulenti del lavoro, Nessun Albo, Altri)</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Albo professionale dell'intermediario delegato Fiscozen (costante di studio).</td></tr>
+  <tr><td><code>NumeroIscrizioneAlboSD</code></td><td>Numero iscrizione albo</td><td>Obbligatorio se ≠ Nessun Albo</td><td><span class="org org-auto">Auto</span></td><td>Albo professionale dell'intermediario delegato Fiscozen (costante di studio).</td></tr>
+  <tr><td><code>DataInizioAbilitazione</code></td><td>Data inizio abilitazione</td><td>Obbligatorio se ≠ Nessun Albo</td><td><span class="org org-auto">Auto</span></td><td>Albo professionale dell'intermediario delegato Fiscozen (costante di studio).</td></tr>
+  <tr><td><code>DataFineAbilitazione</code></td><td>Data fine abilitazione</td><td>Obbligatorio se ≠ Nessun Albo</td><td><span class="org org-auto">Auto</span></td><td>Albo professionale dell'intermediario delegato Fiscozen (costante di studio).</td></tr>
+  <tr><td colspan="5" class="row-section">QuadroB — Posizione Assicurativa Territoriale (PAT) — ripetibile</td></tr>
+  <tr><td><code>DataInizioAttivita</code></td><td>Data inizio attività PAT</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> (prepop. da <code>User.business_start</code>) — Tipicamente coincide con la data inizio attività della ditta.</td></tr>
+  <tr><td><code>SettoreAttivita</code></td><td>Industria / Artigianato / Terziario / Altre attività</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>Postuma</code></td><td>Info riattivazione postuma</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività) — SedeLavori = luogo di svolgimento delle lavorazioni → sede attività. Postuma (riattivazione) non applicabile a nuova iscrizione.</td></tr>
+  <tr><td><code>SedeLavori</code></td><td>Sede lavori (Domicilio completo)</td><td>Obbligatoria</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>) (kind=Attività) — SedeLavori = luogo di svolgimento delle lavorazioni → sede attività. Postuma (riattivazione) non applicabile a nuova iscrizione.</td></tr>
+  <tr><td><code>QuadroD, QuadroD1</code></td><td>Assicurazione artigiani</td><td>Opzionali nello XSD (ripetibili); regola applicativa: almeno uno per avere una PAT attiva</td><td><span class="org org-auto">Auto</span></td><td>Compilati per il titolare artigiano (vedi sezioni sotto).</td></tr>
+  <tr><td colspan="5" class="row-section">QuadroD — Artigiani</td></tr>
+  <tr><td><code>DataInizioValidita</code></td><td>Data inizio validità</td><td>Obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> / <code>ateco</code> — dati del titolare artigiano (iscrizione Albo contestuale alla pratica: numero attribuito dalla CCIAA).</td></tr>
+  <tr><td><code>IscrizioneAlbo</code></td><td>Flag iscrizione Albo artigiani</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> / <code>ateco</code> — dati del titolare artigiano (iscrizione Albo contestuale alla pratica: numero attribuito dalla CCIAA).</td></tr>
+  <tr><td><code>DataIscrizioneAlbo</code></td><td>Data iscrizione Albo</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> / <code>ateco</code> — dati del titolare artigiano (iscrizione Albo contestuale alla pratica: numero attribuito dalla CCIAA).</td></tr>
+  <tr><td><code>NumeroIscrizioneAlbo</code></td><td>Numero iscrizione Albo</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> / <code>ateco</code> — dati del titolare artigiano (iscrizione Albo contestuale alla pratica: numero attribuito dalla CCIAA).</td></tr>
+  <tr><td><code>SettoreAttivita</code></td><td>Settore attività</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> / <code>ateco</code> — dati del titolare artigiano (iscrizione Albo contestuale alla pratica: numero attribuito dalla CCIAA).</td></tr>
+  <tr><td><code>Postuma</code></td><td>Info riattivazione postuma</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> / <code>ateco</code> — dati del titolare artigiano (iscrizione Albo contestuale alla pratica: numero attribuito dalla CCIAA).</td></tr>
+  <tr><td><code>DescrizioneAttivita</code></td><td>Descrizione attività/lavorazione</td><td>Obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> / <code>ateco</code> — dati del titolare artigiano (iscrizione Albo contestuale alla pratica: numero attribuito dalla CCIAA).</td></tr>
+  <tr><td colspan="5" class="row-section">QuadroD1 — Retribuzioni artigiani (quadro ripetibile; un SoggettoAssicurato per quadro)</td></tr>
+  <tr><td><code>TipoResponsabilita</code></td><td>Titolare / Socio / Familiare</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Per ditta individuale → costante <code>"Titolare"</code> (enum TipoResponsabilitaPType: Titolare/Socio/Familiare).</td></tr>
+  <tr><td><code>Anagrafica</code></td><td>CF, cognome, nome, sesso, nascita, dati comunali</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Derivato dal codice fiscale: il luogo di nascita si ricava dal codice catastale nel CF (tabelle COM/PRV/STA).</td></tr>
+  <tr><td><code>DataInizioRischio</code></td><td>Data inizio lavori (rischio)</td><td>Obbligatoria</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> (prepop. da <code>User.business_start</code>) — <code>DataInizioRischio</code> (inizio lavori artigiano) ≈ data inizio attività; <code>DataFineRischio</code> non applicabile a una nuova iscrizione.</td></tr>
+  <tr><td><code>DataFineRischio</code></td><td>Data fine lavori (rischio)</td><td>Opzionale</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> (prepop. da <code>User.business_start</code>) — <code>DataInizioRischio</code> (inizio lavori artigiano) ≈ data inizio attività; <code>DataFineRischio</code> non applicabile a una nuova iscrizione.</td></tr>
+  <tr><td><code>RetribuzioneMinimale</code></td><td>Retribuzione minimale (SI/NO)</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td>Retribuzione convenzionale del titolare artigiano — input del consulente (non presente in DB).</td></tr>
+  <tr><td><code>Retribuzione</code></td><td>Importo retribuzione</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td>Retribuzione convenzionale del titolare artigiano — input del consulente (non presente in DB).</td></tr>
+  <tr><td><code>Domicilio</code></td><td>Domicilio del titolare</td><td>Obbligatori</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress</code>) (kind=Residenza) — Domicilio del titolare da residenza; <code>IncidenzaLavorazioni</code> (percentuale per lavorazione) è dato tecnico → Cliente.</td></tr>
+  <tr><td><code>IncidenzaLavorazioni</code></td><td>Incidenza percentuale per lavorazione (riferimenti a ProgressivoLavorazione)</td><td>Obbligatori</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress</code>) (kind=Residenza) — Domicilio del titolare da residenza; <code>IncidenzaLavorazioni</code> (percentuale per lavorazione) è dato tecnico → Cliente.</td></tr>
+  <tr><td><code>RetribuzioniPrecedenti</code></td><td>Retribuzioni periodi precedenti (ripetibili)</td><td>Opzionali</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto (nuova iscrizione, nessun periodo precedente).</td></tr>
+  <tr><td colspan="5" class="row-section">QuadroO — Rischi silicosi/asbestosi</td></tr>
+  <tr><td><code>DataInizioValidita</code></td><td>Inizio validità rischi</td><td>Sempre obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Coincide con la data di inizio attività dichiarata (User.business_start); per le variazioni è la data di efficacia dell'operazione impostata dal flusso.</td></tr>
+  <tr><td><code>SiliceLibera (SI/NO), Conimetria (SI/NO), Umidita, MezziPrevenzione</code></td><td>Misurazioni e prevenzione</td><td>Opzionali</td><td><span class="org org-auto">Auto</span></td><td>Precompilato assumendo nessun rischio silice/esposizione (caso non standard).</td></tr>
+  <tr><td><code>Lavorazione[]</code></td><td>DescRischio (Miniere, Sotterraneo, Amianto, ...) + RischioAmbientale (addetti+retribuzione) + RischioDiretto (addetti+retribuzione)</td><td>Almeno 1; RischioAmbientale/Diretto opzionali</td><td><span class="org org-auto">Auto</span></td><td>Precompilato assumendo nessun rischio silicosi/asbestosi (QuadroO non compilato).</td></tr>
+</table>
+
+<p class="source">Fonte: <a href="specs/InvioDenunce.xsd"><code>InvioDenunce.xsd</code></a> (operazione Iscrizione_Ditta)</p>
+
+<h3 id="inail-variazione">5.2 INAIL — Operazione Variazione</h3>
+<p>Operazione per modifiche ai dati anagrafici e alla PAT di una ditta già iscritta. Distingue Quadro0 (operazioni semplificate) da QuadroV/V2/V3 (variazioni anagrafiche complete).</p>
+
+<table class="ri-input">
+  <tr><th>Campo</th><th>Significato</th><th>Quando compilare</th><th>Origine</th><th>Come compilare</th></tr>
+  <tr><td colspan="5" class="row-section">Variazione_Ditta — attributi elemento (ripetibile)</td></tr>
+  <tr><td><code>CodiceDitta</code></td><td>Codice ditta INAIL (1-9 cifre)</td><td>Sempre obbligatori</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ssn</code> (prepop. da <code>User.ssn</code>) per il CF ditta; <code>CodiceDitta</code> = codice assegnato da INAIL in sede di iscrizione, riportato sulla ricevuta.</td></tr>
+  <tr><td><code>CodiceFiscaleDitta</code></td><td>CF ditta (11 cifre o CF 16 caratteri)</td><td>Sempre obbligatori</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ssn</code> (prepop. da <code>User.ssn</code>) per il CF ditta; <code>CodiceDitta</code> = codice assegnato da INAIL in sede di iscrizione, riportato sulla ricevuta.</td></tr>
+  <tr><td><code>dataInvio</code></td><td>Data invio (yyyy-MM-dd)</td><td>Opzionali</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>origine</code></td><td>Origine (valore fisso "X")</td><td>Opzionali</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">Quadro0 — Operazioni semplificate</td></tr>
+  <tr><td><code>CodicePAT</code></td><td>Numero PAT (max 9 cifre) — obbligatorio e ripetibile (l'operazione semplificata può riguardare più PAT)</td><td>Obbligatorio (1..n)</td><td><span class="org org-auto">Auto</span></td><td>Assegnato dall'ente dopo l'invio telematico (matricola da INPS, codice PAT da INAIL) e riportato sulla ricevuta: non si compila a mano.</td></tr>
+  <tr><td><code>TipoOperazione</code></td><td>Enum: SOSPENSIONE ATTIVITA / CESSAZIONE ATTIVITA / RIATTIVAZIONE ATTIVITA / VARIAZIONE ATTIVITA ESERCITATA</td><td>Obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Tipo operazione di variazione impostato dal flusso ComUnica.</td></tr>
+  <tr><td><code>DescrOperazione</code></td><td>Descrizione libera</td><td>Sempre obbligatorio (l'elemento va emesso; può essere stringa vuota)</td><td><span class="org org-auto">Auto</span></td><td>Emesso vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">QuadroV — Variazione anagrafica ditta</td></tr>
+  <tr><td><code>DataVariazione</code></td><td>Data inizio variazione (yyyy-MM-dd)</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>DataInizioAttivita</code></td><td>Data inizio attività</td><td>Opzionali</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> (prepop. da <code>User.business_start</code>), <code>User.business_name</code> — I nuovi valori anagrafici provengono dai dati ditta aggiornati: <code>RagioneSociale</code> ← <code>User.business_name</code>, <code>DataInizioAttivita</code> ← <code>User.business_start</code>. <code>TipoNaturaGiuridica</code> = <code>"Individuale"</code> (Auto).</td></tr>
+  <tr><td><code>RagioneSociale</code></td><td>Ragione sociale (max 60)</td><td>Opzionali</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> (prepop. da <code>User.business_start</code>), <code>User.business_name</code> — I nuovi valori anagrafici provengono dai dati ditta aggiornati: <code>RagioneSociale</code> ← <code>User.business_name</code>, <code>DataInizioAttivita</code> ← <code>User.business_start</code>. <code>TipoNaturaGiuridica</code> = <code>"Individuale"</code> (Auto).</td></tr>
+  <tr><td><code>TipoNaturaGiuridica</code></td><td>Natura giuridica</td><td>Opzionali</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> (prepop. da <code>User.business_start</code>), <code>User.business_name</code> — I nuovi valori anagrafici provengono dai dati ditta aggiornati: <code>RagioneSociale</code> ← <code>User.business_name</code>, <code>DataInizioAttivita</code> ← <code>User.business_start</code>. <code>TipoNaturaGiuridica</code> = <code>"Individuale"</code> (Auto).</td></tr>
+  <tr><td><code>DataCostituzioneDitta</code></td><td>Data costituzione ditta</td><td>Opzionali</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> (prepop. da <code>User.business_start</code>), <code>User.business_name</code> — I nuovi valori anagrafici provengono dai dati ditta aggiornati: <code>RagioneSociale</code> ← <code>User.business_name</code>, <code>DataInizioAttivita</code> ← <code>User.business_start</code>. <code>TipoNaturaGiuridica</code> = <code>"Individuale"</code> (Auto).</td></tr>
+  <tr><td><code>IscrizioneCCIAA</code></td><td>Flag iscrizione CCIAA</td><td>Opzionali</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>User.business_start_chamber_of_commerce</code> — Solo <code>DataIscrizioneCCIAA</code> mappa; numero CCIAA non in Fiscozen → Cliente se richiesto.</td></tr>
+  <tr><td><code>DataIscrizioneCCIAA</code></td><td>Data iscrizione CCIAA</td><td>Opzionali</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>User.business_start_chamber_of_commerce</code> — Solo <code>DataIscrizioneCCIAA</code> mappa; numero CCIAA non in Fiscozen → Cliente se richiesto.</td></tr>
+  <tr><td><code>NumeroIscrizioneCCIAA</code></td><td>Numero iscrizione CCIAA</td><td>Opzionali</td><td><span class="org org-db">DB</span></td><td><strong>Da DB:</strong> <code>User.business_start_chamber_of_commerce</code> — Solo <code>DataIscrizioneCCIAA</code> mappa; numero CCIAA non in Fiscozen → Cliente se richiesto.</td></tr>
+  <tr><td><code>Riattivazione → Postuma (DataCessazione + CausaleCessazione, opzionali)</code></td><td>Dati riattivazione</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>NumeroDipendentiDitta</code></td><td>Numero dipendenti ditta</td><td>Opzionali</td><td><span class="org org-auto">Auto</span></td><td><code>NumeroDipendentiDitta</code> costante = <code>Nessuno</code> (dipendenti fuori scope MVP); <code>RichiestaPagamento</code> impostazione di default.</td></tr>
+  <tr><td><code>RichiestaPagamento</code></td><td>Richiesta pagamento (SI/NO)</td><td>Opzionali</td><td><span class="org org-auto">Auto</span></td><td><code>NumeroDipendentiDitta</code> costante = <code>Nessuno</code> (dipendenti fuori scope MVP); <code>RichiestaPagamento</code> impostazione di default.</td></tr>
+  <tr><td><code>SedeLegale</code></td><td>Indirizzo sede legale</td><td>Opzionali</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>), <code>User</code> — Nuovi indirizzi/anagrafica del titolare da <code>UserAddress</code> (kind=Attività/Residenza) e <code>User</code>; Art70 (coordinate rimborso) → Cliente.</td></tr>
+  <tr><td><code>SedeCorrispondenza</code></td><td>Indirizzo sede corrispondenza</td><td>Opzionali</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>), <code>User</code> — Nuovi indirizzi/anagrafica del titolare da <code>UserAddress</code> (kind=Attività/Residenza) e <code>User</code>; Art70 (coordinate rimborso) → Cliente.</td></tr>
+  <tr><td><code>LegaleRappresentante</code></td><td>Legale rappresentante</td><td>Opzionali</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>), <code>User</code> — Nuovi indirizzi/anagrafica del titolare da <code>UserAddress</code> (kind=Attività/Residenza) e <code>User</code>; Art70 (coordinate rimborso) → Cliente.</td></tr>
+  <tr><td><code>Art70</code></td><td>Art. 70 — restituzione indennità (con DataVariazione)</td><td>Opzionali</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.sede_attivita</code> (prepop. da <code>UserAddress</code>), <code>User</code> — Nuovi indirizzi/anagrafica del titolare da <code>UserAddress</code> (kind=Attività/Residenza) e <code>User</code>; Art70 (coordinate rimborso) → Cliente.</td></tr>
+  <tr><td colspan="5" class="row-section">QuadroV2 — Delegati</td></tr>
+  <tr><td><code>SoggettiDelegati (DataInizioDelega, DataFineDelega, AmpiezzaDelega, Anagrafica, Domicilio, AlboProfessionale + NumeroIscrizioneAlboSD + DataInizio/FineAbilitazione, DataVariazione)</code></td><td>Variazione delegati</td><td>Obbligatorio se QuadroV2 presente</td><td><span class="org org-auto">Auto</span></td><td>Delega all'intermediario abilitato Fiscozen: compilata con i dati dello studio (CF, iscrizione albo), non del cliente.</td></tr>
+  <tr><td colspan="5" class="row-section">QuadroV3 — PAT territoriale (ripetibile, una PAT per occorrenza)</td></tr>
+  <tr><td><code>CodicePAT</code></td><td>Numero PAT</td><td>Obbligatorio</td><td><span class="org org-auto">Auto</span></td><td>Assegnato dall'ente dopo l'invio telematico (matricola da INPS, codice PAT da INAIL) e riportato sulla ricevuta: non si compila a mano.</td></tr>
+  <tr><td><code>SedeLavori</code></td><td>Indirizzo sede lavori + DataVariazione</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td><code>CessazionePatAssicurazione (DataVariazione, VariazioneCessazione, DataCessazione, CausaleCessazione, TipoCessazione, TipoCessazioneLavoratori)</code></td><td>Cessazione PAT</td><td>Opzionale</td><td><span class="org org-auto">Auto</span></td><td>Campo opzionale: lasciato sempre vuoto.</td></tr>
+  <tr><td colspan="5" class="row-section">QuadroB — ricorrente</td></tr>
+  <tr><td><code>DataInizioAttivita</code></td><td>Data inizio attività PAT</td><td>Stessa struttura dell'Iscrizione (vedi §5.1)</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> (prepop. da <code>User.business_start</code>), <code>UserAddress</code> (kind=Attività) — Stessa mappatura del QuadroB in Iscrizione: <code>DataInizioAttivita</code> ← <code>User.business_start</code>, <code>SedeLavori</code> ← indirizzo attività; <code>SettoreAttivita</code>/<code>Postuma</code> → Cliente.</td></tr>
+  <tr><td><code>SettoreAttivita</code></td><td>Settore attività</td><td>Stessa struttura dell'Iscrizione (vedi §5.1)</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> (prepop. da <code>User.business_start</code>), <code>UserAddress</code> (kind=Attività) — Stessa mappatura del QuadroB in Iscrizione: <code>DataInizioAttivita</code> ← <code>User.business_start</code>, <code>SedeLavori</code> ← indirizzo attività; <code>SettoreAttivita</code>/<code>Postuma</code> → Cliente.</td></tr>
+  <tr><td><code>Postuma</code></td><td>Info riattivazione postuma</td><td>Stessa struttura dell'Iscrizione (vedi §5.1)</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> (prepop. da <code>User.business_start</code>), <code>UserAddress</code> (kind=Attività) — Stessa mappatura del QuadroB in Iscrizione: <code>DataInizioAttivita</code> ← <code>User.business_start</code>, <code>SedeLavori</code> ← indirizzo attività; <code>SettoreAttivita</code>/<code>Postuma</code> → Cliente.</td></tr>
+  <tr><td><code>SedeLavori</code></td><td>Sede lavori</td><td>Stessa struttura dell'Iscrizione (vedi §5.1)</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_inizio_attivita</code> (prepop. da <code>User.business_start</code>), <code>UserAddress</code> (kind=Attività) — Stessa mappatura del QuadroB in Iscrizione: <code>DataInizioAttivita</code> ← <code>User.business_start</code>, <code>SedeLavori</code> ← indirizzo attività; <code>SettoreAttivita</code>/<code>Postuma</code> → Cliente.</td></tr>
+  <tr><td><code>QuadroD, QuadroD1 (con QuadroO)</code></td><td>Assicurazione artigiani annidata nel QuadroB</td><td>Opzionali, ripetibili — stessa struttura dell'Iscrizione (vedi §5.1)</td><td><span class="org org-auto">Auto</span></td><td>Compilati per il titolare artigiano — stessa mappatura dell'Iscrizione (§5.1).</td></tr>
+</table>
+
+<p class="source">Fonte: <a href="specs/InvioDenunce.xsd"><code>InvioDenunce.xsd</code></a> (operazione Variazione_Ditta)</p>
+
+<h3 id="inail-cessazione">5.3 INAIL — Operazione Cessazione</h3>
+<p>Comunicazione della cessazione totale dell'attività di una ditta. Struttura minimalista: data + causale + opzionalmente sede di corrispondenza per le comunicazioni post-cessazione.</p>
+
+<table class="ri-input">
+  <tr><th>Campo</th><th>Significato</th><th>Quando compilare</th><th>Origine</th><th>Come compilare</th></tr>
+  <tr><td colspan="5" class="row-section">Cessazione_Ditta — attributi elemento (ripetibile)</td></tr>
+  <tr><td><code>CodiceDitta</code></td><td>Codice ditta INAIL (1-9 cifre)</td><td>Sempre obbligatori</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ssn</code> (prepop. da <code>User.ssn</code>) per il CF ditta; <code>CodiceDitta</code> = codice INAIL assegnato all'iscrizione (ricevuta); dataInvio/origine vuoti.</td></tr>
+  <tr><td><code>CodiceFiscaleDitta</code></td><td>CF ditta (11 cifre o CF 16 caratteri)</td><td>Sempre obbligatori</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.ssn</code> (prepop. da <code>User.ssn</code>) per il CF ditta; <code>CodiceDitta</code> = codice INAIL assegnato all'iscrizione (ricevuta); dataInvio/origine vuoti.</td></tr>
+  <tr><td><code>DataCessazione</code></td><td>Data effettiva cessazione (yyyy-MM-dd)</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.data_cessazione</code> — data di cessazione fornita dal consulente nel flow.</td></tr>
+  <tr><td><code>CausaleCessazione</code></td><td>Enum locale di CessazioneDittaType: Fine Attivita / Liquidazione / Trasferimento ad altro soggetto / Fallimento / Eredità giacente / Liquidazione coatta / Amministrativa / Irreperibilita</td><td>Sempre obbligatorio</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.causale</code> — tipicamente costante "Fine Attivita". NB: l'enum è quello locale dell'elemento (senza apostrofi, "Eredità" con accento), diverso da CausaleCessazioneType usato in Postuma/CessazionePat.</td></tr>
+  <tr><td><code>SedeCorrispondenza</code></td><td>Sede ricezione comunicazioni post-cessazione: Presso (opz.) + Domicilio (Toponimo, Indirizzo, NumeroCivico, Cap, DatiComunali, Telefono, EMail, EMailPec, InfoAggiuntive)</td><td>Opzionale (può essere omesso)</td><td><span class="org org-es">Comm</span></td><td><strong>Da</strong> <code>InputCommercialista.residenza_titolare</code> (prepop. da <code>UserAddress</code>) (kind=Residenza), <code>User.phone/email/pec</code> — Indirizzo post-cessazione = residenza del titolare; contatti da <code>User.phone</code>, <code>User.email</code>, <code>User.pec</code>.</td></tr>
+</table>
+
+<p class="source">Fonte: <a href="specs/InvioDenunce.xsd"><code>InvioDenunce.xsd</code></a> (operazione Cessazione_Ditta)</p>
+
+<h3 id="inail-pdf">5.4 File-distinta (PDF firmato)</h3>
+<p>Il <strong>file-distinta-della-dichiarazione</strong> <code>B12P2837.INAIL.PDF.P7M</code> è la stampa PDF della denuncia INAIL, firmata digitalmente <strong>CAdES</strong>.</p>
+
+<!-- ============= APPENDICE FEDRA ============= -->
+<h2 id="fedra">Appendice A — Tracciato FEDRA (come si compila la pratica RI)</h2>
+<p>I "moduli" RI elencati sopra (I1, I2, S5, UL, IntercalareP, R, ...) <strong>non sono file XML autonomi</strong>: sono <em>insiemi logici di campi</em> che vengono serializzati in un unico file di testo binario record-based — il <strong>file-pratica FEDRA</strong>. Il tracciato è standardizzato dal DM MIMIT 12/04/2023 (Allegato A v7.0+) e generato esclusivamente da software autorizzati (StarWeb, FEDRA, ComUnica, software dei commercialisti): non si scrive a mano.</p>
+
+<h4>I tre artefatti che la ComUnica trasporta per il RI</h4>
+<table>
+  <tr><th>File</th><th>Estensione</th><th>Contenuto</th><th>Generato da</th></tr>
+  <tr>
+    <td><strong>file-pratica</strong></td>
+    <td><code>.U3T</code></td>
+    <td>Dati strutturati FEDRA (record a coordinate X Y Z) — il "contenitore dati" che il RI legge con parser automatico</td>
+    <td>Software compilatore</td>
+  </tr>
+  <tr>
+    <td><strong>file-distinta</strong></td>
+    <td><code>.PDF.P7M</code></td>
+    <td>Visura a quadri leggibile, firmata digitalmente CAdES — documento legale di sottoscrizione</td>
+    <td>Software compilatore + firma dichiarante/intermediario</td>
+  </tr>
+  <tr>
+    <td><strong>file-riepilogo</strong></td>
+    <td><code>.U3R</code></td>
+    <td>Record fissi a 320 byte: catalogo metadati di ogni documento allegato (nome, tipo da TABELLA_DOC, pagine, data, codice atto)</td>
+    <td>Software compilatore</td>
+  </tr>
+</table>
+<p>Il file-distinta firmato è il documento "legale"; il file-pratica e il file-riepilogo sono i dati machine-readable che il sistema RI elabora.</p>
+
+<h4>Coordinate dei record: (X, Y, Z)</h4>
+<p>Ogni campo valorizzato della modulistica produce <strong>un record</strong> identificato da una tripla:</p>
+<table>
+  <tr><th>Coord.</th><th>Byte</th><th>Significato</th><th>Esempi</th></tr>
+  <tr>
+    <td><strong>X</strong></td>
+    <td>1 char</td>
+    <td>Identificativo modulo</td>
+    <td><code>1</code>=I1, <code>3</code>=I2, <code>5</code>=UL, <code>P</code>=IntercalareP, <code>O</code>=RP (riepilogo) — moduli applicabili alla Ditta Individuale</td>
+  </tr>
+  <tr>
+    <td><strong>Y</strong></td>
+    <td>1 char</td>
+    <td>Identificativo riquadro/sezione dentro il modulo</td>
+    <td><code>1</code>=Dati anagrafici, <code>2</code>=Residenza, <code>85</code>=Tipo domanda, ...</td>
+  </tr>
+  <tr>
+    <td><strong>Z</strong></td>
+    <td>2 byte (unsigned short)</td>
+    <td>Identificativo campo all'interno della sezione</td>
+    <td><code>10</code>=CF, <code>20</code>=P.IVA, <code>40</code>=cognome, <code>50</code>=nome, ...</td>
+  </tr>
+</table>
+<div class="note">
+Il primo record di ogni modulo ha sempre <code>Y=0, Z=1</code> con contenuto fisso di 6 byte ASCII <code>'0'</code> (<code>0x30</code>) — fa da <em>marcatore di inizio modulo</em>. I moduli ripetibili (IntercalareP per ogni socio/familiare, UL per ogni unità locale) ricominciano da capo questa sequenza per ogni occorrenza.
+</div>
+
+<h4>Tipi di record nel file-pratica</h4>
+<ol class="compact">
+  <li><strong>Record di testa (HEADER)</strong> — 8 byte fissi: offset al record di coda + filler <code>0x68 0x01 0x00 0x00</code>. Una sola volta a inizio file.</li>
+  <li><strong>Record dati (DATI MODULISTICI)</strong> — uno per ogni campo: <code>X (1) | Y (1) | Z (2 bytes) | filler 0x00 0x00 | contenuto (n byte) | 0x7C (pipe)</code>. Si ripete per N campi della pratica.</li>
+  <li><strong>Record di coda (FOOTER)</strong> — 360 byte fissi: filler <code>0x05</code> + CF impresa (16) + Identificativo source software (12) + versione (3) + REA + ModuloBase + denominazione pratica (84) + sequenza enti destinatari + sequenza moduli (60) + userid utente. Definisce il routing della pratica verso AdE/INPS/INAIL.</li>
+  <li><strong>Header di file</strong> (80 byte, aggiunto dopo formattazione finale e "targatura") — numero totale record + sigla provincia destinataria. È il metadato di trasmissione telematica.</li>
+</ol>
+<p>Dopo la generazione, il file viene <strong>formattato in blocchi di 80 byte</strong> (operazione 6.1 dell'Allegato A) e poi "targato" con l'header di file (operazione 6.2).</p>
+
+<h4>Esempio di iscrizione I1 (Mario Rossi)</h4>
+<p>Sequenza di record logici prima della formattazione 80-byte. Le coordinate (X Y Z) sono separative; <code>|</code> = delimiter di chiusura record.</p>
+<pre style="background: #f3f4f6; padding: 1em; border-radius: 4px; overflow-x: auto; font-size: 0.85em;">
+1  0  1   000000|                  INIZIO Modulo I1
+1 85 110  X|                       Tipo Domanda: Impresa Commerciale (X = selezionato)
+1  1  10  RSSMRA70E12H501A|        CF
+1  1  30  M|                       Sesso
+1  1  40  ROSSI|                   Cognome
+1  1  50  MARIO|                   Nome
+1  1  60  12051970|                Data nascita (ggmmaaaa)
+1  1  70  I|                       Cittadinanza (tabella STA "I" = Italia)
+1  1  80  I|                       Stato nascita
+1  1  90  PD|                      Provincia nascita
+1  1 100  PADOVA|                  Comune nascita
+1  2  10  I|                       Residenza: stato
+1  2  20  PD|                      Residenza: provincia
+1  2  30  35100|                   CAP
+1  2  40  PADOVA|                  Residenza: comune
+...
+O  0   1  000000|                  INIZIO Modulo RP (riepilogo - obbligatorio)
+...
+</pre>
+
+<h4>Vincoli sintattici dei campi</h4>
+<ul class="compact">
+  <li><strong>Lunghezze</strong>: fisse per ogni campo (es. CF=16, cognome=25, CAP=5).</li>
+  <li><strong>Tipi</strong>: <code>char[ ]</code> alfanumerico (spazi trimmed); <code>num</code> numerico (zero-pad sinistra/destra per decimali); <code>data</code> formato <code>GGMMAAAA</code> (8 char); <code>scelta</code> singolo <code>X</code> (0x58) se selezionato; <code>testo</code> righe da 80 char fino a 300 righe per campo (stessa coordinata X Y Z ripetuta).</li>
+  <li><strong>Caratteri ammessi</strong>: ASCII <code>0x20</code>–<code>0x5A</code> (spazio fino a "Z"). ISO 8859-1 solo per campo EUID di S1/S2.</li>
+  <li><strong>Controlli logici</strong>: <code>obbligatorio</code>, <code>vietato</code>, <code>consentito se</code>, <code>in alternativa con</code>, <code>esistenza in tabella XYZ</code>.</li>
+</ul>
+
+<h4>Tabelle di lookup</h4>
+<p>Le tabelle ausiliarie sono file di decodifica che validano i valori inseriti in campi enumerati. Le principali:</p>
+<table>
+  <tr><th>Tabella</th><th>Contenuto</th><th>Dove si usa</th></tr>
+  <tr><td><code>TABELLA_DOC</code></td><td>100+ codici tipo documento (DIS=Distinta, U3T=File Dati, B00=Bilancio PDF/A, C01=Atto Costitutivo, V01=Verbale, ...)</td><td>Modulo RP — riepilogo allegati</td></tr>
+  <tr><td><code>TABELLA_STA</code></td><td>Codici stati/paesi (I=Italia, D=Germania, F=Francia, USA, AAA=Apolide, ...)</td><td>Cittadinanza, stato di nascita, stato di residenza</td></tr>
+  <tr><td><code>TABELLA_TPC</code></td><td>7 codici INPS gestione commercianti (1=Svolge attività dipendente, 2=Partecipazione tramite capitale, 3=Iscritto ad altra cassa, ...)</td><td>Sezione AC di I1/I2 — previdenza commercio</td></tr>
+</table>
+<p class="source" style="margin-top:0.3rem;">Le tabelle CTE/RTE (modulo TE — titolare effettivo) non sono incluse perché TE non si applica alla ditta individuale.</p>
+
+<h4>Flusso end-to-end di compilazione</h4>
+<ol class="compact">
+  <li>L'utente compila i campi sui <strong>moduli logici</strong> (I1, I2, IntercalareP, RP, ...) tramite l'interfaccia del software (StarWeb, FEDRA, ComUnica, software di studio).</li>
+  <li>Il software <strong>serializza</strong> ogni campo nel relativo record <code>X Y Z + contenuto + 0x7C</code>.</li>
+  <li>Aggiunge i metadati nel <strong>FOOTER</strong>: <code>identificativo source</code>, versione (<code>"700"</code> per v7.0), sequenza enti destinatari (AE/IL/IP/RI/AA/ML/SP), sequenza moduli compilati, userid.</li>
+  <li><strong>Formatta</strong> il file in blocchi da 80 byte e <strong>targa</strong> con l'header di routing (numero record + sigla provincia).</li>
+  <li>Genera in parallelo il <strong>file-distinta</strong> (PDF stampabile della pratica) e il <strong>file-riepilogo</strong> (U3R).</li>
+  <li>La distinta viene <strong>firmata digitalmente</strong> dal dichiarante o dall'intermediario (CAdES).</li>
+  <li>Il software impacchetta tutto nella ComUnica: il <code>ModelloBase</code> referenzia file-pratica, file-distinta e file-riepilogo come <code>allegati</code> con la rispettiva <strong>impronta digitale</strong> (vedi §1). Il <code>ModelloBase</code> aggiunge poi gli analoghi file-pratica/file-distinta degli altri enti destinatari (AdE, INAIL).</li>
+  <li>Trasmissione telematica via Telemaco/portale ComUnica.</li>
+</ol>
+
+<div class="note">
+<strong>Implicazione progettuale</strong>: i nomi "logici" usati nella documentazione interna ("modulo I1", "riquadro AC", "campo cognome") sono <em>diversi</em> dai nomi reali del wire-format. Chi implementa un generatore di pratiche RI deve scrivere uno <strong>strato di serializzazione FEDRA</strong> che traduce dal modello logico (es. <code>Persona.cognome</code>) alle coordinate fisiche (<code>1 1 40 ROSSI|</code>). Gli enti non RI (AdE, INAIL) hanno invece tracciati XML/posizionali distinti — vedi §4–§5.
+</div>
+
+<p class="source">Fonti: <a href="specs/Allegato_A_Specifiche_tecniche_vers.7.0.pdf"><code>Allegato_A_Specifiche_tecniche_vers.7.0.pdf</code></a> (sezioni 3-6, righe 505-922 dell'estrazione); <a href="specs/MODULO_I1-dd18-02-26.txt"><code>MODULO_I1-dd18-02-26.txt</code></a> (righe 1-190); <code>TABELLA_DOC/PAR/STA/TPC.txt</code>; <code>Decreto_v7.0.pdf</code>.</p>
+
+
+
+<div class="edit-bar">
+  <strong>Modifiche</strong>: le celle delle tabelle sono modificabili; ogni modifica è salvata in locale (questo browser).
+  <button type="button" id="download-edits" class="copy-btn">⬇️ Scarica modifiche (JSON)</button>
+  <button type="button" id="reset-edits" class="copy-btn">🗑️ Azzera modifiche</button>
+</div>
+
+<hr>
+<p class="source">
+Documento generato il 2026-06-02, revisionato il 2026-06-12 contro le specifiche in <code>specs/</code> (inclusi decreto direttoriale 20/05/2026 — Fedra v7.09 e regole CCIAA 2026 sul riquadro AC). Sorgenti consultate: cartella <a href="specs/"><code>specs/</code></a> (file locali raggiungibili) + pagine ufficiali AdE per AA9/12. Versioni: ComUnica spec v3.1, Allegato A RI v7.0 + Fedra v7.09 (efficacia 04/06/2026, allegato B95 v7.09), modulistica RI dd. 18/02/2026, INAIL <code>InvioDenunce.xsd</code>.
+</p>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'default',
+    flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' }
+  });
+</script>
+
+<script>
+  // Revisione in-browser: celle delle tabelle modificabili, modifiche salvate in localStorage, export JSON.
+  (function () {
+    var KEY = 'comunica-edits-v1';
+    function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+    var edits = load();
+    function persist() { try { localStorage.setItem(KEY, JSON.stringify(edits)); } catch (e) {} }
+    function clean(s) { return (s || '').replace(/\s+/g, ' ').trim(); }
+
+    var headings = [].slice.call(document.querySelectorAll('h2[id], h3[id]'));
+    function sectionFor(node) {
+      var id = '';
+      headings.forEach(function (h) {
+        if (node.compareDocumentPosition(h) & Node.DOCUMENT_POSITION_PRECEDING) id = h.id;
+      });
+      return id;
+    }
+
+    // Tabelle modificabili: moduli (.ri-input). Prima colonna (chiave) non editabile.
+    var tables = [].slice.call(document.querySelectorAll('table.ri-input'));
+    tables.forEach(function (table) {
+      var sezione = sectionFor(table);
+      var rows = table.rows;
+      if (!rows.length) return;
+      var headers = [].map.call(rows[0].cells, function (c) { return clean(c.textContent); });
+      for (var r = 1; r < rows.length; r++) {
+        var row = rows[r];
+        if (row.cells.length < 2) continue; // riga-sezione (colspan)
+        var campo = clean(row.cells[0].textContent);
+        for (var ci = 1; ci < row.cells.length; ci++) {
+          (function (cell, colonna, sezione, campo) {
+            var k = sezione + '||' + campo + '||' + colonna;
+            if (colonna === 'Origine') {
+              var clsmap = { 'Auto': 'org-auto', 'Comm': 'org-es', 'DB': 'org-db', 'Cliente': 'org-cli', 'NA': 'org-na' };
+              var cur = 'Auto';
+              var sp = cell.querySelector('span.org');
+              if (sp) {
+                if (sp.classList.contains('org-es')) cur = 'Comm';
+                else if (sp.classList.contains('org-db')) cur = 'DB';
+                else if (sp.classList.contains('org-cli')) cur = 'Cliente';
+                else if (sp.classList.contains('org-na')) cur = 'NA';
+              }
+              if (edits[k] != null) { cur = edits[k].valore; cell.classList.add('edited'); }
+              var sel = document.createElement('select');
+              ['Auto', 'Comm', 'DB', 'Cliente', 'NA'].forEach(function (opt) {
+                var o = document.createElement('option');
+                o.value = opt; o.textContent = opt; if (opt === cur) o.selected = true;
+                sel.appendChild(o);
+              });
+              function color() { sel.className = 'origine-sel ' + (clsmap[sel.value] || 'org-auto'); }
+              cell.innerHTML = ''; cell.appendChild(sel); color();
+              sel.addEventListener('change', function () {
+                edits[k] = { sezione: sezione, campo: campo, colonna: colonna, valore: sel.value };
+                cell.classList.add('edited'); color(); persist();
+              });
+              return;
+            }
+            cell.setAttribute('contenteditable', 'true');
+            cell.setAttribute('spellcheck', 'false');
+            if (edits[k] != null) { cell.textContent = edits[k].valore; cell.classList.add('edited'); }
+            cell.addEventListener('input', function () {
+              edits[k] = { sezione: sezione, campo: campo, colonna: colonna, valore: clean(cell.innerText) };
+              cell.classList.add('edited');
+              persist();
+            });
+          })(row.cells[ci], headers[ci] || ('col' + ci), sezione, campo);
+        }
+      }
+    });
+
+    var dl = document.getElementById('download-edits');
+    if (dl) dl.addEventListener('click', function () {
+      // La key è la sorgente di verità (sezione||campo||colonna): ricostruisco i campi da lì,
+      // così l'export è corretto anche per modifiche salvate prima del fix del bug di closure.
+      var arr = Object.keys(edits).map(function (k) {
+        var parts = k.split('||');
+        return { sezione: parts[0], campo: parts[1], colonna: parts[2], valore: edits[k].valore };
+      });
+      var out = { documento: 'comunica/index.html', generato: new Date().toISOString(), totale: arr.length, modifiche: arr };
+      var blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'comunica-modifiche.json';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+    });
+    var rs = document.getElementById('reset-edits');
+    if (rs) rs.addEventListener('click', function () {
+      if (confirm('Azzerare tutte le modifiche salvate in locale?')) { localStorage.removeItem(KEY); location.reload(); }
+    });
+  })();
+</script>
+
+</body>
+</html>
